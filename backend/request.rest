@@ -206,8 +206,7 @@ Content-Type: application/json
 
 {
     "nama" : "bhs Sunda", 
-    "induk" : "Mulok", 
-    "id_nilai" : 3
+    "induk" : "Mulok"
 }
 
 

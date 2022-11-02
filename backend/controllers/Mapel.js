@@ -4,7 +4,7 @@ import Mapel from "../models/mapelModel.js";
 export const getMapel = async (req, res) => {
     try {
         const mapel = await Mapel.findAll({
-            attributes: ['id', 'nama', 'induk']
+            attributes: ['id', 'nama', 'induk', 'idGuru']
         })
         res.json(mapel)
     } catch (error) {
@@ -21,17 +21,15 @@ export const getMapelId = async (req, res) => {
             res.status(404).json({ msg: "Data Tidak di temukan" })
         else
             res.json(mapel)
-
-
     } catch (error) {
         res.status(404).json({ msg: "Data Tidak di temukan" })
     }
 }
 
 export const tambahMapel = async (req, res) => {
-    const { nama, induk, id_nilai } = req.body
+    const { nama, induk, idGuru } = req.body
     try {
-        const mapel = await Mapel.create({ nama, induk, id_nilai })
+        const mapel = await Mapel.create({ nama, induk, idGuru })
 
         if (mapel === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -43,11 +41,11 @@ export const tambahMapel = async (req, res) => {
 }
 
 export const editMapel = async (req, res) => {
-    const { nama, induk, id_nilai } = req.body
+    const { nama, induk, idGuru } = req.body
     const id = req.params.id
 
     try {
-        const mapel = await Mapel.update({ nama, induk, id_nilai }, {
+        const mapel = await Mapel.update({ nama, induk, idGuru }, {
             where: {
                 id
             }

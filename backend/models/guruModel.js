@@ -13,7 +13,7 @@ const Guru = db.define('guru', {
     nuptk: {
         type: DataTypes.STRING
     },
-    wali_kelas: {
+    id_kelas: {
         type: DataTypes.STRING
     },
     pendidikan: {
@@ -24,7 +24,17 @@ const Guru = db.define('guru', {
     },
     picture: {
         type: DataTypes.STRING
+    },
+    role: {
+        type: DataTypes.STRING
     }
-})
+},
+    {
+        indexes: [
+            {
+                fields: ['id_kelas']
+            }
+        ]
+    })
 
 export default Guru

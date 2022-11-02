@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react'
-// import refreshToken from '../../../config/token/refreshToken'
 import { useNavigate } from 'react-router-dom'
 import ActionType from '../../../redux/reducer/globalActionType'
 import axios from 'axios'
-// import axiosJWT from '../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Mapel = (props) => {
     const navigate = useNavigate()
 
     const [mapel, setMapel] = useState([])
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
+    const [guru, setGuru] = useState([])
     const axiosJWT = axios.create()
 
     const refreshToken = async () => {
@@ -29,27 +27,34 @@ const Mapel = (props) => {
 
     const getMapel = async () => {
         try {
-            console.log(props.token)
             const response = await axiosJWT.get('http://localhost:7000/mapel', {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            console.log(response.data);
             setMapel(response.data)
         } catch (error) {
             console.error(error);
-
         }
     }
-
+    const getGuru = async () => {
+        try {
+            const response = await axiosJWT.get(`http://localhost:7000/guru`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setGuru(response.data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     useEffect(() => {
         refreshToken()
         getMapel()
+        getGuru()
     }, [])
-
-
 
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
@@ -63,10 +68,6 @@ const Mapel = (props) => {
         }
         return config
     })
-    // console.log(props.token)
-    // console.log(mapel);
-
-    // console.log(props.token);
 
 
     return (
@@ -96,9 +97,9 @@ const Mapel = (props) => {
                             <div className="card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">Responsive Hover Table</h3>
-                                    <div className="col-6"></div>
-                                    <div className="card-tools col-2">
-                                        <div className="input-group input-group-sm" style={ { width: 150 } }>
+                                    <div className="col-5"></div>
+                                    <div className="card-tools col-1">
+                                        <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
                                             <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
                                             <div className="input-group-append">
                                                 <button type="submit" className="btn btn-default">
@@ -106,6 +107,11 @@ const Mapel = (props) => {
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div className="col-2 d-flex justify-content-end">
+                                        <Link type='button' className='btn btn-success btn-sm' to={ '/mapel/tambah' }>
+                                            Tambah <i class="fa-solid fa-plus"></i>
+                                        </Link>
                                     </div>
                                 </div>
                                 {/* /.card-header */ }
@@ -116,7 +122,6 @@ const Mapel = (props) => {
                                                 <th>Id</th>
                                                 <th>Mata Pelajaraan</th>
                                                 <th>Induk</th>
-                                                <th>Kelas</th>
                                                 <th>Guru</th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -125,10 +130,18 @@ const Mapel = (props) => {
                                             { mapel.map((val, index) => (
                                                 <tr key={ index }>
                                                     <td className='col-1'>{ index + 1 }</td>
-                                                    <td className='col-3'>{ val.nama }</td>
+                                                    <td className='col-4'>{ val.nama }</td>
                                                     <td className='col-2'>{ val.induk }</td>
-                                                    <td className='col-2'>5A</td>
-                                                    <td className='col-2'><span className="tag tag-success">Approved</span></td>
+                                                    {
+                                                        guru.map((value, index) => (
+                                                            val.idGuru == value.id ?
+                                                                <td className='col-2'>
+                                                                    {
+                                                                        value.nama
+                                                                    }
+                                                                </td> : ''
+                                                        ))
+                                                    }
                                                     <td className='d-flex justify-content-around'>
                                                         <div className='me-5'>
                                                             <button className='btn btn-warning'>
@@ -154,6 +167,7 @@ const Mapel = (props) => {
                     </div>
                 </div>
             </div>
+
         </div>
     )
 }

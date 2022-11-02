@@ -9,6 +9,7 @@ import {
   Route
 } from "react-router-dom";
 import Mapel from "./containers/pages/mapel/Mapel";
+import TambahMapel from "./containers/pages/mapel/TambahMapel";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/mapel" element={ <Template /> } >
         <Route index element={ <Mapel /> } />
+        <Route path="/mapel/tambah" element={ <TambahMapel /> } />
       </Route>
       <Route path="/register" element={ <Register /> } />
     </Route>

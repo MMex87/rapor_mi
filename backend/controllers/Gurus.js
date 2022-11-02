@@ -3,7 +3,7 @@ import Guru from "../models/guruModel.js";
 export const getGurus = async (req, res) => {
     try {
         const gurus = await Guru.findAll({
-            attributes: ['id', 'nama', 'jtm', 'nuptk', 'wali_kelas', 'pendidikan', 'tanggal_lahir', 'picture']
+            attributes: ['id', 'nama', 'jtm', 'nuptk', 'id_kelas', 'pendidikan', 'tanggal_lahir', 'picture', 'role']
         })
         if (gurus === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -25,10 +25,10 @@ export const getGurusId = async (req, res) => {
 }
 
 export const tambahGuru = async (req, res) => {
-    const { nama, jtm, nuptk, wali_kelas, pendidikan, tanggal_lahir, picture } = req.body
+    const { nama, jtm, nuptk, id_kelas, pendidikan, tanggal_lahir, picture, role } = req.body
     try {
         const gurus = await Guru.create({
-            nama, jtm, nuptk, wali_kelas, pendidikan, tanggal_lahir, picture
+            nama, jtm, nuptk, id_kelas, pendidikan, tanggal_lahir, picture, role
         })
         if (gurus === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -39,10 +39,10 @@ export const tambahGuru = async (req, res) => {
 }
 
 export const editGuru = async (req, res) => {
-    const { nama, jtm, nuptk, wali_kelas, pendidikan, tanggal_lahir, picture } = req.body
+    const { nama, jtm, nuptk, id_kelas, pendidikan, tanggal_lahir, picture, role } = req.body
     try {
         const guru = await Guru.update({
-            nama, jtm, nuptk, wali_kelas, pendidikan, tanggal_lahir, picture
+            nama, jtm, nuptk, id_kelas, pendidikan, tanggal_lahir, picture, role
         }, {
             where: {
                 id: req.params.id
