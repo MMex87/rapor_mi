@@ -6,8 +6,8 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 
+export const EditMapel = (props) => {
 
-const TambahMapel = (props) => {
     // Deklarasi Hooks, params, dan axios
     const navigate = useNavigate()
     const params = useParams()
@@ -15,15 +15,17 @@ const TambahMapel = (props) => {
 
 
     // state data
-    const [nama, setMapel] = useState('')
+    const [nama, setNama] = useState('')
     const [induk, setInduk] = useState('')
     const [idGuru, setIdGuru] = useState('')
     const [guru, setGuru] = useState([])
+    const [mapel, setMapel] = useState([])
+
     // state message
     const [msg, setMsg] = useState('')
 
     // menampung Data Id Kelas
-    const id_kelas = params.idKelas
+    const id_mapel = params.idMapel
 
 
     // refresh Token
@@ -53,9 +55,21 @@ const TambahMapel = (props) => {
             console.error(err)
         }
     }
+    const getMapel = async (val) => {
+        try {
+            const response = await axiosJWT.get(`http://localhost:7000/mapel/${val}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setMapel(response.data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     // handle Tambah Data
-    const Tambah = async (e) => {
+    const Edit = async (e) => {
         e.preventDefault()
         try {
             if (nama === '' || induk === '' || idGuru === '') {
@@ -63,8 +77,8 @@ const TambahMapel = (props) => {
             }
             else {
                 setMsg('')
-                await axios.post('http://localhost:7000/mapel', {
-                    nama, induk, idGuru, id_kelas
+                await axios.put(`http://localhost:7000/mapel/${id_mapel}`, {
+                    nama, induk, idGuru
                 })
                 navigate('/mapel')
             }
@@ -78,6 +92,9 @@ const TambahMapel = (props) => {
     useEffect(() => {
         refreshToken()
         getGuru()
+        return () => {
+            getMapel(id_mapel)
+        }
     }, [])
 
 
@@ -95,6 +112,9 @@ const TambahMapel = (props) => {
         return config
     })
 
+    console.log(nama);
+    console.log(idGuru);
+    console.log(induk);
 
     return (
         <div>
@@ -123,7 +143,7 @@ const TambahMapel = (props) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header row">
-                                    <h3 className="card-title col-4">Tambah Mapel</h3>
+                                    <h3 className="card-title col-4">Edit Mapel</h3>
                                     <div className="col-6"></div>
                                     <div className="col-2 d-flex justify-content-end">
                                         <Link type='button' className='btn btn-warning btn-sm' to={ '/mapel' }>
@@ -135,34 +155,35 @@ const TambahMapel = (props) => {
                                 <div className="card-body table-responsive p-2">
                                     <div className="col-md-10">
                                         <div className="form-group">
-                                            <form onSubmit={ Tambah }>
+                                            <form onSubmit={ Edit }>
                                                 <div>
                                                     <b className='text text-danger'>{ msg }</b>
                                                 </div>
                                                 <div>
                                                     <label>Nama Mapel</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setMapel(e.target.value) }>
-                                                        <option selected="selected" value={ '' }>-- Pilih Mapel --</option>
-                                                        <option value={ 'Bahasa Indonesia' }>Bahasa Indonesia</option>
-                                                        <option value={ 'Matematika' }>Matematika</option>
-                                                        <option value={ 'IPA' }>IPA</option>
-                                                        <option value={ 'Bahasa Arab' }>Bahasa Arab</option>
+                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } onMouseEnter={ (e) => setNama(e.target.value) }>
+                                                        <option selected value={ '' }>-- Pilih Mapel --</option>
+                                                        <option selected={ mapel.nama == 'Bahasa Indonesia' ? 'selected' : '' } value={ 'Bahasa Indonesia' }>Bahasa Indonesia</option>
+                                                        <option selected={ mapel.nama == 'Matematika' ? 'selected' : '' } value={ 'Matematika' }>Matematika</option>
+                                                        <option selected={ mapel.nama == 'IPA' ? 'selected' : '' } value={ 'IPA' }>IPA</option>
+                                                        <option selected={ mapel.nama == 'Bahasa Arab' ? 'selected' : '' } value={ 'Bahasa Arab' }>Bahasa Arab</option>
+                                                        <option selected={ mapel.nama == 'Bahasa Jawa' ? 'selected' : '' } value={ 'Bahasa Jawa' }>Bahasa Jawa</option>
                                                     </select>
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Induk</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setInduk(e.target.value) }>
-                                                        <option selected="selected" value={ '' }>-- Pilih Induk --</option>
-                                                        <option value={ 'National' }>National</option>
-                                                        <option value={ 'Muatan Lokal' }>Muatan Lokal</option>
+                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setInduk(e.target.value) } onMouseEnter={ (e) => setInduk(e.target.value) }>
+                                                        <option value={ '' }>-- Pilih Induk --</option>
+                                                        <option selected={ mapel.induk == 'National' ? 'selected' : '' } value={ 'National' }>National</option>
+                                                        <option selected={ mapel.induk == 'Muatan Lokal' ? 'selected' : '' } value={ 'Muatan Lokal' }>Muatan Lokal</option>
                                                     </select>
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Nama Guru</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdGuru(e.target.value) }>
-                                                        <option selected="selected" value={ '' }>-- Pilih Guru --</option>
+                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdGuru(e.target.value) } onMouseEnter={ (e) => setIdGuru(e.target.value) }>
+                                                        <option value={ '' }>-- Pilih Guru --</option>
                                                         { guru.map((val) => (
-                                                            <option value={ val.id }>{ val.nama }</option>
+                                                            <option selected={ mapel.idGuru == val.id ? 'selected' : '' } value={ val.id }>{ val.nama }</option>
                                                         )) }
                                                     </select>
                                                 </div>
@@ -203,4 +224,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TambahMapel)
+export default connect(mapStateToProps, mapDispatchToProps)(EditMapel)

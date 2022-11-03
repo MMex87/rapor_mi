@@ -7,15 +7,17 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const Mapel = (props) => {
+    // deklarasi hooks dan axios
     const navigate = useNavigate()
+    const axiosJWT = axios.create()
 
-    const [no, setNo] = useState(1)
 
+    // state 
     const [mapel, setMapel] = useState([])
     const [kelas, setKelas] = useState([])
     const [guru, setGuru] = useState([])
-    const axiosJWT = axios.create()
 
+    // refresh Token
     const refreshToken = async () => {
         try {
             const response = await axios.get('http://localhost:7000/token')
@@ -28,6 +30,7 @@ const Mapel = (props) => {
         }
     }
 
+    // Get Datas
     const getMapel = async () => {
         try {
             const response = await axiosJWT.get('http://localhost:7000/mapel', {
@@ -65,12 +68,17 @@ const Mapel = (props) => {
         }
     }
 
+    // Hooks Use Effect
+
     useEffect(() => {
         refreshToken()
         getMapel()
         getGuru()
         getKelas()
     }, [])
+
+
+    // axios Interceptors 
 
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
@@ -100,7 +108,7 @@ const Mapel = (props) => {
                             </div>{/* /.col */ }
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li className="breadcrumb-item"><Link to={ "/dashboard" }>Dashboard</Link></li>
                                     <li className="breadcrumb-item active">Mapel</li>
                                 </ol>
                             </div>{/* /.col */ }
@@ -127,7 +135,7 @@ const Mapel = (props) => {
                                             </div>
                                         </div>
                                         <div className="col-2 d-flex justify-content-end">
-                                            <Link type='button' className='btn btn-success btn-sm' to={ `/mapel/tambah/${isi.id}` }>
+                                            <Link type='button' className='btn btn-success btn-sm' to={ `tambah/${isi.id}` }>
                                                 Tambah <i class="fa-solid fa-plus"></i>
                                             </Link>
                                         </div>
@@ -161,14 +169,14 @@ const Mapel = (props) => {
                                                             }
                                                             <td className='d-flex justify-content-around'>
                                                                 <div className='me-5'>
-                                                                    <button className='btn btn-warning'>
+                                                                    <Link type='button' className='btn btn-warning' to={ `edit/${val.id}` }>
                                                                         Edit
-                                                                    </button>
+                                                                    </Link>
                                                                 </div>
                                                                 <div className='ms-5'>
-                                                                    <button className='btn btn-danger'>
+                                                                    <Link type='button' className='btn btn-danger' to={ `delete/${val.id}` }>
                                                                         Hapus
-                                                                    </button>
+                                                                    </Link>
                                                                 </div>
                                                             </td>
                                                         </tr>

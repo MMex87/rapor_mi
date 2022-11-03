@@ -10,6 +10,8 @@ import {
 } from "react-router-dom";
 import Mapel from "./containers/pages/mapel/Mapel";
 import TambahMapel from "./containers/pages/mapel/TambahMapel";
+import EditMapel from "./containers/pages/mapel/EditMapel";
+import DeleteMapel from "./containers/pages/mapel/DeleteMapel";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +24,10 @@ const router = createBrowserRouter(
         <Route index element={ <Mapel /> } />
         <Route path="/mapel/tambah/:idKelas"
           element={ <TambahMapel /> } />
+        <Route path="/mapel/edit/:idMapel"
+          element={ <EditMapel /> } />
+        <Route path="/mapel/delete/:idMapel"
+          element={ <DeleteMapel /> } />
       </Route>
       <Route path="/register" element={ <Register /> } />
     </Route>
