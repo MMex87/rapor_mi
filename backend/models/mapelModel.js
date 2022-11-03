@@ -6,11 +6,13 @@ const { DataTypes } = Sequelize
 const Mapel = db.define('mapel', {
     nama: { type: DataTypes.STRING },
     induk: { type: DataTypes.STRING },
-    idGuru: { type: DataTypes.INTEGER }
+    idGuru: { type: DataTypes.INTEGER },
+    id_kelas: { type: DataTypes.INTEGER }
 }, {
     indexes: [
         {
-            fields: ['idGuru']
+            fields: ['idGuru'],
+            fields: ['id_kelas']
         }
     ],
     freezeTableName: true

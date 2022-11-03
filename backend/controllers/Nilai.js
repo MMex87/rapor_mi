@@ -3,7 +3,7 @@ import Nilai from "../models/nilaiModel.js";
 export const getNilai = async (req, res) => {
     try {
         const nilai = await Nilai.findAll({
-            attributes: ['id', 'nilai', 'id_jenis_nilai']
+            attributes: ['id', 'nilai', 'jenis_nilai', 'id_mapel', 'id_siswa']
         })
         res.json(nilai)
     } catch (error) {
@@ -25,11 +25,12 @@ export const getNilaiId = async (req, res) => {
 }
 
 export const tambahNilai = async (req, res) => {
-    const { nilai, id_jenis_nilai } = req.body
+    const { nilai, jenis_nilai, id_mapel, id_siswa } = req.body
 
     try {
         const n = await Nilai.create({
-            nilai, id_jenis_nilai
+            nilai, jenis_nilai
+            , id_mapel, id_siswa
         })
         if (n === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -40,10 +41,11 @@ export const tambahNilai = async (req, res) => {
 }
 
 export const editNilai = async (req, res) => {
-    const { nilai, id_jenis_nilai } = req.body
+    const { nilai, jenis_nilai, id_mapel, id_siswa } = req.body
     try {
         const n = await Nilai.update({
-            nilai, id_jenis_nilai
+            nilai, jenis_nilai
+            , id_mapel, id_siswa
         }, {
             where: {
                 id: req.params.id

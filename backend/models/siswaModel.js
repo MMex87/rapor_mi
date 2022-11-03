@@ -17,6 +17,9 @@ const Siswa = db.define('siswa', {
     jenis_kelamin: {
         type: DataTypes.STRING
     },
+    status: {
+        type: DataTypes.STRING
+    },
     id_kelas: {
         type: DataTypes.STRING
     },
