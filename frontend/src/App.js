@@ -20,7 +20,8 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/mapel" element={ <Template /> } >
         <Route index element={ <Mapel /> } />
-        <Route path="/mapel/tambah" element={ <TambahMapel /> } />
+        <Route path="/mapel/tambah/:idKelas"
+          element={ <TambahMapel /> } />
       </Route>
       <Route path="/register" element={ <Register /> } />
     </Route>

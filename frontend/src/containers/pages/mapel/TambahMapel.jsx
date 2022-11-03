@@ -1,18 +1,52 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import ActionType from '../../../redux/reducer/globalActionType'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 
 
 const TambahMapel = (props) => {
     const [nama, setMapel] = useState('')
     const [induk, setInduk] = useState('')
-    const [idGuru, setGuru] = useState('')
+    const [idGuru, setIdGuru] = useState('')
+    const [guru, setGuru] = useState([])
 
     const [msg, setMsg] = useState('')
     const navigate = useNavigate()
 
+    const params = useParams()
+
+    const id_kelas = params.idKelas
+
+
+    const axiosJWT = axios.create()
+
+    const refreshToken = async () => {
+        try {
+            const response = await axios.get('http://localhost:7000/token')
+            props.handleToken(response.data.accessToken)
+            const decoded = jwt_decode(response.data.accessToken)
+            props.handleName(decoded.name)
+            props.handleExp(decoded.exp)
+        } catch (error) {
+            return navigate('/')
+            // console.error(error);
+        }
+    }
+    const getGuru = async () => {
+        try {
+            const response = await axiosJWT.get(`http://localhost:7000/guru`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setGuru(response.data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     const Tambah = async (e) => {
         e.preventDefault()
@@ -22,8 +56,9 @@ const TambahMapel = (props) => {
             }
             else {
                 setMsg('')
+                console.log(id_kelas)
                 await axios.post('http://localhost:7000/mapel', {
-                    nama, induk, idGuru
+                    nama, induk, idGuru, id_kelas
                 })
                 navigate('/mapel')
             }
@@ -31,6 +66,26 @@ const TambahMapel = (props) => {
             setMsg(err.response.data.msg)
         }
     }
+
+    useEffect(() => {
+        refreshToken()
+        getGuru()
+    }, [])
+
+    axiosJWT.interceptors.request.use(async (config) => {
+        const currenDate = new Date()
+        if (props.expired * 1000 < currenDate.getTime()) {
+            const response = await axios.get('http://localhost:7000/token')
+            config.headers.Authorization = `Bearer ${response.data.accessToken}`
+            props.handleToken(response.data.accessToken)
+            const decoded = jwt_decode(response.data.accessToken)
+            props.handleExp(decoded.exp)
+            props.handleName(decoded.name)
+        }
+        return config
+    })
+
+
     return (
         <div>
             <div className="content-wrapper">
@@ -61,7 +116,7 @@ const TambahMapel = (props) => {
                                     <div className="col-6"></div>
                                     <div className="col-2 d-flex justify-content-end">
                                         <Link type='button' className='btn btn-warning btn-sm' to={ '/mapel' }>
-                                            Kembali <i class="fa-solid fa-rotate-left"></i>
+                                            Kembali <i className="fa-solid fa-rotate-left"></i>
                                         </Link>
                                     </div>
                                 </div>
@@ -93,10 +148,11 @@ const TambahMapel = (props) => {
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Nama Guru</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setGuru(e.target.value) }>
+                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdGuru(e.target.value) }>
                                                         <option selected="selected" value={ '' }>-- Pilih Guru --</option>
-                                                        <option value={ 1 }>Pak Rofiq</option>
-                                                        <option value={ 2 }>Bu ida</option>
+                                                        { guru.map((val) => (
+                                                            <option value={ val.id }>{ val.nama }</option>
+                                                        )) }
                                                     </select>
                                                 </div>
                                                 <div className='mt-5 d-flex justify-content-end'>
@@ -120,9 +176,9 @@ const TambahMapel = (props) => {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-        name: state.name,
+        name: state.user,
         token: state.token,
         expired: state.expired
     }

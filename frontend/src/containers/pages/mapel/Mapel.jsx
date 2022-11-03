@@ -9,7 +9,10 @@ import { Link } from 'react-router-dom'
 const Mapel = (props) => {
     const navigate = useNavigate()
 
+    const [no, setNo] = useState(1)
+
     const [mapel, setMapel] = useState([])
+    const [kelas, setKelas] = useState([])
     const [guru, setGuru] = useState([])
     const axiosJWT = axios.create()
 
@@ -37,6 +40,18 @@ const Mapel = (props) => {
             console.error(error);
         }
     }
+    const getKelas = async () => {
+        try {
+            const response = await axiosJWT.get('http://localhost:7000/kelas', {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setKelas(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
     const getGuru = async () => {
         try {
             const response = await axiosJWT.get(`http://localhost:7000/guru`, {
@@ -46,7 +61,7 @@ const Mapel = (props) => {
             })
             setGuru(response.data)
         } catch (err) {
-            console.log(err)
+            console.error(err)
         }
     }
 
@@ -54,6 +69,7 @@ const Mapel = (props) => {
         refreshToken()
         getMapel()
         getGuru()
+        getKelas()
     }, [])
 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -68,6 +84,8 @@ const Mapel = (props) => {
         }
         return config
     })
+
+    console.log(kelas)
 
 
     return (
@@ -89,83 +107,86 @@ const Mapel = (props) => {
                         </div>{/* /.row */ }
                     </div>{/* /.container-fluid */ }
                 </div>
-                {/* /.content-header */ }
-                <div className="container-fluid">
-                    {/* /.row */ }
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="card">
-                                <div className="card-header row">
-                                    <h3 className="card-title col-4">Responsive Hover Table</h3>
-                                    <div className="col-5"></div>
-                                    <div className="card-tools col-1">
-                                        <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
-                                            <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
-                                            <div className="input-group-append">
-                                                <button type="submit" className="btn btn-default">
-                                                    <i className="fas fa-search" />
-                                                </button>
+                { kelas.map((isi) => (
+                    <div className="container-fluid">
+                        {/* /.row */ }
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="card">
+                                    <div className="card-header row">
+                                        <h3 className="card-title col-4">Kelas { isi.nama_kelas }</h3>
+                                        <div className="col-5"></div>
+                                        <div className="card-tools col-1">
+                                            <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
+                                                <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
+                                                <div className="input-group-append">
+                                                    <button type="submit" className="btn btn-default">
+                                                        <i className="fas fa-search" />
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div className="col-2 d-flex justify-content-end">
+                                            <Link type='button' className='btn btn-success btn-sm' to={ `/mapel/tambah/${isi.id}` }>
+                                                Tambah <i class="fa-solid fa-plus"></i>
+                                            </Link>
+                                        </div>
                                     </div>
-                                    <div className="col-2 d-flex justify-content-end">
-                                        <Link type='button' className='btn btn-success btn-sm' to={ '/mapel/tambah' }>
-                                            Tambah <i class="fa-solid fa-plus"></i>
-                                        </Link>
-                                    </div>
-                                </div>
-                                {/* /.card-header */ }
-                                <div className="card-body table-responsive p-0">
-                                    <table className="table table-hover table-dark text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>Mata Pelajaraan</th>
-                                                <th>Induk</th>
-                                                <th>Guru</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            { mapel.map((val, index) => (
-                                                <tr key={ index }>
-                                                    <td className='col-1'>{ index + 1 }</td>
-                                                    <td className='col-4'>{ val.nama }</td>
-                                                    <td className='col-2'>{ val.induk }</td>
-                                                    {
-                                                        guru.map((value, index) => (
-                                                            val.idGuru == value.id ?
-                                                                <td className='col-2'>
-                                                                    {
-                                                                        value.nama
-                                                                    }
-                                                                </td> : ''
-                                                        ))
-                                                    }
-                                                    <td className='d-flex justify-content-around'>
-                                                        <div className='me-5'>
-                                                            <button className='btn btn-warning'>
-                                                                Edit
-                                                            </button>
-                                                        </div>
-                                                        <div className='ms-5'>
-                                                            <button className='btn btn-danger'>
-                                                                Hapus
-                                                            </button>
-                                                        </div>
-                                                    </td>
+                                    {/* /.card-header */ }
+                                    <div className="card-body table-responsive p-0">
+                                        <table className="table table-hover table-dark text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mata Pelajaraan</th>
+                                                    <th>Induk</th>
+                                                    <th>Guru</th>
+                                                    <th>Aksi</th>
                                                 </tr>
-                                            ))
-                                            }
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                { mapel.map((val, index) => (
+                                                    isi.id == val.id_kelas ?
+                                                        <tr key={ index }>
+                                                            <td className='col-5'>{ val.nama }</td>
+                                                            <td className='col-2'>{ val.induk }</td>
+                                                            {
+                                                                guru.map((value) => (
+                                                                    val.idGuru == value.id ?
+                                                                        <td className='col-2'>
+                                                                            {
+                                                                                value.nama
+                                                                            }
+                                                                        </td> : ''
+                                                                ))
+                                                            }
+                                                            <td className='d-flex justify-content-around'>
+                                                                <div className='me-5'>
+                                                                    <button className='btn btn-warning'>
+                                                                        Edit
+                                                                    </button>
+                                                                </div>
+                                                                <div className='ms-5'>
+                                                                    <button className='btn btn-danger'>
+                                                                        Hapus
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        : ''
+                                                ))
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {/* /.card-body */ }
                                 </div>
-                                {/* /.card-body */ }
+                                {/* /.card */ }
                             </div>
-                            {/* /.card */ }
                         </div>
                     </div>
-                </div>
+
+                )) }
+                {/* /.content-header */ }
             </div>
 
         </div>
