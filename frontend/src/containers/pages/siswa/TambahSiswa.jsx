@@ -155,7 +155,7 @@ export const TambahSiswa = (props) => {
                                                 <div className='mt-3'>
                                                     <label>Kelas</label>
                                                     <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdKelas(e.target.value) }>
-                                                        <option value="">-- Pilih Kelas --</option>
+                                                        <option selected value="">-- Pilih Kelas --</option>
                                                         { kelas.map((val) => (
                                                             <option value={ val.id }>{ val.nama_kelas }</option>
                                                         )) }

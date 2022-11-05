@@ -14,6 +14,7 @@ export const Siswa = (props) => {
     // deklarasi state
     const [siswa, setSiswa] = useState([])
     const [kelas, setKelas] = useState([])
+    const [msg, setMsg] = useState('')
 
     // refresh Token
     const refreshToken = async () => {
@@ -49,6 +50,18 @@ export const Siswa = (props) => {
                 }
             })
             setKelas(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // handle Hapus
+
+    const handleHapus = async (val) => {
+        try {
+            await axios.delete(`http://localhost:7000/siswa/${val}`)
+            setMsg("Data Berhasil Terhapus")
+            getSiswa()
         } catch (error) {
             console.error(error);
         }
@@ -134,7 +147,7 @@ export const Siswa = (props) => {
                                         </thead>
                                         <tbody>
                                             { siswa.map((val, index) => (
-                                                <tr key={ index }>
+                                                <tr key={ index + 1 }>
                                                     <td className='col-sm-1'>{ index + 1 }</td>
                                                     <td className='col-sm-2'>{ val.nisn }</td>
                                                     <td className='col-sm-3'>{ val.nama }</td>
@@ -153,12 +166,12 @@ export const Siswa = (props) => {
                                                     </td>
                                                     <td className='d-flex justify-content-around'>
                                                         <div className='me-5'>
-                                                            <Link type='button' className='btn btn-warning' to={ `edit` }>
+                                                            <Link type='button' className='btn btn-warning' to={ `edit/${val.id}` }>
                                                                 Edit
                                                             </Link>
                                                         </div>
                                                         <div className='ms-5'>
-                                                            <button type='button' className='btn btn-danger' >
+                                                            <button type='button' className='btn btn-danger' onClick={ () => { confirm('Apakah anda yakin ingin menghapus?') ? handleHapus(val.id) : '' } }>
                                                                 Hapus
                                                             </button>
                                                         </div>
