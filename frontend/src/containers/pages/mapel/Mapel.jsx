@@ -11,11 +11,11 @@ const Mapel = (props) => {
     const navigate = useNavigate()
     const axiosJWT = axios.create()
 
-
     // state 
     const [mapel, setMapel] = useState([])
     const [kelas, setKelas] = useState([])
     const [guru, setGuru] = useState([])
+    const [msg, setMsg] = useState('')
 
     // refresh Token
     const refreshToken = async () => {
@@ -68,8 +68,20 @@ const Mapel = (props) => {
         }
     }
 
-    // Hooks Use Effect
+    // handle delete
 
+    const handleDelete = async (val) => {
+        try {
+            const result = await axios.delete(`http://localhost:7000/mapel/${val}`)
+            setMsg('Data Berhasil Dihapus')
+            getMapel()
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    // Hooks Use Effect
     useEffect(() => {
         refreshToken()
         getMapel()
@@ -79,7 +91,6 @@ const Mapel = (props) => {
 
 
     // axios Interceptors 
-
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
         if (props.expired * 1000 < currenDate.getTime()) {
@@ -92,8 +103,6 @@ const Mapel = (props) => {
         }
         return config
     })
-
-    console.log(kelas)
 
 
     return (
@@ -174,9 +183,9 @@ const Mapel = (props) => {
                                                                     </Link>
                                                                 </div>
                                                                 <div className='ms-5'>
-                                                                    <Link type='button' className='btn btn-danger' to={ `delete/${val.id}` }>
+                                                                    <button type='button' className='btn btn-danger' onClick={ () => { (window.confirm("apakah Yakin ingin menghapus?") ? handleDelete(val.id) : '') } }>
                                                                         Hapus
-                                                                    </Link>
+                                                                    </button>
                                                                 </div>
                                                             </td>
                                                         </tr>

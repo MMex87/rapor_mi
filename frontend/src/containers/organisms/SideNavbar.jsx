@@ -48,12 +48,12 @@ const SideNav = (props) => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <a href="pages/widgets.html" className="nav-link">
+                                <Link to={ "/siswa" } className="nav-link">
                                     <IconPerson />
                                     <p>
                                         Siswa
                                     </p>
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <a href="pages/widgets.html" className="nav-link">

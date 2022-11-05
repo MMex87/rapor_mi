@@ -11,7 +11,8 @@ import {
 import Mapel from "./containers/pages/mapel/Mapel";
 import TambahMapel from "./containers/pages/mapel/TambahMapel";
 import EditMapel from "./containers/pages/mapel/EditMapel";
-import DeleteMapel from "./containers/pages/mapel/DeleteMapel";
+import Siswa from "./containers/pages/siswa/Siswa";
+import TambahSiswa from "./containers/pages/siswa/TambahSiswa";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,8 +27,11 @@ const router = createBrowserRouter(
           element={ <TambahMapel /> } />
         <Route path="/mapel/edit/:idMapel"
           element={ <EditMapel /> } />
-        <Route path="/mapel/delete/:idMapel"
-          element={ <DeleteMapel /> } />
+      </Route>
+      <Route path="/siswa" element={ <Template /> } >
+        <Route index element={ <Siswa /> } />
+        <Route path="/siswa/tambah"
+          element={ <TambahSiswa /> } />
       </Route>
       <Route path="/register" element={ <Register /> } />
     </Route>
