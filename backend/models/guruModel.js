@@ -19,6 +19,9 @@ const Guru = db.define('guru', {
     tanggal_lahir: {
         type: DataTypes.DATE
     },
+    jenis_kelamin: {
+        type: DataTypes.STRING
+    },
     picture: {
         type: DataTypes.STRING
     },

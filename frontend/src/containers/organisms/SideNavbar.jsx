@@ -15,11 +15,11 @@ const SideNav = (props) => {
                 {/* Sidebar */ }
                 <div className="sidebar">
                     {/* Sidebar user panel (optional) */ }
-                    <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div className="user-panel mt-3 pb-3 mb-3 d-flex row">
                         <div className="image">
-                            <img src="http://localhost:3000/assets/dist/img/user2-160x160.jpg" className="img-circle elevation-3" alt="User Image" />
+                            <img src="http://localhost:3000/assets/uploads/default.png" className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
                         </div>
-                        <div className="info">
+                        <div className="info" style={ { marginLeft: 20 } }>
                             <a href="#" className="d-block">{ props.name }</a>
                         </div>
                     </div>
@@ -56,13 +56,13 @@ const SideNav = (props) => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <a href="pages/widgets.html" className="nav-link">
+                                <Link to={ "/guru" } className="nav-link">
                                     {/* <IconPerson2 /> */ }
                                     <i className="fa-solid fa-chalkboard-user nav-icon"></i>
                                     <p>
                                         Guru
                                     </p>
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/mapel">
