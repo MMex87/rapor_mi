@@ -52,7 +52,7 @@ export const editKelas = async (req, res) => {
                 id
             }
         })
-        if (kelas === 1)
+        if (kelas == 1)
             res.json({ msg: "Data Berhasil Di Ubah" })
         else
             res.status(404).json({ msg: "Data Tidak di temukan" })

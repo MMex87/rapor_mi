@@ -17,6 +17,7 @@ import EditSiswa from "./containers/pages/siswa/EditSiswa";
 import Guru from "./containers/pages/guru/Guru";
 import TambahGuru from "./containers/pages/guru/TambahGuru";
 import EditGuru from "./containers/pages/guru/EditGuru";
+import Kelas from "./containers/pages/kelas/Kelas";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +46,9 @@ const router = createBrowserRouter(
           element={ <TambahGuru /> } />
         <Route path="/guru/edit/:idGuru"
           element={ <EditGuru /> } />
+      </Route>
+      <Route path="/kelas" element={ <Template /> }>
+        <Route index element={ <Kelas /> } />
       </Route>
       <Route path="/register" element={ <Register /> } />
     </Route>

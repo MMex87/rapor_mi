@@ -74,13 +74,13 @@ const SideNav = (props) => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <a href="pages/widgets.html" className="nav-link">
+                                <Link to="/kelas" className="nav-link">
                                     <i className="fa-solid fa-school-flag nav-icon"></i>
                                     {/* <IconBuild /> */ }
                                     <p>
                                         Kelas
                                     </p>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </nav>
