@@ -3,7 +3,8 @@ import ActionType from "./globalActionType";
 const globalState = {
     user: '',
     token: '',
-    expired: ''
+    expired: '',
+    picture: ''
 }
 
 const rootReducer = (state = globalState, action) => {
@@ -22,6 +23,11 @@ const rootReducer = (state = globalState, action) => {
             return {
                 ...state,
                 expired: action.index
+            }
+        case ActionType.SET_PICTURE_USER:
+            return {
+                ...state,
+                picture: action.index
             }
         default:
             return state

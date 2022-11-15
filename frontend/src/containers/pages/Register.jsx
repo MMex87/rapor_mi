@@ -3,19 +3,71 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
 const Register = () => {
+
+    const fileInput = React.createRef()
+
+    // state
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confPassword, setConfPassword] = useState('')
     const [msg, setMsg] = useState('')
 
+    // state Foto profile
+    const [picture, setPicture] = useState('default.png')
+    const [foto, setFoto] = useState('http://localhost:3000/assets/uploads/default.png')
+    const [saveImage, setSaveImage] = useState(null)
+    const [statusUp, setStatusUp] = useState(0)
+
+
+    // navigate
     const navigate = useNavigate()
+
+
+    // handle upload foto
+
+    const handleFoto = () => {
+        const uploaded = fileInput.current.files[0]
+        setPicture(uploaded.name)
+        setFoto(URL.createObjectURL(uploaded))
+        setSaveImage(uploaded)
+        setStatusUp(1)
+    }
+
+    const handleUploadFoto = (e) => {
+        e.preventDefault()
+        // deklarasi form data
+        const formData = new FormData()
+        formData.append('photo', saveImage)
+
+        if (statusUp == 0) {
+            window.alert('Tolong Pilih gambar Terlebih dalulu!!')
+        } else if (statusUp == 2) {
+            window.alert('Foto Sudah Tersimpan!!')
+        } else {
+            axios({
+                method: "POST",
+                url: 'http://localhost:7000/img/uploads',
+                data: formData,
+            }).then((res) => {
+                setFoto(res.data.image)
+                setPicture(res.data.name)
+                setStatusUp(2)
+                window.alert('Foto Berhasil di Upload!!')
+            }).catch((err) => {
+                console.error(err)
+            })
+        }
+
+    }
+
 
     const Register = async (e) => {
         e.preventDefault()
+        const role = 'admin'
         try {
             await axios.post('http://localhost:7000/users', {
-                name, email, password, confPassword
+                name, email, password, confPassword, role, picture
             })
             navigate('/')
         } catch (err) {
@@ -32,17 +84,33 @@ const Register = () => {
                     <div className="columns is-centered">
                         <div className="column is-4-desktop">
                             <form onSubmit={ Register } className='box'>
+                                <h1 className='columns is-centered title is-1'>Register</h1>
                                 <p className='has-text-centered'>{ msg }</p>
                                 <div className="field mt-5">
                                     <label className='label'>Name</label>
                                     <div className="controls">
-                                        <input type="text" className="input" placeholder='name' value={ name } onChange={ (e) => setName(e.target.value) } />
+                                        <input type="text" className="input" id='name' placeholder='name' value={ name } onChange={ (e) => setName(e.target.value) } />
                                     </div>
                                 </div>
                                 <div className="field mt-5">
                                     <label className='label'>Email</label>
                                     <div className="controls">
-                                        <input type="text" className="input" placeholder='Email' value={ email } onChange={ (e) => setEmail(e.target.value) } />
+                                        <input type="text" className="input" id='email' placeholder='Email' value={ email } onChange={ (e) => setEmail(e.target.value) } />
+                                    </div>
+                                </div>
+                                <div className='mt-3'>
+                                    <label>Foto Profile</label>
+                                    <div className="w-25 mt-3 mb-3" style={ { marginLeft: 50 } }>
+                                        <img src={ foto } className='img-thumbnail'></img>
+                                    </div>
+                                    <div className="input-group">
+                                        <div className="custom-file">
+                                            <input type="file" className="custom-file-input" id="exampleInputFile" accept='image/*' onChange={ handleFoto } ref={ fileInput } />
+                                            <label className="custom-file-label" htmlFor="exampleInputFile">{ foto == 'http://localhost:3000/assets/uploads/default.png' ? 'Pilih Gambar' : picture }</label>
+                                        </div>
+                                        <div className="input-group-append">
+                                            <button type='button' className="input-group-text" onClick={ handleUploadFoto }>Upload</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="field mt-5">

@@ -6,7 +6,7 @@ import { where } from "sequelize";
 export const getUsers = async (req, res) => {
     try {
         const users = await Users.findAll({
-            attributes: ['id', 'name', 'email']
+            attributes: ['id', 'name', 'email', 'role', 'picture']
         })
         res.json(users)
     } catch (error) {
@@ -15,7 +15,7 @@ export const getUsers = async (req, res) => {
 }
 
 export const Register = async (req, res) => {
-    const { name, email, password, confPassword } = req.body
+    const { name, email, password, confPassword, role, picture } = req.body
 
     if (password !== confPassword) return res.status(400)
         .json({ msg: "Password dan Confirm Password tidak cocok" })
@@ -24,7 +24,7 @@ export const Register = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, salt)
     try {
         await Users.create({
-            name, email, password: hashPassword
+            name, email, password: hashPassword, role, picture
         })
         res.json({ msg: "Register Berhasil" })
     } catch (error) {
@@ -43,11 +43,12 @@ export const Login = async (req, res) => {
         if (!match) return res.status(400).json({ msg: "Wrong Password" })
         const userId = user[0].id;
         const name = user[0].name;
+        const picture = user[0].picture;
         const email = user[0].email;
-        const accesstoken = jwt.sign({ userId, name, email }, process.env.ACCESS_TOKEN_SECRET, {
+        const accesstoken = jwt.sign({ userId, name, email, picture }, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: '20s'
         })
-        const refreshtoken = jwt.sign({ userId, name, email }, process.env.REFRESH_TOKEN_SECRET, {
+        const refreshtoken = jwt.sign({ userId, name, email, picture }, process.env.REFRESH_TOKEN_SECRET, {
             expiresIn: '1D'
         })
         await Users.update({ refresh_token: refreshtoken }, {

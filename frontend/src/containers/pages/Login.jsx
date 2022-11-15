@@ -9,10 +9,21 @@ const Login = () => {
     const [msg, setMsg] = useState('')
     const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     refreshToken()
-    //     AuthLogin()
-    // },[])
+    // refresh Token
+    const AuthLogin = async () => {
+        try {
+            await axios.get('http://localhost:7000/token')
+
+            navigate('/dashboard')
+        } catch (error) {
+            return navigate('/')
+        }
+    }
+
+
+    useEffect(() => {
+        AuthLogin()
+    }, [])
 
 
     const Auth = async (e) => {

@@ -17,7 +17,7 @@ const SideNav = (props) => {
                     {/* Sidebar user panel (optional) */ }
                     <div className="user-panel mt-3 pb-3 mb-3 d-flex row">
                         <div className="image">
-                            <img src="http://localhost:3000/assets/uploads/default.png" className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
+                            <img src={ 'http://localhost:3000/assets/uploads/' + props.picture } className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
                         </div>
                         <div className="info" style={ { marginLeft: 20 } }>
                             <a href="#" className="d-block">{ props.name }</a>
@@ -94,7 +94,8 @@ const SideNav = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        name: state.user
+        name: state.user,
+        picture: state.picture
     }
 }
 

@@ -30,6 +30,7 @@ export const TambahSiswa = (props) => {
             const decoded = jwt_decode(response.data.accessToken)
             props.handleName(decoded.name)
             props.handleExp(decoded.exp)
+            props.handlePicture(decoded.picture)
         } catch (error) {
             return navigate('/')
         }
@@ -87,6 +88,7 @@ export const TambahSiswa = (props) => {
             const decoded = jwt_decode(response.data.accessToken)
             props.handleExp(decoded.exp)
             props.handleName(decoded.name)
+            props.handlePicture(decoded.picture)
         }
         return config
     })
@@ -183,7 +185,8 @@ const mapStateToProps = state => {
     return {
         name: state.user,
         token: state.token,
-        expired: state.expired
+        expired: state.expired,
+        picture: state.picture
     }
 }
 
@@ -191,7 +194,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
-        handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp })
+        handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
+        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp })
     }
 }
 
