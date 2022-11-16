@@ -3,7 +3,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
-import ActionType from '../../../redux/reducer/globalActionType'
+import ActionType from '../../../../redux/reducer/globalActionType'
 
 const Dashboard = (props) => {
 
@@ -20,6 +20,7 @@ const Dashboard = (props) => {
             props.handleName(decoded.name)
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
 
         } catch (error) {
             return navigate('/')
@@ -47,6 +48,7 @@ const Dashboard = (props) => {
             props.handleExp(decoded.exp)
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         }
         return config
     }, (error) => {
@@ -283,7 +285,8 @@ const mapStateToProps = state => {
         name: state.user,
         token: state.token,
         expired: state.expired,
-        picture: state.picture
+        picture: state.picture,
+        role: state.role
     }
 }
 
@@ -292,7 +295,8 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp })
+        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
     }
 }
 

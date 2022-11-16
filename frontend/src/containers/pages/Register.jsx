@@ -64,7 +64,7 @@ const Register = () => {
 
     const Register = async (e) => {
         e.preventDefault()
-        const role = 'admin'
+        const role = 'Admin'
         try {
             await axios.post('http://localhost:7000/users', {
                 name, email, password, confPassword, role, picture

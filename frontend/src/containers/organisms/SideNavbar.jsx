@@ -10,17 +10,20 @@ const SideNav = (props) => {
                 {/* Brand Logo */ }
                 <Link to="/dashboard" className="brand-link">
                     <img src="http://localhost:3000/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={ { opacity: '.8' } } />
-                    <span className="brand-text font-weight-light">Admin MIDU</span>
+                    <span className="brand-text font-weight-light">{ props.role } MIDU</span>
                 </Link>
                 {/* Sidebar */ }
                 <div className="sidebar">
                     {/* Sidebar user panel (optional) */ }
-                    <div className="user-panel mt-3 pb-3 mb-3 d-flex row">
+                    <div className="user-panel mt-3 pb-3 mb-3 d-flex row container">
                         <div className="image">
                             <img src={ 'http://localhost:3000/assets/uploads/' + props.picture } className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
                         </div>
-                        <div className="info" style={ { marginLeft: 20 } }>
+                        <div className="info" style={ { marginLeft: 10 } }>
                             <a href="#" className="d-block">{ props.name }</a>
+                        </div>
+                        <div className="info container">
+                            <a href="#" className="d-flex justify-content-center">{ props.role }</a>
                         </div>
                     </div>
                     {/* SidebarSearch Form */ }
@@ -40,47 +43,104 @@ const SideNav = (props) => {
                             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
                             <li className="nav-item">
-                                <Link className="nav-link" to={ '/dashboard' }>
-                                    <i className="nav-icon fas fa-tachometer-alt" />
-                                    <p>
-                                        Dashboard
-                                    </p>
-                                </Link>
+                                { (props.role == 'Kepala Sekolah') ? (
+                                    <Link className="nav-link" to={ '/kepala/dashboard' }>
+                                        <i className="nav-icon fas fa-tachometer-alt" />
+                                        <p>
+                                            Dashboard
+                                        </p>
+                                    </Link>
+
+                                ) : (
+                                    <Link className="nav-link" to={ '/dashboard' }>
+                                        <i className="nav-icon fas fa-tachometer-alt" />
+                                        <p>
+                                            Dashboard
+                                        </p>
+                                    </Link>
+                                ) }
                             </li>
                             <li className="nav-item">
-                                <Link to={ "/siswa" } className="nav-link">
-                                    <IconPerson />
-                                    <p>
-                                        Siswa
-                                    </p>
-                                </Link>
+                                { (props.role == 'Kepala Sekolah') ? (
+                                    <Link to={ "/kepala/siswa" } className="nav-link">
+                                        <IconPerson />
+                                        <p>
+                                            Siswa
+                                        </p>
+                                    </Link>
+
+                                ) : (
+                                    <Link to={ "/siswa" } className="nav-link">
+                                        <IconPerson />
+                                        <p>
+                                            Siswa
+                                        </p>
+                                    </Link>
+
+                                ) }
                             </li>
                             <li className="nav-item">
-                                <Link to={ "/guru" } className="nav-link">
-                                    {/* <IconPerson2 /> */ }
-                                    <i className="fa-solid fa-chalkboard-user nav-icon"></i>
-                                    <p>
-                                        Guru
-                                    </p>
-                                </Link>
+                                { (props.role == 'Kepala Sekolah') ? (
+                                    <Link to={ "/kepala/guru" } className="nav-link">
+                                        {/* <IconPerson2 /> */ }
+                                        <i className="fa-solid fa-chalkboard-user nav-icon"></i>
+                                        <p>
+                                            Guru
+                                        </p>
+                                    </Link>
+
+                                ) : (
+
+                                    <Link to={ "/guru" } className="nav-link">
+                                        {/* <IconPerson2 /> */ }
+                                        <i className="fa-solid fa-chalkboard-user nav-icon"></i>
+                                        <p>
+                                            Guru
+                                        </p>
+                                    </Link>
+                                ) }
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/mapel">
-                                    <IconJurnal />
-                                    {/* <i className="nav-icon bi bi-journal" /> */ }
-                                    <p>
-                                        Mata Pelajaran
-                                    </p>
-                                </Link>
+                                { (props.role == 'Kepala Sekolah') ? (
+                                    <Link className="nav-link" to="/kepala/mapel">
+                                        <IconJurnal />
+                                        {/* <i className="nav-icon bi bi-journal" /> */ }
+                                        <p>
+                                            Mata Pelajaran
+                                        </p>
+                                    </Link>
+
+                                ) : (
+                                    <Link className="nav-link" to="/mapel">
+                                        <IconJurnal />
+                                        {/* <i className="nav-icon bi bi-journal" /> */ }
+                                        <p>
+                                            Mata Pelajaran
+                                        </p>
+                                    </Link>
+
+                                ) }
                             </li>
                             <li className="nav-item">
-                                <Link to="/kelas" className="nav-link">
-                                    <i className="fa-solid fa-school-flag nav-icon"></i>
-                                    {/* <IconBuild /> */ }
-                                    <p>
-                                        Kelas
-                                    </p>
-                                </Link>
+                                { (props.role == 'Kepala Sekolah') ? (
+                                    <Link to="/kepala/kelas" className="nav-link">
+                                        <i className="fa-solid fa-school-flag nav-icon"></i>
+                                        {/* <IconBuild /> */ }
+                                        <p>
+                                            Kelas
+                                        </p>
+                                    </Link>
+
+                                ) : (
+                                    <Link to="/kelas" className="nav-link">
+                                        <i className="fa-solid fa-school-flag nav-icon"></i>
+                                        {/* <IconBuild /> */ }
+                                        <p>
+                                            Kelas
+                                        </p>
+                                    </Link>
+
+                                ) }
                             </li>
                         </ul>
                     </nav>
@@ -95,7 +155,8 @@ const SideNav = (props) => {
 const mapStateToProps = (state) => {
     return {
         name: state.user,
-        picture: state.picture
+        picture: state.picture,
+        role: state.role
     }
 }
 

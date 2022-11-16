@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import ActionType from '../../../redux/reducer/globalActionType'
+import ActionType from '../../../../redux/reducer/globalActionType'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
@@ -35,6 +35,7 @@ const TambahMapel = (props) => {
             props.handleName(decoded.name)
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         } catch (error) {
             return navigate('/')
             // console.error(error);
@@ -93,6 +94,7 @@ const TambahMapel = (props) => {
             props.handleExp(decoded.exp)
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         }
         return config
     })
@@ -194,7 +196,8 @@ const mapStateToProps = state => {
         name: state.user,
         token: state.token,
         expired: state.expired,
-        picture: state.picture
+        picture: state.picture,
+        role: state.role
     }
 }
 
@@ -203,7 +206,8 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp })
+        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
     }
 }
 

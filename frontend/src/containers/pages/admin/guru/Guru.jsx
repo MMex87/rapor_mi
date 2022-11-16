@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ActionType from '../../../redux/reducer/globalActionType'
+import ActionType from '../../../../redux/reducer/globalActionType'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-export const Siswa = (props) => {
+export const Guru = (props) => {
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
 
-    // deklarasi state
-    const [siswa, setSiswa] = useState([])
-    const [kelas, setKelas] = useState([])
+    // deklarasi State
+    const [guru, setGuru] = useState([])
     const [msg, setMsg] = useState('')
 
     // refresh Token
@@ -25,57 +24,42 @@ export const Siswa = (props) => {
             props.handleName(decoded.name)
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         } catch (error) {
             return navigate('/')
         }
     }
 
     // get Datas
-    const getSiswa = async () => {
+    const getGuru = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:7000/siswa', {
+            const response = await axiosJWT.get('http://localhost:7000/guru', {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            setSiswa(response.data)
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    const getKelas = async () => {
-        try {
-            const response = await axiosJWT.get('http://localhost:7000/kelas', {
-                headers: {
-                    Authorization: `Bearer ${props.token}`
-                }
-            })
-            setKelas(response.data)
+            setGuru(response.data)
         } catch (error) {
             console.error(error);
         }
     }
 
     // handle Hapus
-
     const handleHapus = async (val) => {
         try {
-            await axios.delete(`http://localhost:7000/siswa/${val}`)
+            await axios.delete(`http://localhost:7000/guru/${val}`)
             setMsg("Data Berhasil Terhapus")
-            getSiswa()
+            getGuru()
         } catch (error) {
             console.error(error);
         }
     }
 
-
     // Hooks Use Effect
     useEffect(() => {
         refreshToken()
-        getSiswa()
-        getKelas()
+        getGuru()
     }, [])
-
 
     // axios Interceptors 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -88,9 +72,11 @@ export const Siswa = (props) => {
             props.handleExp(decoded.exp)
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         }
         return config
     })
+
     return (
         <div>
             <div className="content-wrapper">
@@ -104,7 +90,7 @@ export const Siswa = (props) => {
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to={ "/dashboard" }>Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Siswa</li>
+                                    <li className="breadcrumb-item active">Guru</li>
                                 </ol>
                             </div>{/* /.col */ }
                         </div>{/* /.row */ }
@@ -116,7 +102,7 @@ export const Siswa = (props) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header row">
-                                    <h3 className="card-title col-4">Data Siswa</h3>
+                                    <h3 className="card-title col-4">Data Guru</h3>
                                     <div className="col-5"></div>
                                     <div className="card-tools col-1">
                                         <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
@@ -139,32 +125,26 @@ export const Siswa = (props) => {
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>NISN</th>
-                                                <th>Nama Siswa</th>
+                                                <th>NUPTK</th>
+                                                <th>Nama Guru</th>
                                                 <th>Tanggal Lahir</th>
-                                                <th>Kelas</th>
-                                                <th>Status</th>
+                                                <th>JTM</th>
+                                                <th>Pendidikan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            { siswa.map((val, index) => (
+                                            { guru.map((val, index) => (
                                                 <tr key={ index + 1 }>
                                                     <td className='col-sm-1'>{ index + 1 }</td>
-                                                    <td className='col-sm-2'>{ val.nisn }</td>
+                                                    <td className='col-sm-2'>{ val.nuptk }</td>
                                                     <td className='col-sm-3'>{ val.nama }</td>
                                                     <td className='col-sm-1'>{ val.tanggal_lahir }</td>
-                                                    {
-                                                        kelas.map((value) => (
-                                                            val.id_kelas == value.id ?
-                                                                <td className='col-sm-1'>
-                                                                    { value.nama_kelas }
-                                                                </td> : ''
-
-                                                        ))
-                                                    }
                                                     <td className='col-sm-1'>
-                                                        { val.status }
+                                                        { val.jtm }
+                                                    </td>
+                                                    <td className='col-sm-1'>
+                                                        { val.pendidikan }
                                                     </td>
                                                     <td className='d-flex justify-content-around'>
                                                         <div className='me-5'>
@@ -197,7 +177,8 @@ const mapStateToProps = state => {
         name: state.user,
         token: state.token,
         expired: state.expired,
-        picture: state.picture
+        picture: state.picture,
+        role: state.role
     }
 }
 
@@ -206,8 +187,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp })
+        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Siswa)
+export default connect(mapStateToProps, mapDispatchToProps)(Guru)

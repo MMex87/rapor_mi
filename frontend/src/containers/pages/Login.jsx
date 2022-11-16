@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
+import jwt_decode from 'jwt-decode'
 import { useNavigate } from "react-router-dom"
 
 const Login = () => {
@@ -32,7 +33,14 @@ const Login = () => {
             await axios.post('http://localhost:7000/login', {
                 email, password
             })
-            navigate('/dashboard')
+            const response = await axios.get('http://localhost:7000/token')
+            const decoded = jwt_decode(response.data.accessToken)
+            if (decoded.role == 'Kepala Sekolah') {
+                navigate('/kepala/dashboard')
+            } else {
+                navigate('/dashboard')
+
+            }
         } catch (err) {
             if (err.response) {
                 setMsg(err.response.data.msg)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ActionType from '../../../redux/reducer/globalActionType'
+import ActionType from '../../../../redux/reducer/globalActionType'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
@@ -15,7 +15,6 @@ const Mapel = (props) => {
     const [mapel, setMapel] = useState([])
     const [kelas, setKelas] = useState([])
     const [guru, setGuru] = useState([])
-    const [msg, setMsg] = useState('')
 
     // refresh Token
     const refreshToken = async () => {
@@ -26,6 +25,7 @@ const Mapel = (props) => {
             props.handleName(decoded.name)
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         } catch (error) {
             return navigate('/')
         }
@@ -69,18 +69,6 @@ const Mapel = (props) => {
         }
     }
 
-    // handle delete
-
-    const handleDelete = async (val) => {
-        try {
-            const result = await axios.delete(`http://localhost:7000/mapel/${val}`)
-            setMsg('Data Berhasil Dihapus')
-            getMapel()
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
 
     // Hooks Use Effect
     useEffect(() => {
@@ -102,6 +90,7 @@ const Mapel = (props) => {
             props.handleExp(decoded.exp)
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         }
         return config
     })
@@ -134,7 +123,7 @@ const Mapel = (props) => {
                                 <div className="card">
                                     <div className="card-header row">
                                         <h3 className="card-title col-4">Kelas { isi.nama_kelas }</h3>
-                                        <div className="col-5"></div>
+                                        <div className="col-6"></div>
                                         <div className="card-tools col-1">
                                             <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
                                                 <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
@@ -145,11 +134,6 @@ const Mapel = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-2 d-flex justify-content-end">
-                                            <Link type='button' className='btn btn-success btn-sm' to={ `tambah/${isi.id}` }>
-                                                Tambah <i class="fa-solid fa-plus"></i>
-                                            </Link>
-                                        </div>
                                     </div>
                                     {/* /.card-header */ }
                                     <div className="card-body table-responsive p-0">
@@ -159,7 +143,6 @@ const Mapel = (props) => {
                                                     <th>Mata Pelajaraan</th>
                                                     <th>Induk</th>
                                                     <th>Guru</th>
-                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -178,18 +161,6 @@ const Mapel = (props) => {
                                                                         </td> : ''
                                                                 ))
                                                             }
-                                                            <td className='d-flex justify-content-around'>
-                                                                <div className='me-5'>
-                                                                    <Link type='button' className='btn btn-warning' to={ `edit/${val.id}` }>
-                                                                        Edit
-                                                                    </Link>
-                                                                </div>
-                                                                <div className='ms-5'>
-                                                                    <button type='button' className='btn btn-danger' onClick={ () => { (window.confirm("apakah Yakin ingin menghapus?") ? handleDelete(val.id) : '') } }>
-                                                                        Hapus
-                                                                    </button>
-                                                                </div>
-                                                            </td>
                                                         </tr>
                                                         : ''
                                                 ))
@@ -218,7 +189,8 @@ const mapStateToProps = state => {
         name: state.user,
         token: state.token,
         expired: state.expired,
-        picture: state.picture
+        picture: state.picture,
+        role: state.role
     }
 }
 
@@ -227,7 +199,8 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp })
+        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
     }
 }
 

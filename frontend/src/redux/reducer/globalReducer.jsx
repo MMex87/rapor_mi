@@ -4,7 +4,8 @@ const globalState = {
     user: '',
     token: '',
     expired: '',
-    picture: ''
+    picture: '',
+    role: ''
 }
 
 const rootReducer = (state = globalState, action) => {
@@ -28,6 +29,11 @@ const rootReducer = (state = globalState, action) => {
             return {
                 ...state,
                 picture: action.index
+            }
+        case ActionType.SET_ROLE_USER:
+            return {
+                ...state,
+                role: action.index
             }
         default:
             return state

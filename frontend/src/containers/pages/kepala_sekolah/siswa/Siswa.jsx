@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ActionType from '../../../redux/reducer/globalActionType'
+import ActionType from '../../../../redux/reducer/globalActionType'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-export const Guru = (props) => {
+export const Siswa = (props) => {
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
 
-    // deklarasi State
-    const [guru, setGuru] = useState([])
-    const [msg, setMsg] = useState('')
+    // deklarasi state
+    const [siswa, setSiswa] = useState([])
+    const [kelas, setKelas] = useState([])
 
     // refresh Token
     const refreshToken = async () => {
@@ -24,41 +24,46 @@ export const Guru = (props) => {
             props.handleName(decoded.name)
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         } catch (error) {
             return navigate('/')
         }
     }
 
     // get Datas
-    const getGuru = async () => {
+    const getSiswa = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:7000/guru', {
+            const response = await axiosJWT.get('http://localhost:7000/siswa', {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            setGuru(response.data)
+            setSiswa(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const getKelas = async () => {
+        try {
+            const response = await axiosJWT.get('http://localhost:7000/kelas', {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setKelas(response.data)
         } catch (error) {
             console.error(error);
         }
     }
 
-    // handle Hapus
-    const handleHapus = async (val) => {
-        try {
-            await axios.delete(`http://localhost:7000/guru/${val}`)
-            setMsg("Data Berhasil Terhapus")
-            getGuru()
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     // Hooks Use Effect
     useEffect(() => {
         refreshToken()
-        getGuru()
+        getSiswa()
+        getKelas()
     }, [])
+
 
     // axios Interceptors 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -71,10 +76,10 @@ export const Guru = (props) => {
             props.handleExp(decoded.exp)
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
+            props.handleRole(decoded.role)
         }
         return config
     })
-
     return (
         <div>
             <div className="content-wrapper">
@@ -88,7 +93,7 @@ export const Guru = (props) => {
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to={ "/dashboard" }>Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Guru</li>
+                                    <li className="breadcrumb-item active">Siswa</li>
                                 </ol>
                             </div>{/* /.col */ }
                         </div>{/* /.row */ }
@@ -100,8 +105,8 @@ export const Guru = (props) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header row">
-                                    <h3 className="card-title col-4">Data Guru</h3>
-                                    <div className="col-5"></div>
+                                    <h3 className="card-title col-4">Data Siswa</h3>
+                                    <div className="col-6"></div>
                                     <div className="card-tools col-1">
                                         <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
                                             <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
@@ -112,50 +117,39 @@ export const Guru = (props) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-2 d-flex justify-content-end">
-                                        <Link type='button' className='btn btn-success btn-sm' to={ `tambah` }>
-                                            Tambah <i className="fa-solid fa-plus"></i>
-                                        </Link>
-                                    </div>
                                 </div>
                                 <div className="card-body table-responsive p-0">
                                     <table className="table table-hover table-dark text-nowrap">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>NUPTK</th>
-                                                <th>Nama Guru</th>
+                                                <th>NISN</th>
+                                                <th>Nama Siswa</th>
                                                 <th>Tanggal Lahir</th>
-                                                <th>JTM</th>
-                                                <th>Pendidikan</th>
-                                                <th>Aksi</th>
+                                                <th>Kelas</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            { guru.map((val, index) => (
+                                            { siswa.map((val, index) => (
                                                 <tr key={ index + 1 }>
                                                     <td className='col-sm-1'>{ index + 1 }</td>
-                                                    <td className='col-sm-2'>{ val.nuptk }</td>
+                                                    <td className='col-sm-2'>{ val.nisn }</td>
                                                     <td className='col-sm-3'>{ val.nama }</td>
                                                     <td className='col-sm-1'>{ val.tanggal_lahir }</td>
+                                                    {
+                                                        kelas.map((value) => (
+                                                            val.id_kelas == value.id ?
+                                                                <td className='col-sm-1'>
+                                                                    { value.nama_kelas }
+                                                                </td> : ''
+
+                                                        ))
+                                                    }
                                                     <td className='col-sm-1'>
-                                                        { val.jtm }
+                                                        { val.status }
                                                     </td>
-                                                    <td className='col-sm-1'>
-                                                        { val.pendidikan }
-                                                    </td>
-                                                    <td className='d-flex justify-content-around'>
-                                                        <div className='me-5'>
-                                                            <Link type='button' className='btn btn-warning' to={ `edit/${val.id}` }>
-                                                                Edit
-                                                            </Link>
-                                                        </div>
-                                                        <div className='ms-5'>
-                                                            <button type='button' className='btn btn-danger' onClick={ () => { confirm('Apakah anda yakin ingin menghapus?') ? handleHapus(val.id) : '' } }>
-                                                                Hapus
-                                                            </button>
-                                                        </div>
-                                                    </td>
+
                                                 </tr>
                                             )) }
                                         </tbody>
@@ -175,7 +169,8 @@ const mapStateToProps = state => {
         name: state.user,
         token: state.token,
         expired: state.expired,
-        picture: state.picture
+        picture: state.picture,
+        role: state.role
     }
 }
 
@@ -184,8 +179,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp })
+        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Guru)
+export default connect(mapStateToProps, mapDispatchToProps)(Siswa)
