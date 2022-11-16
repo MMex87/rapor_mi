@@ -138,11 +138,11 @@ export const TambahSiswa = (props) => {
                                                 </div>
                                                 <div>
                                                     <label>Nama Siswa</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } />
+                                                    <input type="text" id='name' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>NISN</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNisn(e.target.value) } />
+                                                    <input type="number" id='id' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNisn(e.target.value) } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Tanggal Lahir</label>

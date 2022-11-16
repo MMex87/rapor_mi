@@ -162,11 +162,11 @@ export const EditSiswa = (props) => {
                                                 </div>
                                                 <div>
                                                     <label>Nama Siswa</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } value={ nama } />
+                                                    <input type="text" id='name' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } value={ nama } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>NISN</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNisn(e.target.value) } value={ nisn } />
+                                                    <input type="number" id='id' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNisn(e.target.value) } value={ nisn } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Tanggal Lahir</label>

@@ -13,6 +13,14 @@ export const getUsers = async (req, res) => {
         console.log(error);
     }
 }
+export const getUsersId = async (req, res) => {
+    try {
+        const users = await Users.findOne({ where: { id: req.params.id } })
+        res.json(users)
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export const Register = async (req, res) => {
     const { name, email, password, confPassword, role, picture } = req.body

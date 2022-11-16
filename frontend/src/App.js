@@ -27,11 +27,16 @@ import MapelKep from "./containers/pages/kepala_sekolah/mapel/Mapel";
 import SiswaKep from "./containers/pages/kepala_sekolah/siswa/Siswa";
 import GuruKep from "./containers/pages/kepala_sekolah/guru/Guru";
 import KelasKep from "./containers/pages/kepala_sekolah/kelas/Kelas";
+// import profile
+import Profile from "./containers/pages/Profile";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
+      {/* login dan register */ }
       <Route index element={ <Login /> } />
+      <Route path="/register" element={ <Register /> } />
       {/* Admin */ }
       <Route path="/dashboard" element={ <Template /> } >
         <Route index element={ <Dashboard /> } />
@@ -77,7 +82,10 @@ const router = createBrowserRouter(
       <Route path="/kepala/kelas" element={ <Template /> }>
         <Route index element={ <KelasKep /> } />
       </Route>
-      <Route path="/register" element={ <Register /> } />
+      {/* profile */ }
+      <Route path="/profile" element={ <Template /> }>
+        <Route index element={ <Profile /> } />
+      </Route>
     </Route>
   )
 );

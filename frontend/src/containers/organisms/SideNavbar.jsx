@@ -19,11 +19,11 @@ const SideNav = (props) => {
                         <div className="image">
                             <img src={ 'http://localhost:3000/assets/uploads/' + props.picture } className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
                         </div>
-                        <div className="info" style={ { marginLeft: 10 } }>
-                            <a href="#" className="d-block">{ props.name }</a>
+                        <div className="info container">
+                            <Link to={ "/profile" } className="d-flex justify-content-center">{ props.name }</Link>
                         </div>
                         <div className="info container">
-                            <a href="#" className="d-flex justify-content-center">{ props.role }</a>
+                            <span className='d-flex justify-content-center'>{ props.role }</span>
                         </div>
                     </div>
                     {/* SidebarSearch Form */ }
