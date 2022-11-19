@@ -38,6 +38,9 @@ export const EditMapel = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            if (decoded.role == "Kepala Sekolah") {
+                return navigate('/kepala/mapel')
+            }
         } catch (error) {
             return navigate('/')
             // console.error(error);

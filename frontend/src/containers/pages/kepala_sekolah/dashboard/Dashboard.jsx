@@ -21,6 +21,9 @@ const Dashboard = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            if (decoded.role == "Admin") {
+                return navigate('/dashboard')
+            }
 
         } catch (error) {
             return navigate('/')

@@ -25,6 +25,9 @@ export const Siswa = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            if (decoded.role == "Admin") {
+                return navigate('/siswa')
+            }
         } catch (error) {
             return navigate('/')
         }

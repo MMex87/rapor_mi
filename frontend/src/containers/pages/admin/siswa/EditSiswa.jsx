@@ -37,6 +37,9 @@ export const EditSiswa = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            if (decoded.role == "Kepala Sekolah") {
+                return navigate('/kepala/siswa')
+            }
         } catch (error) {
             return navigate('/')
         }

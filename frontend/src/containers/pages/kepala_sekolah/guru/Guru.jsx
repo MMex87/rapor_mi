@@ -24,6 +24,9 @@ export const Guru = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            if (decoded.role == "Admin") {
+                return navigate('/guru')
+            }
         } catch (error) {
             return navigate('/')
         }
