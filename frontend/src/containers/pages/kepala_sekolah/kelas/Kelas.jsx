@@ -5,11 +5,14 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { jsPDF } from "jspdf"
 
 const Kelas = (props) => {
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
+
+
 
 
     // state Data
@@ -79,6 +82,23 @@ const Kelas = (props) => {
         getKelas()
         getSiswa()
     }, [])
+
+
+    // handle Download pdf
+    const handlePDF = (val) => {
+        // Deklarasi PDF
+        const doc = new jsPDF("p", "pt", "a4")
+
+        doc.html(document.querySelector("#kelas" + val), {
+            callback: function (pdf) {
+                pdf.save("contoh.pdf")
+                window.open(pdf.output("bloburl"));
+            },
+            margin: 20
+        })
+        // doc.text("Hello World", 10, 10)
+        return doc
+    }
 
 
     // axios Interceptors 
@@ -160,7 +180,7 @@ const Kelas = (props) => {
                                                             Wali Kelas
                                                         </div>
                                                         <div className="col-md-1">:</div>
-                                                        <div className="col-md-6">
+                                                        <div className="col-md-5">
                                                             {
                                                                 guru.map((value) => (
                                                                     <>
@@ -171,8 +191,11 @@ const Kelas = (props) => {
                                                                 ))
                                                             }
                                                         </div>
+                                                        <div className="col-md-1">
+                                                            <button className='btn btn-success btn-sm' onClick={ () => handlePDF(index) } >Download</button>
+                                                        </div>
                                                     </div>
-                                                    <div>
+                                                    <div id={ 'kelas' + index }>
                                                         <table className="table table-hover table-dark text-nowrap">
                                                             <thead>
                                                                 <tr>
