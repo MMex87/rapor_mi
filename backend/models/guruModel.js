@@ -7,6 +7,12 @@ const Guru = db.define('guru', {
     nama: {
         type: DataTypes.STRING
     },
+    password: {
+        type: DataTypes.STRING
+    },
+    refresh_token: {
+        type: DataTypes.TEXT
+    },
     jtm: {
         type: DataTypes.STRING
     },
@@ -28,6 +34,8 @@ const Guru = db.define('guru', {
     role: {
         type: DataTypes.STRING
     }
+}, {
+    freezeTableName: true
 })
 
 export default Guru

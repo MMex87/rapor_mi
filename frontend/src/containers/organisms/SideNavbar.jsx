@@ -15,7 +15,7 @@ const SideNav = (props) => {
                 {/* Sidebar */ }
                 <div className="sidebar">
                     {/* Sidebar user panel (optional) */ }
-                    <div className="user-panel mt-3 pb-3 mb-3 d-flex row container">
+                    <div className="user-panel mt-3 pb-3 mb-3 d-flex flex-column container">
                         <div className="image">
                             <img src={ 'http://localhost:3000/assets/uploads/' + props.picture } className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
                         </div>
@@ -141,6 +141,18 @@ const SideNav = (props) => {
                                     </Link>
 
                                 ) }
+                            </li>
+                            <li className="nav-item">
+                                { (props.role == 'Super Admin') ? (
+                                    <Link to="/user" className="nav-link">
+                                        <i className="fa-solid fa-users-gear nav-icon"></i>
+                                        {/* <IconBuild /> */ }
+                                        <p>
+                                            User Manage
+                                        </p>
+                                    </Link>
+
+                                ) : '' }
                             </li>
                         </ul>
                     </nav>

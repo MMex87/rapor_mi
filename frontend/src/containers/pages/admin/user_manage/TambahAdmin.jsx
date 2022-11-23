@@ -6,10 +6,7 @@ import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-
-
-export const TambahGuru = (props) => {
-
+export const TambahAdmin = (props) => {
     const fileInput = React.createRef()
 
     // deklarasi hooks dan axios
@@ -17,21 +14,15 @@ export const TambahGuru = (props) => {
     const axiosJWT = axios.create()
 
 
+    const [users, setUsers] = useState([])
 
-
-    // state 
+    // state Form
+    // state
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('adminmidu')
+    const [confPassword, setConfPassword] = useState('adminmidu')
     const [msg, setMsg] = useState('')
-    const [msgPop, setMsgPop] = useState('')
-
-    // state input
-    const [nama, setNama] = useState('')
-    const [nuptk, setNuptk] = useState('')
-    const [tanggal_lahir, setTanggal] = useState('')
-    const [pendidikan, setPendidikan] = useState('')
-    const [jenis_kelamin, setJenis] = useState('')
-
-    // state data
-    const [guru, setGuru] = useState([])
 
     // state picture
     const [picture, setPicture] = useState('default.png')
@@ -39,12 +30,10 @@ export const TambahGuru = (props) => {
     const [saveImage, setSaveImage] = useState(null)
     const [statusUp, setStatusUp] = useState(0)
 
-
-
     // refresh Token
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
             props.handleName(decoded.name)
@@ -52,27 +41,25 @@ export const TambahGuru = (props) => {
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
             if (decoded.role == "Kepala Sekolah") {
-                return navigate('/kepala/guru')
+                return navigate('/kepala/dashboard')
+            } else if (decoded.role == "Admin") {
+                return navigate('/dashboard')
             }
         } catch (error) {
             return navigate('/')
         }
     }
 
-
-    // Datas
-    const getGuru = async () => {
-        try {
-            const response = await axiosJWT.get('http://localhost:7000/guru', {
-                headers: {
-                    Authorization: `Bearer ${props.token}`
-                }
-            })
-            setGuru(response.data)
-        } catch (error) {
-            console.error(error);
-        }
+    // getDatas
+    const getUser = async () => {
+        const response = await axiosJWT.get('/users', {
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        setUsers(response.data)
     }
+
 
     // handle upload foto
 
@@ -82,12 +69,12 @@ export const TambahGuru = (props) => {
         setFoto(URL.createObjectURL(uploaded))
         setSaveImage(uploaded)
         setStatusUp(1)
+        console.log(uploaded.size)
     }
 
-    const handleUploadFoto = async (e) => {
-        e.preventDefault()
-        // deklarasi form data
+    const handleUploadFoto = async () => {
         const formData = new FormData()
+        // deklarasi form data
         formData.append('photo', saveImage)
 
         if (statusUp == 0) {
@@ -97,7 +84,7 @@ export const TambahGuru = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: 'http://localhost:7000/img/uploads',
+                url: '/img/uploads',
                 data: formData,
             }).then((res) => {
                 setFoto(res.data.image)
@@ -111,52 +98,33 @@ export const TambahGuru = (props) => {
 
     }
 
-    // handle Tambah
-
-    const tambah = async (e) => {
+    // handle Tambah Kepala
+    const tambahAdmin = async (e) => {
         e.preventDefault()
-
-        // deklarasi jtm dan role
-        const jtm = 0
-        const role = 'Guru'
-
+        const role = 'Admin'
         try {
-            if (nama == "" || nuptk == '' || tanggal_lahir == '' || jenis_kelamin == '') {
-                setMsg("Tolong isi dengan Lengkap")
-            } else {
-                if (statusUp == 2 || statusUp == 0) {
-                    setMsg('')
-                    setMsgPop('')
-                    await axios.post('http://localhost:7000/guru', {
-                        nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
-                    })
-                    setStatusUp(0)
-
-                    // axios refresh token
-                    refreshToken()
-
-                    navigate('/guru')
-                } else {
-                    window.alert('Tolong tekan Upload foto terlebih dahulu!!')
-                }
+            await axios.post('/users', {
+                name, email, password, confPassword, role, picture
+            })
+            navigate('/user')
+        } catch (err) {
+            if (err.response) {
+                setMsg(err.response.data.msg)
             }
-        } catch (error) {
-            console.error(error);
         }
-
     }
 
     // Hooks Use Effect
     useEffect(() => {
         refreshToken()
-        getGuru()
+        getUser()
     }, [])
 
     // axios Interceptors 
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
         if (props.expired * 1000 < currenDate.getTime()) {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             config.headers.Authorization = `Bearer ${response.data.accessToken}`
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
@@ -169,7 +137,6 @@ export const TambahGuru = (props) => {
     })
 
 
-
     return (
         <div>
             <div className="content-wrapper">
@@ -178,13 +145,13 @@ export const TambahGuru = (props) => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1 className="m-0">Guru</h1>
+                                <h1 className="m-0">User Manage</h1>
                             </div>{/* /.col */ }
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to={ "/dashboard" }>Dashboard</Link></li>
-                                    <li className="breadcrumb-item"><Link to={ "/guru" }>Guru</Link></li>
-                                    <li className="breadcrumb-item active">Tambah Guru</li>
+                                    <li className="breadcrumb-item"><Link to={ "/user" }>Dashboard</Link></li>
+                                    <li className="breadcrumb-item active">Tambah Admin</li>
                                 </ol>
                             </div>{/* /.col */ }
                         </div>{/* /.row */ }
@@ -196,44 +163,32 @@ export const TambahGuru = (props) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header row">
-                                    <h3 className="card-title col-4">Tambah Data Guru</h3>
+                                    <h3 className="card-title col-4">Tambah User Admin</h3>
                                     <div className="col-6"></div>
                                     <div className="col-2 d-flex justify-content-end">
-                                        <Link type='button' className='btn btn-warning btn-sm' to={ `/guru` }>
-                                            Kembali <i className="fa-solid fa-rotate-left"></i>
+                                        <Link type='button' className='btn btn-warning btn-sm' to={ `/user` }>
+                                            kembali <i className="fa-solid fa-rotate-left"></i>
                                         </Link>
                                     </div>
                                 </div>
-                                <div className="card-body table-responsive p-2">
+                                <div className="card-body table-responsive p-5">
                                     <div className="col-md-10">
                                         <div className="form-group">
-                                            <form onSubmit={ tambah }>
-                                                <div>
-                                                    <b className='text text-danger'>{ msg }</b>
+                                            <form onSubmit={ tambahAdmin }>
+                                                <div className="field">
+                                                    <p>Default Password: adminmidu</p>
                                                 </div>
-                                                <div>
-                                                    <label>Nama Guru</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } />
+                                                <div className="field mt-5">
+                                                    <label>Name</label>
+                                                    <div className="controls">
+                                                        <input type="text" className="form-control select2" id='name' placeholder='name' value={ name } onChange={ (e) => setName(e.target.value) } />
+                                                    </div>
                                                 </div>
-                                                <div className='mt-3'>
-                                                    <label>NUPTK</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNuptk(e.target.value) } />
-                                                </div>
-                                                <div className='mt-3'>
-                                                    <label>Tanggal Lahir</label>
-                                                    <input type="date" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setTanggal(e.target.value) } />
-                                                </div>
-                                                <div className='mt-3'>
-                                                    <label>Pendidikan</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setPendidikan(e.target.value) } />
-                                                </div>
-                                                <div className='mt-3'>
-                                                    <label>Jenis Kelamin</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setJenis(e.target.value) }>
-                                                        <option selected value="">-- Pilih Jenis Kelamin --</option>
-                                                        <option value="Laki-Laki">Laki-Laki</option>
-                                                        <option value="Perempuan">Perempuan</option>
-                                                    </select>
+                                                <div className="field mt-5">
+                                                    <label>Email</label>
+                                                    <div className="controls">
+                                                        <input type="text" className="form-control select2" id='email' placeholder='Email' value={ email } onChange={ (e) => setEmail(e.target.value) } />
+                                                    </div>
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Foto Profile</label>
@@ -248,6 +203,18 @@ export const TambahGuru = (props) => {
                                                         <div className="input-group-append">
                                                             <button type='button' className="input-group-text" onClick={ handleUploadFoto }>Upload</button>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div className="field mt-5">
+                                                    <label>Password</label>
+                                                    <div className="controls">
+                                                        <input type="password" className="form-control select2" placeholder='********' value={ password } onChange={ (e) => setPassword(e.target.value) } />
+                                                    </div>
+                                                </div>
+                                                <div className="field mt-5">
+                                                    <label>confirm Password</label>
+                                                    <div className="controls">
+                                                        <input type="password" className="form-control select2" placeholder='********' value={ confPassword } onChange={ (e) => setConfPassword(e.target.value) } />
                                                     </div>
                                                 </div>
                                                 <div className='mt-5 d-flex justify-content-end'>
@@ -288,4 +255,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TambahGuru)
+export default connect(mapStateToProps, mapDispatchToProps)(TambahAdmin)

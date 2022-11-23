@@ -1,7 +1,7 @@
 import Users from "../models/userModel.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
-import { where } from "sequelize";
+import fs from 'fs'
 
 export const getUsers = async (req, res) => {
     try {
@@ -35,6 +35,43 @@ export const Register = async (req, res) => {
             name, email, password: hashPassword, role, picture
         })
         res.json({ msg: "Register Berhasil" })
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const UpdateUser = async (req, res) => {
+    const { name, email, password, confPassword, role, picture } = req.body
+
+    const user = await Users.findOne({
+        where: {
+            id: req.params.id
+        }
+    })
+    const filepath = '../frontend/public/assets/uploads/' + user.picture
+
+    if (password !== confPassword) return res.status(400)
+        .json({ msg: "Password dan Confirm Password tidak cocok" })
+
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt)
+    try {
+        await Users.update({
+            name, email, password: hashPassword, role, picture
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ msg: "Register Berhasil" })
+        if (picture == null) {
+            console.log("Tidak Menghapus Gambar")
+        } else {
+            if (user.picture == "default.png") {
+                console.log("default");
+            } else {
+                fs.unlink(filepath, err => console.log(err))
+            }
+        }
     } catch (error) {
         console.log(error)
     }
@@ -92,4 +129,36 @@ export const Logout = async (req, res) => {
     })
     res.clearCookie('refreshToken')
     return res.sendStatus(200)
+}
+
+export const DeleteUser = async (req, res) => {
+    try {
+        const user = await Users.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+
+
+        const users = await Users.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (users === 0)
+            res.status(404).json({ msg: "Data Tidak di temukan!" })
+        else {
+            const filepath = '../frontend/public/assets/uploads/' + user.picture
+
+            if (user.picture == 'default.png') {
+                console.log("default")
+            } else {
+                fs.unlink(filepath, err => console.log(err))
+            }
+
+            res.json({ msg: "Data Berhasil Terhapus" })
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }

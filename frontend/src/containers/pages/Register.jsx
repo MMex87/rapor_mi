@@ -34,7 +34,7 @@ const Register = () => {
         setStatusUp(1)
     }
 
-    const handleUploadFoto = (e) => {
+    const handleUploadFoto = async (e) => {
         e.preventDefault()
         // deklarasi form data
         const formData = new FormData()
@@ -45,7 +45,7 @@ const Register = () => {
         } else if (statusUp == 2) {
             window.alert('Foto Sudah Tersimpan!!')
         } else {
-            axios({
+            await axios({
                 method: "POST",
                 url: 'http://localhost:7000/img/uploads',
                 data: formData,

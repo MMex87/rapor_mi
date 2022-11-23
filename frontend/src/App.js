@@ -29,6 +29,10 @@ import GuruKep from "./containers/pages/kepala_sekolah/guru/Guru";
 import KelasKep from "./containers/pages/kepala_sekolah/kelas/Kelas";
 // import profile
 import Profile from "./containers/pages/Profile";
+// import SuperUser
+import User from "./containers/pages/admin/user_manage/user";
+import TambahKepala from "./containers/pages/admin/user_manage/TambahKepala";
+import TambahAdmin from "./containers/pages/admin/user_manage/TambahAdmin";
 
 
 const router = createBrowserRouter(
@@ -37,6 +41,16 @@ const router = createBrowserRouter(
       {/* login dan register */ }
       <Route index element={ <Login /> } />
       <Route path="/register" element={ <Register /> } />
+
+      {/* Super Admin */ }
+      <Route path="/user" element={ <Template /> } >
+        <Route index element={ <User /> } />
+        <Route path="/user/tambah"
+          element={ <TambahKepala /> } />
+        <Route path="/user/tambahAdmin"
+          element={ <TambahAdmin /> } />
+      </Route>
+
       {/* Admin */ }
       <Route path="/dashboard" element={ <Template /> } >
         <Route index element={ <Dashboard /> } />
