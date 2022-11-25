@@ -28,11 +28,11 @@ export const getGurusId = async (req, res) => {
 }
 
 export const TambahGuru = async (req, res) => {
-    const { nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
+    const { nama, username, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 
     try {
         const gurus = await Guru.create({
-            nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
+            nama, username, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
         })
         if (gurus === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -43,14 +43,14 @@ export const TambahGuru = async (req, res) => {
 }
 
 export const editGuru = async (req, res) => {
-    const { nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
+    const { nama, username, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 
     const gurus = await Guru.findOne({ where: { id: req.params.id } })
     const filepath = '../frontend/public/assets/uploads/' + gurus.picture
 
     try {
         const guru = await Guru.update({
-            nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
+            nama, username, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
         }, {
             where: {
                 id: req.params.id
@@ -71,7 +71,7 @@ export const editGuru = async (req, res) => {
     }
 }
 export const updateGuru = async (req, res) => {
-    const { nama, password, confPassword, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
+    const { nama, username, password, confPassword, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 
     const gurus = await Guru.findOne({ where: { id: req.params.id } })
     const filepath = '../frontend/public/assets/uploads/' + gurus.picture
@@ -84,7 +84,7 @@ export const updateGuru = async (req, res) => {
 
     try {
         const guru = await Guru.update({
-            nama, password: hashPassword, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
+            nama, username, password: hashPassword, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
         }, {
             where: {
                 id: req.params.id
@@ -108,6 +108,60 @@ export const updateGuru = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+export const Login = async (req, res) => {
+    try {
+        const user = await Guru.findAll({
+            where: {
+                username: req.body.username
+            }
+        })
+        const match = await bcrypt.compare(req.body.password, user[0].password)
+        if (!match) return res.status(400).json({ msg: "Wrong Password" })
+        const userId = user[0].id;
+        const name = user[0].nama;
+        const username = user[0].username;
+        const picture = user[0].picture;
+        const role = user[0].role;
+        const accesstoken = jwt.sign({ userId, name, username, picture, role }, process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: '20s'
+        })
+        const refreshtoken = jwt.sign({ userId, name, username, picture, role }, process.env.REFRESH_TOKEN_SECRET, {
+            expiresIn: '1D'
+        })
+        await Guru.update({ refresh_token: refreshtoken }, {
+            where: {
+                id: userId
+            }
+        })
+        res.cookie('refreshToken', refreshtoken, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000
+        })
+        res.json({ accesstoken })
+    } catch (error) {
+        res.status(404).json({ msg: "Username tidak ditemukan" })
+    }
+}
+
+export const Logout = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken
+    if (!refreshToken) return res.sendStatus(204)
+    const user = await Guru.findAll({
+        where: {
+            refresh_token: refreshToken
+        }
+    })
+    if (!user[0]) return res.sendStatus(204)
+    const userId = user[0].id
+    await Guru.update({ refresh_token: null }, {
+        where: {
+            id: userId
+        }
+    })
+    res.clearCookie('refreshToken')
+    return res.sendStatus(200)
 }
 
 export const hapusGuru = async (req, res) => {

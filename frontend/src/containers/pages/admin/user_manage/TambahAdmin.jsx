@@ -26,7 +26,7 @@ export const TambahAdmin = (props) => {
 
     // state picture
     const [picture, setPicture] = useState('default.png')
-    const [foto, setFoto] = useState('http://localhost:3000/assets/uploads/default.png')
+    const [foto, setFoto] = useState('http://localhost:8076/assets/uploads/default.png')
     const [saveImage, setSaveImage] = useState(null)
     const [statusUp, setStatusUp] = useState(0)
 
@@ -198,7 +198,7 @@ export const TambahAdmin = (props) => {
                                                     <div className="input-group">
                                                         <div className="custom-file">
                                                             <input type="file" className="custom-file-input" id="exampleInputFile" accept='image/*' onChange={ handleFoto } ref={ fileInput } />
-                                                            <label className="custom-file-label" htmlFor="exampleInputFile">{ foto == 'http://localhost:3000/assets/uploads/default.png' ? 'Pilih Gambar' : picture }</label>
+                                                            <label className="custom-file-label" htmlFor="exampleInputFile">{ foto == 'http://localhost:8076/assets/uploads/default.png' ? 'Pilih Gambar' : picture }</label>
                                                         </div>
                                                         <div className="input-group-append">
                                                             <button type='button' className="input-group-text" onClick={ handleUploadFoto }>Upload</button>

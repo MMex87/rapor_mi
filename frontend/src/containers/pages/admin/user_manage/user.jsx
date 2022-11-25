@@ -10,7 +10,7 @@ export const user = (props) => {
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
-    const foto = "http://localhost:3000/assets/uploads/"
+    const foto = "http://localhost:8076/assets/uploads/"
 
     // state get datas
     const [users, setUsers] = useState([])
@@ -101,8 +101,17 @@ export const user = (props) => {
         try {
             const password = pwGuru
             const confPassword = pwGuru
+
+            const gurufind = await axiosJWT.get(`/guru/${val}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            const nama = gurufind.data.nama.split(" ")
+            const username = nama[0] + nama[1]
+
             await axios.put(`/guru/update/${val}`, {
-                password, confPassword
+                username, password, confPassword
             })
             console.log('Berhasil Membuat akun')
             getGuru()

@@ -1,7 +1,7 @@
 import express from "express";
 import { DeleteUser, getUsers, getUsersId, Login, Logout, Register, UpdateUser } from "../controllers/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
-import { refreshToken } from "../controllers/RefreshToken.js";
+import { refreshToken, refreshTokenGuru } from "../controllers/RefreshToken.js";
 import * as guru from "../controllers/Gurus.js";
 import * as kelas from "../controllers/Kelas.js";
 import * as nilai from "../controllers/Nilai.js";
@@ -29,6 +29,9 @@ router.post('/guru', guru.TambahGuru)
 router.put('/guru/:id', guru.editGuru)
 router.put('/guru/update/:id', guru.updateGuru)
 router.delete('/guru/:id', guru.hapusGuru)
+router.get('/tokenGuru', refreshTokenGuru)
+router.post('/loginGuru', guru.Login)
+router.delete('/logoutGuru', guru.Logout)
 
 // Kelas
 router.get('/kelas', verifyToken, kelas.getKelas)

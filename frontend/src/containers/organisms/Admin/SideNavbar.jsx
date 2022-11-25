@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { IconBuild, IconJurnal, IconPerson, IconPerson2 } from '../../components/atoms/icon/Icon.jsx'
+import { IconBuild, IconJurnal, IconPerson, IconPerson2 } from '../../../components/atoms/icon/Icon.jsx'
 import { Link } from 'react-router-dom'
 
 const SideNav = (props) => {
@@ -9,7 +9,7 @@ const SideNav = (props) => {
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* Brand Logo */ }
                 <Link to="/dashboard" className="brand-link">
-                    <img src="http://localhost:3000/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={ { opacity: '.8' } } />
+                    <img src="http://localhost:8076/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={ { opacity: '.8' } } />
                     <span className="brand-text font-weight-light">{ props.role } MIDU</span>
                 </Link>
                 {/* Sidebar */ }
@@ -17,7 +17,7 @@ const SideNav = (props) => {
                     {/* Sidebar user panel (optional) */ }
                     <div className="user-panel mt-3 pb-3 mb-3 d-flex flex-column container">
                         <div className="image">
-                            <img src={ 'http://localhost:3000/assets/uploads/' + props.picture } className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
+                            <img src={ 'http://localhost:8076/assets/uploads/' + props.picture } className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
                         </div>
                         <div className="info container">
                             <Link to={ "/profile" } className="d-flex justify-content-center">{ props.name }</Link>

@@ -7,6 +7,9 @@ const Guru = db.define('guru', {
     nama: {
         type: DataTypes.STRING
     },
+    username: {
+        type: DataTypes.STRING
+    },
     password: {
         type: DataTypes.STRING
     },

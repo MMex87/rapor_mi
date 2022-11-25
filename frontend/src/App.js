@@ -35,6 +35,14 @@ import TambahKepala from "./containers/pages/admin/user_manage/TambahKepala";
 import TambahAdmin from "./containers/pages/admin/user_manage/TambahAdmin";
 
 
+// Login Guru
+import LoginGuru from "./containers/pages/login_guru/Login";
+// template Guru
+import TemplateGuru from './containers/templates/TemplateGuru'
+import DashboardGuru from './containers/pages/guru/dashboard/Dashboard'
+
+// dashboard login
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
@@ -99,6 +107,15 @@ const router = createBrowserRouter(
       {/* profile */ }
       <Route path="/profile" element={ <Template /> }>
         <Route index element={ <Profile /> } />
+      </Route>
+
+
+      {/* Login Guru */ }
+      <Route path="/login" element={ <LoginGuru /> } />
+
+      {/* Dashboard Guru */ }
+      <Route path="/dashboardGuru" element={ <TemplateGuru /> }>
+        <Route index element={ <DashboardGuru /> } />
       </Route>
     </Route>
   )
