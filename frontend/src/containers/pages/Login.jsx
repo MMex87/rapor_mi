@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from "axios"
+import axios from "../../api/axios"
 import jwt_decode from 'jwt-decode'
 import { useNavigate } from "react-router-dom"
 
@@ -13,7 +13,7 @@ const Login = () => {
     // refresh Token
     const AuthLogin = async () => {
         try {
-            await axios.get('http://localhost:7000/token')
+            await axios.get('/token')
 
             navigate('/dashboard')
         } catch (error) {
@@ -30,10 +30,10 @@ const Login = () => {
     const Auth = async (e) => {
         e.preventDefault()
         try {
-            await axios.post('http://localhost:7000/login', {
+            await axios.post('/login', {
                 email, password
             })
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             const decoded = jwt_decode(response.data.accessToken)
             if (decoded.role == 'Kepala Sekolah') {
                 navigate('/kepala/dashboard')

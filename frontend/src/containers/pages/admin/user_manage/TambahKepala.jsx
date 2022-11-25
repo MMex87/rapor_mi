@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ActionType from '../../../../redux/reducer/globalActionType'
-import axios from 'axios'
+import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'

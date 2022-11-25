@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ActionType from '../../../../redux/reducer/globalActionType'
-import axios from 'axios'
+import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -44,7 +44,7 @@ export const TambahGuru = (props) => {
     // refresh Token
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
             props.handleName(decoded.name)
@@ -63,7 +63,7 @@ export const TambahGuru = (props) => {
     // Datas
     const getGuru = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:7000/guru', {
+            const response = await axiosJWT.get('/guru', {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -97,7 +97,7 @@ export const TambahGuru = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: 'http://localhost:7000/img/uploads',
+                url: '/img/uploads',
                 data: formData,
             }).then((res) => {
                 setFoto(res.data.image)
@@ -127,7 +127,7 @@ export const TambahGuru = (props) => {
                 if (statusUp == 2 || statusUp == 0) {
                     setMsg('')
                     setMsgPop('')
-                    await axios.post('http://localhost:7000/guru', {
+                    await axios.post('/guru', {
                         nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
                     })
                     setStatusUp(0)
@@ -156,7 +156,7 @@ export const TambahGuru = (props) => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
         if (props.expired * 1000 < currenDate.getTime()) {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             config.headers.Authorization = `Bearer ${response.data.accessToken}`
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)

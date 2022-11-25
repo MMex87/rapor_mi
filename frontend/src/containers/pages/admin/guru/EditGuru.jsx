@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ActionType from '../../../../redux/reducer/globalActionType'
-import axios from 'axios'
+import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -45,7 +45,7 @@ export const EditGuru = (props) => {
     // refresh Token
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
             props.handleName(decoded.name)
@@ -64,7 +64,7 @@ export const EditGuru = (props) => {
     // Datas
     const getGuru = async () => {
         try {
-            const response = await axiosJWT.get(`http://localhost:7000/guru/${params.idGuru}`, {
+            const response = await axiosJWT.get(`/guru/${params.idGuru}`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -109,7 +109,7 @@ export const EditGuru = (props) => {
 
             axios({
                 method: "POST",
-                url: 'http://localhost:7000/img/uploads',
+                url: '/img/uploads',
                 data: formData,
             }).then((res) => {
                 setFoto(res.data.image)
@@ -139,7 +139,7 @@ export const EditGuru = (props) => {
                 if (statusUp == 2 || statusUp == 0) {
                     setMsg('')
                     setMsgPop('')
-                    await axios.put(`http://localhost:7000/guru/${params.idGuru}`, {
+                    await axios.put(`/guru/${params.idGuru}`, {
                         nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
                     })
                     setStatusUp(0)
@@ -164,7 +164,7 @@ export const EditGuru = (props) => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
         if (props.expired * 1000 < currenDate.getTime()) {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             config.headers.Authorization = `Bearer ${response.data.accessToken}`
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -13,7 +13,7 @@ const Dashboard = (props) => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             const decoded = jwt_decode(response.data.accessToken)
             const token = response.data.accessToken
             props.handleToken(token)
@@ -44,7 +44,7 @@ const Dashboard = (props) => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currentDate = new Date()
         if (props.expired * 1000 < currentDate.getTime()) {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             config.headers.Authorization = `Bearer ${response.data.accessToken}`
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
@@ -59,7 +59,7 @@ const Dashboard = (props) => {
     })
 
     const getUser = async () => {
-        const response = await axiosJWT.get('http://localhost:7000/users', {
+        const response = await axiosJWT.get('/users', {
             headers: {
                 Authorization: `Bearer ${props.token}`
             }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ActionType from '../../../../redux/reducer/globalActionType'
-import axios from 'axios'
+import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -19,7 +19,7 @@ export const Siswa = (props) => {
     // refresh Token
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
             props.handleName(decoded.name)
@@ -37,7 +37,7 @@ export const Siswa = (props) => {
     // get Datas
     const getSiswa = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:7000/siswa', {
+            const response = await axiosJWT.get('/siswa', {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -49,7 +49,7 @@ export const Siswa = (props) => {
     }
     const getKelas = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:7000/kelas', {
+            const response = await axiosJWT.get('/kelas', {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -64,7 +64,7 @@ export const Siswa = (props) => {
 
     const handleHapus = async (val) => {
         try {
-            await axios.delete(`http://localhost:7000/siswa/${val}`)
+            await axios.delete(`/siswa/${val}`)
             setMsg("Data Berhasil Terhapus")
             getSiswa()
         } catch (error) {
@@ -85,7 +85,7 @@ export const Siswa = (props) => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
         if (props.expired * 1000 < currenDate.getTime()) {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             config.headers.Authorization = `Bearer ${response.data.accessToken}`
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)

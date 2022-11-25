@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import ActionType from '../../../../redux/reducer/globalActionType'
-import axios from 'axios'
+import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 
@@ -29,7 +29,7 @@ const TambahMapel = (props) => {
     // refresh Token
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
             props.handleName(decoded.name)
@@ -48,7 +48,7 @@ const TambahMapel = (props) => {
     // get Datas
     const getGuru = async () => {
         try {
-            const response = await axiosJWT.get(`http://localhost:7000/guru`, {
+            const response = await axiosJWT.get(`/guru`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -68,7 +68,7 @@ const TambahMapel = (props) => {
             }
             else {
                 setMsg('')
-                await axios.post('http://localhost:7000/mapel', {
+                await axios.post('/mapel', {
                     nama, induk, idGuru, id_kelas
                 })
                 navigate('/mapel')
@@ -90,7 +90,7 @@ const TambahMapel = (props) => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
         if (props.expired * 1000 < currenDate.getTime()) {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             config.headers.Authorization = `Bearer ${response.data.accessToken}`
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import ActionType from '../../../../redux/reducer/globalActionType'
-import axios from 'axios'
+import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 
@@ -31,7 +31,7 @@ export const EditMapel = (props) => {
     // refresh Token
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)
             props.handleName(decoded.name)
@@ -50,7 +50,7 @@ export const EditMapel = (props) => {
     // get Datas
     const getGuru = async () => {
         try {
-            const response = await axiosJWT.get(`http://localhost:7000/guru`, {
+            const response = await axiosJWT.get(`/guru`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -62,7 +62,7 @@ export const EditMapel = (props) => {
     }
     const getMapel = async (val) => {
         try {
-            const response = await axiosJWT.get(`http://localhost:7000/mapel/${val}`, {
+            const response = await axiosJWT.get(`/mapel/${val}`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -85,7 +85,7 @@ export const EditMapel = (props) => {
             }
             else {
                 setMsg('')
-                await axios.put(`http://localhost:7000/mapel/${id_mapel}`, {
+                await axios.put(`/mapel/${id_mapel}`, {
                     nama, induk, idGuru
                 })
                 navigate('/mapel')
@@ -110,7 +110,7 @@ export const EditMapel = (props) => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currenDate = new Date()
         if (props.expired * 1000 < currenDate.getTime()) {
-            const response = await axios.get('http://localhost:7000/token')
+            const response = await axios.get('/token')
             config.headers.Authorization = `Bearer ${response.data.accessToken}`
             props.handleToken(response.data.accessToken)
             const decoded = jwt_decode(response.data.accessToken)

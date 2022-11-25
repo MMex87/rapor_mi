@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import axios from '../../../api/axios'
 import { useNavigate } from 'react-router-dom'
 
 const Header = () => {
@@ -7,7 +7,7 @@ const Header = () => {
 
     const Logout = async () => {
         try {
-            await axios.delete('http://localhost:7000/logout')
+            await axios.delete('/logout')
             navigate('/')
         } catch (error) {
             console.log(error);

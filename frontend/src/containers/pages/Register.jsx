@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from "axios"
+import axios from "../../api/axios"
 import { useNavigate } from "react-router-dom"
 
 const Register = () => {
@@ -47,7 +47,7 @@ const Register = () => {
         } else {
             await axios({
                 method: "POST",
-                url: 'http://localhost:7000/img/uploads',
+                url: '/img/uploads',
                 data: formData,
             }).then((res) => {
                 setFoto(res.data.image)
@@ -66,7 +66,7 @@ const Register = () => {
         e.preventDefault()
         const role = 'Admin'
         try {
-            await axios.post('http://localhost:7000/users', {
+            await axios.post('/users', {
                 name, email, password, confPassword, role, picture
             })
             navigate('/')
