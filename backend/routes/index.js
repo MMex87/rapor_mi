@@ -25,6 +25,7 @@ router.delete('/logout', Logout)
 // Guru
 router.get('/guru', verifyToken, guru.getGurus)
 router.get('/guru/:id', verifyToken, guru.getGurusId)
+router.get('/guru/nama/:nama', verifyToken, guru.getGurusName)
 router.post('/guru', guru.TambahGuru)
 router.put('/guru/:id', guru.editGuru)
 router.put('/guru/update/:id', guru.updateGuru)

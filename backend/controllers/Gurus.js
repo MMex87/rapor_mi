@@ -27,6 +27,17 @@ export const getGurusId = async (req, res) => {
     }
 }
 
+export const getGurusName = async (req, res) => {
+    try {
+        const gurus = await Guru.findOne({ where: { nama: req.params.nama } })
+        if (gurus === 0)
+            res.status(404).json({ msg: "Data Tidak di temukan" })
+        res.json(gurus)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const TambahGuru = async (req, res) => {
     const { nama, username, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 

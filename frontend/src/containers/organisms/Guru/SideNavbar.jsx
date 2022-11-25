@@ -1,10 +1,77 @@
+import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { IconBuild, IconJurnal, IconPerson, IconPerson2 } from '../../../components/atoms/icon/Icon.jsx'
 import { Link } from 'react-router-dom'
+import axios from '../../../api/axios'
 
 const SideNav = (props) => {
+    const axiosJWT = axios.create()
+
+    // state data
+    const [id_Guru, setIdGuru] = useState('')
+    const [kelas, setKelas] = useState([])
+    const [mapel, setMapel] = useState([])
+    const [nama_kel, setNamaKel] = useState([])
+
+
+    // get Datas
+    const getGuru = async () => {
+        try {
+            const response = await axiosJWT.get(`/guru/nama/${props.name}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setIdGuru(response.data.id)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const getKelas = async () => {
+        try {
+            const response = await axiosJWT.get(`/kelas`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setKelas(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const getKelasId = async (val) => {
+        try {
+            const response = await axiosJWT.get(`/kelas/${val}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setNamaKel(response.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getMapel = async () => {
+        try {
+            const response = await axiosJWT.get('/mapel', {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setMapel(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const hendleLoad = () => {
+        getKelas()
+        getGuru()
+        getMapel()
+    }
+
+
     return (
-        <div>
+        <div onLoad={ () => hendleLoad() }>
             {/* Main Sidebar Container */ }
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* Brand Logo */ }
@@ -43,130 +110,56 @@ const SideNav = (props) => {
                             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
                             <li className="nav-item">
-                                { (props.role == 'Kepala Sekolah') ? (
+                                <Link className="nav-link" to={ '/kepala/dashboard' }>
+                                    <i className="nav-icon fas fa-tachometer-alt" />
+                                    <p>
+                                        Dashboard
+                                    </p>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                { (props.role == 'Wali Kelas') ? (
                                     <Link className="nav-link" to={ '/kepala/dashboard' }>
-                                        <i className="nav-icon fas fa-tachometer-alt" />
-                                        <p>
-                                            Dashboard
-                                        </p>
-                                    </Link>
-
-                                ) : (
-                                    <Link className="nav-link" to={ '/dashboard' }>
-                                        <i className="nav-icon fas fa-tachometer-alt" />
-                                        <p>
-                                            Dashboard
-                                        </p>
-                                    </Link>
-                                ) }
-                            </li>
-                            <li className="nav-item">
-                                { (props.role == 'Kepala Sekolah') ? (
-                                    <Link to={ "/kepala/siswa" } className="nav-link">
-                                        <IconPerson />
-                                        <p>
-                                            Siswa
-                                        </p>
-                                    </Link>
-
-                                ) : (
-                                    <Link to={ "/siswa" } className="nav-link">
-                                        <IconPerson />
-                                        <p>
-                                            Siswa
-                                        </p>
-                                    </Link>
-
-                                ) }
-                            </li>
-                            <li className="nav-item">
-                                { (props.role == 'Kepala Sekolah') ? (
-                                    <Link to={ "/kepala/guru" } className="nav-link">
-                                        {/* <IconPerson2 /> */ }
-                                        <i className="fa-solid fa-chalkboard-user nav-icon"></i>
-                                        <p>
-                                            Guru
-                                        </p>
-                                    </Link>
-
-                                ) : (
-
-                                    <Link to={ "/guru" } className="nav-link">
-                                        {/* <IconPerson2 /> */ }
-                                        <i className="fa-solid fa-chalkboard-user nav-icon"></i>
-                                        <p>
-                                            Guru
-                                        </p>
-                                    </Link>
-                                ) }
-                            </li>
-                            <li className="nav-item">
-                                { (props.role == 'Kepala Sekolah') ? (
-                                    <Link className="nav-link" to="/kepala/mapel">
-                                        <IconJurnal />
-                                        {/* <i className="nav-icon bi bi-journal" /> */ }
-                                        <p>
-                                            Mata Pelajaran
-                                        </p>
-                                    </Link>
-
-                                ) : (
-                                    <Link className="nav-link" to="/mapel">
-                                        <IconJurnal />
-                                        {/* <i className="nav-icon bi bi-journal" /> */ }
-                                        <p>
-                                            Mata Pelajaran
-                                        </p>
-                                    </Link>
-
-                                ) }
-                            </li>
-                            <li className="nav-item">
-                                { (props.role == 'Kepala Sekolah') ? (
-                                    <Link to="/kepala/kelas" className="nav-link">
-                                        <i className="fa-solid fa-school-flag nav-icon"></i>
-                                        {/* <IconBuild /> */ }
-                                        <p>
-                                            Kelas
-                                        </p>
-                                    </Link>
-
-                                ) : (
-                                    <Link to="/kelas" className="nav-link">
-                                        <i className="fa-solid fa-school-flag nav-icon"></i>
-                                        {/* <IconBuild /> */ }
-                                        <p>
-                                            Kelas
-                                        </p>
-                                    </Link>
-
-                                ) }
-                            </li>
-                            <li className="nav-item">
-                                { (props.role == 'Super Admin') ? (
-                                    <Link to="/user" className="nav-link">
-                                        <i className="fa-solid fa-users-gear nav-icon"></i>
-                                        {/* <IconBuild /> */ }
-                                        <p>
-                                            User Manage
-                                        </p>
+                                        <i className="fa-sharp fa-solid fa-chalkboard-user nav-icon"></i>
+                                        { kelas.filter(({ id_guru }) => id_guru.toString().indexOf(id_Guru.toString()) > -1).map((val) => (
+                                            <p>
+                                                Kelas { val.nama_kelas }
+                                            </p>
+                                        )) }
                                     </Link>
 
                                 ) : '' }
                             </li>
+                            { mapel.filter(({ idGuru }) => idGuru.toString().indexOf(id_Guru.toString()) > -1).map((val) => (
+                                <li className="nav-item">
+                                    <Link to={ "/kepala/siswa" } className="nav-link">
+                                        <i className="fa-solid fa-book-open nav-icon"></i>
+                                        <p>
+                                            { val.nama } - { kelas.filter(({ id }) => id.toString() == val.id_kelas.toString()).map((value) => (
+                                                <p>
+                                                    { value.nama_kelas }
+                                                </p>
+                                            )) }
+                                        </p>
+                                    </Link>
+                                </li>
+
+                            )) }
                         </ul>
                     </nav>
                     {/* /.sidebar-menu */ }
                 </div>
                 {/* /.sidebar */ }
-            </aside>
-        </div>
+            </aside >
+        </div >
     )
 }
 
 const mapStateToProps = (state) => {
     return {
         name: state.user,
+        token: state.token,
+        expired: state.expired,
         picture: state.picture,
         role: state.role
     }
