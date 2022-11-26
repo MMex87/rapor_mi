@@ -14,11 +14,14 @@ const TambahMapel = (props) => {
     const axiosJWT = axios.create()
 
 
+
     // state data
     const [nama, setMapel] = useState('')
     const [induk, setInduk] = useState('')
     const [idGuru, setIdGuru] = useState('')
     const [guru, setGuru] = useState([])
+    const [count, setCount] = useState(2)
+
     // state message
     const [msg, setMsg] = useState('')
 
@@ -59,15 +62,39 @@ const TambahMapel = (props) => {
         }
     }
 
+    const getGuruId = async (val) => {
+        try {
+            const response = await axiosJWT.get(`/guru/${val}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            // console.log(response.data.jtm);
+            // const jtm2 = parseInt(response.data.jtm)
+            // console.log(jtm2)
+            // setCount(5)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // handle Tambah Data
     const Tambah = async (e) => {
         e.preventDefault()
+        getGuruId(idGuru)
+        // console.log(count)
+        // setCount(count + 10)
+        // console.log(count)
+        // console.log(jtm)
         try {
             if (nama === '' || induk === '' || idGuru === '') {
                 setMsg('Tolong Isi dengan Lengkap')
             }
             else {
                 setMsg('')
+                // await axios.put(`/guru/${idGuru}`, {
+                //     jtm
+                // })
                 await axios.post('/mapel', {
                     nama, induk, idGuru, id_kelas
                 })

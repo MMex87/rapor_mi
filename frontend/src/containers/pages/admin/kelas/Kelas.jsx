@@ -19,6 +19,8 @@ const Kelas = (props) => {
     const [visi, setVisi] = useState('invisible')
     const [idKelas, setIdKelas] = useState('')
     const [id_guru, setIdGuru] = useState('')
+    const [id_guru2, setIdGuru2] = useState('')
+    const [role, setRole] = useState('')
 
     // state Data
     const [kelas, setKelas] = useState([])
@@ -41,6 +43,7 @@ const Kelas = (props) => {
         setIdKelas(id)
         setNama(nama)
         setIdGuru(idGuru)
+        setIdGuru2(idGuru)
         getGuruId(idGuru)
     }
 
@@ -108,6 +111,7 @@ const Kelas = (props) => {
                 }
             })
             setWali(response.data.nama)
+            setRole(response.data.role)
         } catch (error) {
             console.error(error)
         }
@@ -121,27 +125,52 @@ const Kelas = (props) => {
                 await axios.post('/kelas', {
                     nama_kelas, id_guru
                 })
-                getKelas()
-                setVisi('invisible')
-            } catch (error) {
-                console.error(error);
-            }
-        } else {
-            try {
-                await axios.put(`/kelas/${idKelas}`, {
-                    nama_kelas, id_guru
+                await axios.put(`/guru/${id_guru}`, {
+                    role: 'Wali Kelas'
                 })
                 getKelas()
                 setVisi('invisible')
             } catch (error) {
                 console.error(error);
             }
+            getKelas()
+            getGuru()
+            setVisi('invisible')
+            setWali('')
+            setNama('')
+        } else {
+
+            await axios.put(`/kelas/${idKelas}`, {
+                nama_kelas, id_guru
+            })
+            await axios.put(`/guru/${id_guru}`, {
+                role: 'Wali Kelas'
+            })
+            await axios.put(`/guru/${id_guru2}`, {
+                role: 'Guru'
+            })
+
+            getKelas()
+            getGuru()
+            setVisi('invisible')
+            setWali('')
+            setNama('')
         }
     }
 
     // handale hapus
     const handleHapus = async (id_kelas) => {
         try {
+            const response = await axiosJWT.get(`/kelas/${id_kelas}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+
+            await axios.put(`/guru/${response.data.id_guru}`, {
+                role: 'Guru'
+            })
+
             await axios.delete(`/kelas/${id_kelas}`)
             setMsg('Data Berhasil Dihapus')
             getKelas()
@@ -250,6 +279,7 @@ const Kelas = (props) => {
                                                                         {
                                                                             value.id === val.id_guru ? value.nama : ''
                                                                         }
+
                                                                     </>
                                                                 ))
                                                             }
@@ -318,7 +348,10 @@ const Kelas = (props) => {
                                                                     <ul className="list-group list-group-flush">
                                                                         {
                                                                             guru
-                                                                                .filter(({ nama }) => nama.indexOf(wali.toString()) > -1)
+                                                                                .filter(({ nama, role }) =>
+                                                                                    nama.toString().indexOf(wali.toString()) > -1 &&
+                                                                                    role == "Guru"
+                                                                                )
                                                                                 .map((v, i) => (
                                                                                     <li key={ i } onClick={ () => { handleAuto(v.nama, v.id) } } class="list-group-item">{ v.nama }</li>
                                                                                 ))

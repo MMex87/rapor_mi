@@ -128,19 +128,16 @@ export const EditGuru = (props) => {
     const edit = async (e) => {
         e.preventDefault()
 
-        // deklarasi jtm dan role
-        const jtm = 0
-        const role = 'Guru'
 
         try {
-            if (nama == "" || nuptk == '' || tanggal_lahir == '' || jenis_kelamin == '') {
+            if (nama == "" || nuptk == '' || tanggal_lahir == '' || jenis_kelamin == '' || pendidikan == '') {
                 setMsg("Tolong isi dengan Lengkap")
             } else {
                 if (statusUp == 2 || statusUp == 0) {
                     setMsg('')
                     setMsgPop('')
                     await axios.put(`/guru/${params.idGuru}`, {
-                        nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
+                        nama, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture
                     })
                     setStatusUp(0)
                     navigate('/guru')
