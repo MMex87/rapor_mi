@@ -121,7 +121,7 @@ const SideNav = (props) => {
                                 { (props.role == 'Wali Kelas') ? (
                                     <Link className="nav-link" to={ '/kepala/dashboard' }>
                                         <i className="fa-sharp fa-solid fa-chalkboard-user nav-icon"></i>
-                                        { kelas.filter(({ id_guru }) => id_guru.toString().indexOf(id_Guru.toString()) > -1).map((val) => (
+                                        { kelas.filter(({ id_guru }) => id_guru.toString() == id_Guru.toString()).map((val) => (
                                             <p>
                                                 Kelas { val.nama_kelas }
                                             </p>
@@ -130,7 +130,7 @@ const SideNav = (props) => {
 
                                 ) : '' }
                             </li>
-                            { mapel.filter(({ idGuru }) => idGuru.toString().indexOf(id_Guru.toString()) > -1).map((val) => (
+                            { mapel.filter(({ idGuru }) => idGuru.toString() == id_Guru.toString()).map((val) => (
                                 <li className="nav-item">
                                     <Link to={ "/kepala/siswa" } className="nav-link">
                                         <i className="fa-solid fa-book-open nav-icon"></i>
