@@ -75,9 +75,20 @@ const Mapel = (props) => {
 
     // handle delete
 
-    const handleDelete = async (val) => {
+    const handleDelete = async (val, val2) => {
         try {
-            const result = await axios.delete(`/mapel/${val}`)
+            const response = await axiosJWT.get(`/guru/${val2}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            let jtm = parseInt(response.data.jtm) - 2
+
+            await axios.put(`/guru/${val2}`, {
+                jtm
+            })
+
+            await axios.delete(`/mapel/${val}`)
             setMsg('Data Berhasil Dihapus')
             getMapel()
         } catch (error) {
@@ -190,7 +201,7 @@ const Mapel = (props) => {
                                                                     </Link>
                                                                 </div>
                                                                 <div className='ms-5'>
-                                                                    <button type='button' className='btn btn-danger' onClick={ () => { (window.confirm("apakah Yakin ingin menghapus?") ? handleDelete(val.id) : '') } }>
+                                                                    <button type='button' className='btn btn-danger' onClick={ () => { (window.confirm("apakah Yakin ingin menghapus?") ? handleDelete(val.id, val.idGuru) : '') } }>
                                                                         Hapus
                                                                     </button>
                                                                 </div>

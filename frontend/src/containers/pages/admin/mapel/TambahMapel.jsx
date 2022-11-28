@@ -20,7 +20,7 @@ const TambahMapel = (props) => {
     const [induk, setInduk] = useState('')
     const [idGuru, setIdGuru] = useState('')
     const [guru, setGuru] = useState([])
-    const [count, setCount] = useState(2)
+    const [jtm, setJtm] = useState(0)
 
     // state message
     const [msg, setMsg] = useState('')
@@ -69,10 +69,7 @@ const TambahMapel = (props) => {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            // console.log(response.data.jtm);
-            // const jtm2 = parseInt(response.data.jtm)
-            // console.log(jtm2)
-            // setCount(5)
+            setJtm(parseInt(response.data.jtm) + 2)
         } catch (error) {
             console.log(error);
         }
@@ -81,20 +78,15 @@ const TambahMapel = (props) => {
     // handle Tambah Data
     const Tambah = async (e) => {
         e.preventDefault()
-        getGuruId(idGuru)
-        // console.log(count)
-        // setCount(count + 10)
-        // console.log(count)
-        // console.log(jtm)
         try {
             if (nama === '' || induk === '' || idGuru === '') {
                 setMsg('Tolong Isi dengan Lengkap')
             }
             else {
                 setMsg('')
-                // await axios.put(`/guru/${idGuru}`, {
-                //     jtm
-                // })
+                await axios.put(`/guru/${idGuru}`, {
+                    jtm
+                })
                 await axios.post('/mapel', {
                     nama, induk, idGuru, id_kelas
                 })
@@ -103,6 +95,11 @@ const TambahMapel = (props) => {
         } catch (err) {
             setMsg(err.response.data.msg)
         }
+    }
+
+    const handleSetGuru = (val) => {
+        setIdGuru(val)
+        getGuruId(val)
     }
 
 
@@ -128,7 +125,6 @@ const TambahMapel = (props) => {
         }
         return config
     })
-
 
     return (
         <div>
@@ -193,7 +189,7 @@ const TambahMapel = (props) => {
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Nama Guru</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdGuru(e.target.value) }>
+                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => handleSetGuru(e.target.value) }>
                                                         <option selected="selected" value={ '' }>-- Pilih Guru --</option>
                                                         { guru.map((val) => (
                                                             <option value={ val.id }>{ val.nama }</option>
