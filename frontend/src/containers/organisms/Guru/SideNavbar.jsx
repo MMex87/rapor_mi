@@ -69,7 +69,6 @@ const SideNav = (props) => {
         getMapel()
     }
 
-
     return (
         <div onLoad={ () => hendleLoad() }>
             {/* Main Sidebar Container */ }
@@ -110,7 +109,7 @@ const SideNav = (props) => {
                             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
                             <li className="nav-item">
-                                <Link className="nav-link" to={ '/kepala/dashboard' }>
+                                <Link className="nav-link" to={ '/dashboardGuru' }>
                                     <i className="nav-icon fas fa-tachometer-alt" />
                                     <p>
                                         Dashboard
@@ -121,8 +120,8 @@ const SideNav = (props) => {
                                 { (props.role == 'Wali Kelas') ? (
                                     <Link className="nav-link" to={ '/kepala/dashboard' }>
                                         <i className="fa-sharp fa-solid fa-chalkboard-user nav-icon"></i>
-                                        { kelas.filter(({ id_guru }) => id_guru.toString() == id_Guru.toString()).map((val) => (
-                                            <p>
+                                        { kelas.filter(({ id_guru }) => id_guru.toString() == id_Guru.toString()).map((val, index) => (
+                                            <p key={ index }>
                                                 Kelas { val.nama_kelas }
                                             </p>
                                         )) }
@@ -130,17 +129,15 @@ const SideNav = (props) => {
 
                                 ) : '' }
                             </li>
-                            { mapel.filter(({ idGuru }) => idGuru.toString() == id_Guru.toString()).map((val) => (
-                                <li className="nav-item">
-                                    <Link to={ "/kepala/siswa" } className="nav-link">
+                            { mapel.filter(({ idGuru }) => idGuru.toString() == id_Guru.toString()).map((val, index) => (
+                                <li className="nav-item" key={ index }>
+                                    <Link to={ `/UserGuru/nilai/${val.id}` } className="nav-link">
                                         <i className="fa-solid fa-book-open nav-icon"></i>
-                                        <p>
-                                            { val.nama } - { kelas.filter(({ id }) => id.toString() == val.id_kelas.toString()).map((value) => (
-                                                <p>
-                                                    { value.nama_kelas }
-                                                </p>
-                                            )) }
-                                        </p>
+                                        { val.nama } - { kelas.filter(({ id }) => id.toString() == val.id_kelas.toString()).map((value, index) => (
+                                            <p key={ index }>
+                                                { value.nama_kelas }
+                                            </p>
+                                        )) }
                                     </Link>
                                 </li>
 

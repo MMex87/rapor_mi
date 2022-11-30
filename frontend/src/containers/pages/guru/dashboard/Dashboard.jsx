@@ -9,6 +9,8 @@ const Dashboard = (props) => {
 
     const navigate = useNavigate()
 
+    const axiosJWT = axios.create()
+
     const [users, setUsers] = useState()
 
     const refreshToken = async () => {
@@ -23,8 +25,15 @@ const Dashboard = (props) => {
             props.handleRole(decoded.role)
         } catch (error) {
             return navigate('/login')
-            // return error
         }
+    }
+    const getUser = async () => {
+        const response = await axiosJWT.get('/guru', {
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        setUsers(response.data)
     }
 
     useEffect(() => {
@@ -32,10 +41,6 @@ const Dashboard = (props) => {
         getUser()
     }, [])
 
-    // console.log(props.expired);
-    // console.log(props.name);
-
-    const axiosJWT = axios.create()
 
     axiosJWT.interceptors.request.use(async (config) => {
         const currentDate = new Date()
@@ -54,14 +59,7 @@ const Dashboard = (props) => {
         return Promise.reject(error)
     })
 
-    const getUser = async () => {
-        const response = await axiosJWT.get('/usersGuru', {
-            headers: {
-                Authorization: `Bearer ${props.token}`
-            }
-        })
-        setUsers(response.data)
-    }
+
 
     return (
         <div>
