@@ -5,13 +5,13 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ActionType from '../../../../redux/reducer/globalActionType'
 
-export const UasGanjil = (props) => {
+export const UtsGanjil = (props) => {
 
     // Deklarasi params, jenis_nilai dan axios
     const params = useParams()
     const axiosJWT = axios.create()
     const navigate = useNavigate()
-    const jenisNilai = 'UAS Ganjil'
+    const jenisNilai = 'UTS Ganjil'
 
     // state data
     const [siswa, setSiswa] = useState([])
@@ -283,4 +283,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UasGanjil)
+export default connect(mapStateToProps, mapDispatchToProps)(UtsGanjil)
