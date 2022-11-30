@@ -1,11 +1,15 @@
 import React from 'react'
+import axios from '../api/axios'
 import { connect } from 'react-redux'
 
 const api = (props) => {
 
+    const axiosJWT = axios.create()
+
+
     const getKelas = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:7000/kelas', {
+            const response = await axiosJWT.get('/kelas', {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -15,6 +19,10 @@ const api = (props) => {
             console.error(error);
         }
     }
+
+    return (
+        getKelas()
+    )
 }
 
 const mapStateToProps = state => {

@@ -40,6 +40,7 @@ import LoginGuru from "./containers/pages/login_guru/Login";
 // template Guru
 import TemplateGuru from './containers/templates/TemplateGuru'
 import DashboardGuru from './containers/pages/guru/dashboard/Dashboard'
+import Nilai from "./containers/pages/guru/nilai/Nilai";
 
 // dashboard login
 
@@ -113,9 +114,12 @@ const router = createBrowserRouter(
       {/* Login Guru */ }
       <Route path="/login" element={ <LoginGuru /> } />
 
-      {/* Dashboard Guru */ }
+      {/* Guru */ }
       <Route path="/dashboardGuru" element={ <TemplateGuru /> }>
         <Route index element={ <DashboardGuru /> } />
+      </Route>
+      <Route path="/UserGuru/nilai/:idMapel" element={ <TemplateGuru /> }>
+        <Route index element={ <Nilai /> } />
       </Route>
     </Route>
   )

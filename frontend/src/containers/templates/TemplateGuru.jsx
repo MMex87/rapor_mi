@@ -13,7 +13,6 @@ const Template = () => {
             <Header />
             <Outlet />
             <SideNav />
-            <Footer />
         </>
     )
 }
