@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ActionType from '../../../../redux/reducer/globalActionType'
 import UasGanjil from './UasGanjil'
+import UasGenap from './UasGenap'
+import UtsGanjil from './UtsGanjil'
+import UtsGenap from './UtsGenap'
 
 const Nilai = (props) => {
     // Deklarasi axios
@@ -94,7 +97,7 @@ const Nilai = (props) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header row">
-                                    <h3 className="card-title col-4">Nilai UAS Genap</h3>
+                                    <h3 className="card-title col-4">Nilai UAS Ganjil</h3>
                                     <div className="col-5"></div>
                                     <div className="col-3 d-flex justify-content-end">
                                         <div className="card-tools">
@@ -110,6 +113,87 @@ const Nilai = (props) => {
                                 </div>
                                 <div className="card-body table-responsive p-0">
                                     <UasGanjil />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-fluid">
+                    {/* /.row */ }
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-header row">
+                                    <h3 className="card-title col-4">Nilai UAS Genap</h3>
+                                    <div className="col-5"></div>
+                                    <div className="col-3 d-flex justify-content-end">
+                                        <div className="card-tools">
+                                            <button type="button" className="btn btn-tool " data-card-widget="collapse">
+                                                <i className="fas fa-minus" />
+                                            </button>
+                                        </div>
+                                        <div className="card-tools me-5">
+                                            <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card-body table-responsive p-0">
+                                    <UasGenap />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-fluid">
+                    {/* /.row */ }
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-header row">
+                                    <h3 className="card-title col-4">Nilai UTS Ganjil</h3>
+                                    <div className="col-5"></div>
+                                    <div className="col-3 d-flex justify-content-end">
+                                        <div className="card-tools">
+                                            <button type="button" className="btn btn-tool " data-card-widget="collapse">
+                                                <i className="fas fa-minus" />
+                                            </button>
+                                        </div>
+                                        <div className="card-tools me-5">
+                                            <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card-body table-responsive p-0">
+                                    <UtsGanjil />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-fluid">
+                    {/* /.row */ }
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-header row">
+                                    <h3 className="card-title col-4">Nilai UTS Genap</h3>
+                                    <div className="col-5"></div>
+                                    <div className="col-3 d-flex justify-content-end">
+                                        <div className="card-tools">
+                                            <button type="button" className="btn btn-tool " data-card-widget="collapse">
+                                                <i className="fas fa-minus" />
+                                            </button>
+                                        </div>
+                                        <div className="card-tools me-5">
+                                            <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card-body table-responsive p-0">
+                                    <UtsGenap />
                                 </div>
                             </div>
                         </div>
