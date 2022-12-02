@@ -39,8 +39,11 @@ import TambahAdmin from "./containers/pages/admin/user_manage/TambahAdmin";
 import LoginGuru from "./containers/pages/login_guru/Login";
 // template Guru
 import TemplateGuru from './containers/templates/TemplateGuru'
+// Tampilan Guru dan Wali Kelas
 import DashboardGuru from './containers/pages/guru/dashboard/Dashboard'
 import Nilai from "./containers/pages/guru/nilai/Nilai";
+import WaliKelas from "./containers/pages/guru/wali_kelas/WaliKelas";
+import DetailRapor from "./containers/pages/guru/wali_kelas/DetailRapor";
 
 // dashboard login
 
@@ -120,6 +123,10 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/UserGuru/nilai/:idMapel" element={ <TemplateGuru /> }>
         <Route index element={ <Nilai /> } />
+      </Route>
+      <Route path="/UserGuru/WaliKelas/:idKelas" element={ <TemplateGuru /> } >
+        <Route index element={ <WaliKelas /> } />
+        <Route path='/UserGuru/WaliKelas/:idKelas/:idSiswa' element={ <DetailRapor /> } />
       </Route>
     </Route>
   )

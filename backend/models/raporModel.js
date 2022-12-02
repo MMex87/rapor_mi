@@ -7,15 +7,11 @@ const Rapor = db.define('rapor', {
     angkatan: { type: DataTypes.STRING },
     semester: { type: DataTypes.STRING },
     id_siswa: { type: DataTypes.INTEGER },
-    id_nilai: { type: DataTypes.INTEGER },
     id_kelas: { type: DataTypes.INTEGER },
 }, {
     indexes: [
         {
             fields: ['id_siswa']
-        },
-        {
-            fields: ['id_nilai']
         },
         {
             fields: ['id_kelas']

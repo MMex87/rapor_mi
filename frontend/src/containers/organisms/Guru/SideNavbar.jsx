@@ -118,14 +118,16 @@ const SideNav = (props) => {
                             </li>
                             <li className="nav-item">
                                 { (props.role == 'Wali Kelas') ? (
-                                    <Link className="nav-link" to={ '/kepala/dashboard' }>
-                                        <i className="fa-sharp fa-solid fa-chalkboard-user nav-icon"></i>
+                                    <>
                                         { kelas.filter(({ id_guru }) => id_guru.toString() == id_Guru.toString()).map((val, index) => (
-                                            <p key={ index }>
-                                                Kelas { val.nama_kelas }
-                                            </p>
+                                            <Link className="nav-link" to={ `/UserGuru/WaliKelas/${val.id}` }>
+                                                <i className="fa-sharp fa-solid fa-chalkboard-user nav-icon"></i>
+                                                <p key={ index }>
+                                                    Kelas { val.nama_kelas }
+                                                </p>
+                                            </Link>
                                         )) }
-                                    </Link>
+                                    </>
 
                                 ) : '' }
                             </li>

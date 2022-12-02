@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ActionType from '../../../../redux/reducer/globalActionType'
 import UasGanjil from './UasGanjil'
@@ -12,6 +12,7 @@ import UtsGenap from './UtsGenap'
 const Nilai = (props) => {
     // Deklarasi axios
     const axiosJWT = axios.create()
+    const params = useParams()
 
     // state data
     const [namaKelas, setNamaKelas] = useState('')
@@ -37,6 +38,11 @@ const Nilai = (props) => {
     // get Datas
     const handleData = async () => {
         try {
+            const response = await axiosJWT.get(`/mapel/${params.idMapel}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
             const responseKelas = await axiosJWT.get(`/kelas/${response.data.id_kelas}`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
@@ -52,7 +58,7 @@ const Nilai = (props) => {
     useEffect(() => {
         refreshToken()
         handleData()
-    }, [])
+    }, [params.idMapel])
 
     axiosJWT.interceptors.request.use(async (config) => {
         const currentDate = new Date()
