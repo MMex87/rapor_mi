@@ -6460,6 +6460,7 @@ __metadata:
     react-router-dom: ^6.4.1
     react-scripts: 5.0.1
     redux: ^4.2.0
+    sweetalert2: ^11.6.15
     web-vitals: ^2.1.0
   languageName: unknown
   linkType: soft
@@ -12065,6 +12066,13 @@ __metadata:
   bin:
     svgo: bin/svgo
   checksum: b92f71a8541468ffd0b81b8cdb36b1e242eea320bf3c1a9b2c8809945853e9d8c80c19744267eb91cabf06ae9d5fff3592d677df85a31be4ed59ff78534fa420
+  languageName: node
+  linkType: hard
+
+"sweetalert2@npm:^11.6.15":
+  version: 11.6.15
+  resolution: "sweetalert2@npm:11.6.15"
+  checksum: c8272447b97d213a008927c954a6bd467063a3120a324e2a808e52da4342d0f1bb540d5ad0f3faec9880824c1e070e1b2f7845fe83807cd58cd50cca97402be9
   languageName: node
   linkType: hard
 

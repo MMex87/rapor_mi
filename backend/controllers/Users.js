@@ -21,6 +21,14 @@ export const getUsersId = async (req, res) => {
         console.log(error);
     }
 }
+export const getSuper = async (req, res) => {
+    try {
+        const users = await Users.findOne({ where: { role: req.params.super } })
+        res.json(users)
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export const Register = async (req, res) => {
     const { name, email, password, confPassword, role, picture } = req.body

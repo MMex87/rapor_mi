@@ -222,7 +222,7 @@ export const user = (props) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            { users.filter(({ role }) => role.indexOf("Kepala Sekolah") > -1).map((val, index) => (
+                                            { users.filter(({ role }) => role == "Kepala Sekolah").map((val, index) => (
                                                 <tr key={ index + 1 }>
                                                     <td className='col-sm-3'>{ val.name }</td>
                                                     <td className='col-sm-3'>{ val.email }</td>
@@ -281,7 +281,7 @@ export const user = (props) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            { users.filter(({ role }) => role.indexOf("Admin") > -1).map((val, index) => (
+                                            { users.filter(({ role }) => role == "Admin").map((val, index) => (
                                                 <tr key={ index + 1 }>
                                                     <td className='col-3'>{ val.name }</td>
                                                     <td className='col-3'>{ val.email }</td>

@@ -5,7 +5,7 @@ import {
   Route
 } from "react-router-dom";
 // import login dan register
-import Login from "./containers/pages/Login";
+import Login from "./containers/pages/login/Login";
 import Register from "./containers/pages/Register"
 // import Template
 import Template from "./containers/templates/Template";
@@ -35,8 +35,6 @@ import TambahKepala from "./containers/pages/admin/user_manage/TambahKepala";
 import TambahAdmin from "./containers/pages/admin/user_manage/TambahAdmin";
 
 
-// Login Guru
-import LoginGuru from "./containers/pages/login_guru/Login";
 // template Guru
 import TemplateGuru from './containers/templates/TemplateGuru'
 // Tampilan Guru dan Wali Kelas
@@ -46,6 +44,7 @@ import WaliKelas from "./containers/pages/guru/wali_kelas/WaliKelas";
 import DetailRapor from "./containers/pages/guru/wali_kelas/DetailRapor";
 
 // dashboard login
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -113,9 +112,6 @@ const router = createBrowserRouter(
         <Route index element={ <Profile /> } />
       </Route>
 
-
-      {/* Login Guru */ }
-      <Route path="/login" element={ <LoginGuru /> } />
 
       {/* Guru */ }
       <Route path="/dashboardGuru" element={ <TemplateGuru /> }>

@@ -24,7 +24,7 @@ const Dashboard = (props) => {
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
         } catch (error) {
-            return navigate('/login')
+            return navigate('/')
         }
     }
     const getUser = async () => {

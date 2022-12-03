@@ -8,7 +8,7 @@ const Header = () => {
     const Logout = async () => {
         try {
             await axios.delete('/logoutGuru')
-            navigate('/login')
+            navigate('/')
         } catch (error) {
             console.log(error);
         }
