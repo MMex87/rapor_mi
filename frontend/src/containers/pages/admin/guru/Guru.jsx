@@ -5,15 +5,26 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export const Guru = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
 
     // deklarasi State
     const [guru, setGuru] = useState([])
-    const [msg, setMsg] = useState('')
+    const [handle, setHandle] = useState(false)
 
     // refresh Token
     const refreshToken = async () => {
@@ -50,19 +61,49 @@ export const Guru = (props) => {
     // handle Hapus
     const handleHapus = async (val) => {
         try {
-            await axios.delete(`/guru/${val}`)
-            setMsg("Data Berhasil Terhapus")
-            getGuru()
+            Toast.fire({
+                title: 'Apa Kamu Yakin?',
+                text: "Kamu akan Menghapus Data Guru!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Hapus!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast.fire(
+                        'Terhapus!',
+                        'Data Guru Sudah Terhapus.',
+                        'success'
+                    ).then((res) => {
+                        if (res.isConfirmed)
+                            setHandle(false)
+                    })
+                    axios.delete(`/guru/${val}`)
+                    // navigate('/siswa')
+                    setHandle(true)
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast.fire(
+                        'Dibatalkan',
+                        'Data Guru tetap aman :)',
+                        'error'
+                    )
+                }
+            })
         } catch (error) {
             console.error(error);
         }
     }
 
+
     // Hooks Use Effect
     useEffect(() => {
         refreshToken()
         getGuru()
-    }, [])
+    }, [handle == true])
 
     // axios Interceptors 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -156,7 +197,7 @@ export const Guru = (props) => {
                                                             </Link>
                                                         </div>
                                                         <div className='ms-5'>
-                                                            <button type='button' className='btn btn-danger' onClick={ () => { confirm('Apakah anda yakin ingin menghapus?') ? handleHapus(val.id) : '' } }>
+                                                            <button type='button' className='btn btn-danger' onClick={ () => { handleHapus(val.id) } }>
                                                                 Hapus
                                                             </button>
                                                         </div>

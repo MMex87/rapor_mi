@@ -5,10 +5,28 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 
 
 export const EditGuru = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+    const Toast2 = Swal.mixin({
+        toast: true,
+        position: 'center',
+        showConfirmButton: true,
+        background: '#343a40'
+    })
+
+
     // deklarasi file input dan params
     const fileInput = React.createRef()
     const params = useParams()
@@ -16,7 +34,6 @@ export const EditGuru = (props) => {
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
-
 
 
 
@@ -95,19 +112,26 @@ export const EditGuru = (props) => {
         setStatusUp(1)
     }
 
-    const handleUploadFoto = (e) => {
+    const handleUploadFoto = async (e) => {
         e.preventDefault()
         // deklarasi form data
         const formData = new FormData()
         formData.append('photo', saveImage)
 
         if (statusUp == 0) {
-            window.alert('Tolong Pilih gambar Terlebih dalulu!!')
-        } else if (statusUp == 2) {
-            window.alert('Foto Sudah Tersimpan!!')
-        } else {
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Tolong Pilih gambar Terlebih dalulu!!',
 
-            axios({
+            })
+        } else if (statusUp == 2) {
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Foto Sudah Tersimpan!!',
+
+            })
+        } else {
+            await axios({
                 method: "POST",
                 url: '/img/uploads',
                 data: formData,
@@ -115,7 +139,11 @@ export const EditGuru = (props) => {
                 setFoto(res.data.image)
                 setPicture(res.data.name)
                 setStatusUp(2)
-                window.alert('Foto Berhasil di Upload!!')
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Foto Berhasil di Upload!!',
+
+                })
             }).catch((err) => {
                 console.error(err)
             })
@@ -128,21 +156,31 @@ export const EditGuru = (props) => {
     const edit = async (e) => {
         e.preventDefault()
 
-
         try {
             if (nama == "" || nuptk == '' || tanggal_lahir == '' || jenis_kelamin == '' || pendidikan == '') {
-                setMsg("Tolong isi dengan Lengkap")
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Tolong isi dengan Lengkap',
+
+                })
             } else {
                 if (statusUp == 2 || statusUp == 0) {
-                    setMsg('')
-                    setMsgPop('')
                     await axios.put(`/guru/${params.idGuru}`, {
                         nama, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture
                     })
                     setStatusUp(0)
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Berhasil di DiEdit',
+
+                    })
                     navigate('/guru')
                 } else {
-                    window.alert('Tolong tekan Upload foto terlebih dahulu!!')
+                    Toast2.fire({
+                        icon: 'warning',
+                        title: 'Tolong tekan Upload foto terlebih dahulu!!',
+
+                    })
                 }
             }
         } catch (error) {

@@ -5,9 +5,20 @@ import ActionType from '../../../../redux/reducer/globalActionType'
 import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
+import Swal from 'sweetalert2'
 
 
 const TambahMapel = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+
     // Deklarasi Hooks, params, dan axios
     const navigate = useNavigate()
     const params = useParams()
@@ -80,15 +91,23 @@ const TambahMapel = (props) => {
         e.preventDefault()
         try {
             if (nama === '' || induk === '' || idGuru === '') {
-                setMsg('Tolong Isi dengan Lengkap')
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Tolong Isi dengan Lengkap',
+
+                })
             }
             else {
-                setMsg('')
                 await axios.put(`/guru/${idGuru}`, {
                     jtm
                 })
                 await axios.post('/mapel', {
                     nama, induk, idGuru, id_kelas
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Data Berhasil Ditambahkan!',
+
                 })
                 navigate('/mapel')
             }

@@ -5,16 +5,37 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export const user = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+    const Toast2 = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
+
+    const [handle, setHandle] = useState(false)
     const foto = "http://localhost:8076/assets/uploads/"
 
     // state get datas
     const [users, setUsers] = useState([])
     const [guru, setGuru] = useState([])
+
 
     // Deklarasi password Default
     const pwKepala = 'kepsekmidu'
@@ -64,10 +85,39 @@ export const user = (props) => {
     // Handle Tombol
     // handle Hapus Kepala Sekolah
 
-    const hapusKepala = async (val) => {
+    const hapusKepala = async (val, role) => {
         try {
-            await axios.delete(`/users/${val}`)
-            getUser()
+            Toast2.fire({
+                title: 'Apa Kamu Yakin?',
+                text: `Kamu akan Menghapus Data ${role}!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Hapus!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast2.fire(
+                        'Terhapus!',
+                        `Data ${role} Sudah Terhapus.`,
+                        'success'
+                    ).then((res) => {
+                        if (res.isConfirmed)
+                            setHandle(false)
+                    })
+                    axios.delete(`/users/${val}`)
+                    setHandle(true)
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast2.fire(
+                        'Dibatalkan',
+                        `Data ${role} tetap aman :)`,
+                        'error'
+                    )
+                }
+            })
         } catch (error) {
             console.log(error)
         }
@@ -76,21 +126,48 @@ export const user = (props) => {
     //handle reset password Kepala Sekolah
     const resetKepala = async (val, role) => {
         try {
-            if (role == 'admin') {
-                const password = pwadmin
-                const confPassword = pwadmin
-                await axios.put(`/users/${val}`, {
-                    password, confPassword
-                })
-                console.log('Berhasil Mereset Password')
-            } else {
-                const password = pwKepala
-                const confPassword = pwKepala
-                await axios.put(`/users/${val}`, {
-                    password, confPassword
-                })
-                console.log('Berhasil Mereset Password')
-            }
+
+            Toast2.fire({
+                title: 'Apa Kamu Yakin?',
+                text: `Kamu akan Mereset Password ${role}!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Reset!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast.fire(
+                        'Reset!',
+                        `Password ${role} Sudah di Reset.`,
+                        'success',
+                        'black'
+                    )
+                    if (role == 'Admin') {
+                        const password = pwadmin
+                        const confPassword = pwadmin
+                        axios.put(`/users/${val}`, {
+                            password, confPassword
+                        })
+                    } else {
+                        const password = pwKepala
+                        const confPassword = pwKepala
+                        axios.put(`/users/${val}`, {
+                            password, confPassword
+                        })
+                    }
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast.fire({
+                        titleText: 'Dibatalkan',
+                        text: `Password ${role} tetap aman :)`,
+                        icon: 'error'
+                    }
+                    )
+                }
+            })
         } catch (error) {
             console.error(error);
         }
@@ -110,37 +187,87 @@ export const user = (props) => {
             const nama = gurufind.data.nama.split(" ")
             const username = nama[0] + nama[1]
 
-            await axios.put(`/guru/update/${val}`, {
-                username, password, confPassword
+            Toast2.fire({
+                title: 'Apa Kamu Yakin?',
+                text: `Kamu akan Menambahkan User Guru!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Tambahkan!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast2.fire(
+                        'Terupdate!',
+                        `User Guru Berhasil Ditambahkan.`,
+                        'success'
+                    ).then((res) => {
+                        if (res.isConfirmed)
+                            setHandle(false)
+                    })
+                    axios.put(`/guruUpdate/${val}`, {
+                        username, password, confPassword
+                    })
+                    setHandle(true)
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast2.fire(
+                        'Dibatalkan',
+                        `User Guru Gagal di Tambahkan :)`,
+                        'error'
+                    )
+                }
             })
-            console.log('Berhasil Membuat akun')
+
+
+
             getGuru()
         } catch (error) {
             console.log(error);
         }
     }
 
-    // handle Hapus guru
-
-    const hapusGuru = async (val) => {
-        try {
-            await axios.delete(`/guru/${val}`)
-            getGuru()
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     //handle reset password guru
     const resetGuru = async (val) => {
         try {
+            Toast2.fire({
+                title: 'Apa Kamu Yakin?',
+                text: `Kamu akan Mereset Password Guru!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Reset!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast.fire(
+                        'Reset!',
+                        `Password Guru Sudah di Reset.`,
+                        'success',
+                        'black'
+                    )
+                    const password = pwGuru
+                    const confPassword = pwGuru
 
-            const password = pwGuru
-            const confPassword = pwGuru
-            await axios.put(`/guru/update/${val}`, {
-                password, confPassword
+                    axios.put(`/guruUpdate/${val}`, {
+                        password, confPassword
+                    })
+                    console.log("masuk")
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast.fire({
+                        titleText: 'Dibatalkan',
+                        text: `Pasword Guru tetap aman :)`,
+                        icon: 'error'
+                    }
+                    )
+                }
             })
-            console.log('Berhasil Mereset Password')
         } catch (error) {
             console.error(error);
         }
@@ -152,7 +279,7 @@ export const user = (props) => {
         refreshToken()
         getUser()
         getGuru()
-    }, [])
+    }, [handle == true])
 
     // axios Interceptors 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -202,7 +329,7 @@ export const user = (props) => {
                                         <p>Password Default : { pwKepala }</p>
                                     </div>
                                     <div className="col-2 d-flex justify-content-end">
-                                        { (users.filter(({ role }) => role.indexOf("Kepala Sekolah") > -1).length > 0) ? (
+                                        { (users.filter(({ role }) => role == "Kepala Sekolah").length > 0) ? (
                                             ''
                                         ) :
                                             <Link type='button' className='btn btn-success btn-sm' to={ `tambah` }>
@@ -236,10 +363,10 @@ export const user = (props) => {
                                                     </td>
                                                     <td className='col-sm-2 container p-2'>
                                                         <div className="row mt-2">
-                                                            <button className='btn btn-warning' onClick={ () => { confirm('Apakah anda yakin ingin mereset Password default?') ? resetKepala(val.id, 'kepsek') : '' } }>Reset Password</button>
+                                                            <button className='btn btn-warning' onClick={ () => resetKepala(val.id, 'Kepala Sekolah') }>Reset Password</button>
                                                         </div>
                                                         <div className="row mt-3">
-                                                            <button className='btn btn-danger' onClick={ () => { confirm('Apakah anda yakin ingin menghapus?') ? hapusKepala(val.id) : '' } }>Hapus</button>
+                                                            <button className='btn btn-danger' onClick={ () => hapusKepala(val.id, 'Kepala Sekolah') }>Hapus</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -295,10 +422,10 @@ export const user = (props) => {
                                                     </td>
                                                     <td className='col-2 container p-2'>
                                                         <div className="row mt-2">
-                                                            <button className='btn btn-warning' onClick={ () => { confirm('Apakah anda yakin ingin mereset Password default?') ? resetKepala(val.id, 'admin') : '' } }>Reset Password</button>
+                                                            <button className='btn btn-warning' onClick={ () => resetKepala(val.id, 'Admin') }>Reset Password</button>
                                                         </div>
                                                         <div className="row mt-3">
-                                                            <button className='btn btn-danger' onClick={ () => { confirm('Apakah anda yakin ingin menghapus?') ? hapusKepala(val.id) : '' } }>Hapus</button>
+                                                            <button className='btn btn-danger' onClick={ () => hapusKepala(val.id, 'Admin') }>Hapus</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -356,17 +483,16 @@ export const user = (props) => {
                                                         }
                                                     </td>
                                                     <td className='col-sm-2'>
-                                                        { (val.password == null) &&
+                                                        { (val.password == null)
+                                                            ?
                                                             <div div className="row mt-2">
-                                                                <button className='btn btn-success' onClick={ () => { confirm('Apakah anda yakin ingin menjadikan akun Guru?') ? handleAkunGuru(val.id) : '' } }>Add Account</button>
+                                                                <button className='btn btn-success' onClick={ () => handleAkunGuru(val.id) }>Add Account</button>
+                                                            </div>
+                                                            :
+                                                            <div className="row mt-3">
+                                                                <button className='btn btn-warning' onClick={ () => resetGuru(val.id) }>Reset Password</button>
                                                             </div>
                                                         }
-                                                        <div className="row mt-3">
-                                                            <button className='btn btn-warning' onClick={ () => { confirm('Apakah anda yakin ingin mereset Password default?') ? resetGuru(val.id) : '' } }>Reset Password</button>
-                                                        </div>
-                                                        <div className="row mt-3">
-                                                            <button className='btn btn-danger' onClick={ () => { confirm('Apakah anda yakin ingin menghapus?') ? hapusGuru(val.id) : '' } }>Hapus</button>
-                                                        </div>
                                                     </td>
                                                 </tr>
                                             )) }

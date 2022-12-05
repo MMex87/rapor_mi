@@ -5,10 +5,27 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 
 
 export const TambahGuru = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+    const Toast2 = Swal.mixin({
+        toast: true,
+        position: 'center',
+        showConfirmButton: true,
+        background: '#343a40'
+    })
+
 
     const fileInput = React.createRef()
 
@@ -91,9 +108,17 @@ export const TambahGuru = (props) => {
         formData.append('photo', saveImage)
 
         if (statusUp == 0) {
-            window.alert('Tolong Pilih gambar Terlebih dalulu!!')
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Tolong Pilih gambar Terlebih dalulu!!',
+
+            })
         } else if (statusUp == 2) {
-            window.alert('Foto Sudah Tersimpan!!')
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Foto Sudah Tersimpan!!',
+
+            })
         } else {
             await axios({
                 method: "POST",
@@ -103,7 +128,11 @@ export const TambahGuru = (props) => {
                 setFoto(res.data.image)
                 setPicture(res.data.name)
                 setStatusUp(2)
-                window.alert('Foto Berhasil di Upload!!')
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Foto Berhasil di Upload!!',
+
+                })
             }).catch((err) => {
                 console.error(err)
             })
@@ -122,11 +151,13 @@ export const TambahGuru = (props) => {
 
         try {
             if (nama == "" || nuptk == '' || tanggal_lahir == '' || jenis_kelamin == '') {
-                setMsg("Tolong isi dengan Lengkap")
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Tolong isi dengan Lengkap',
+
+                })
             } else {
                 if (statusUp == 2 || statusUp == 0) {
-                    setMsg('')
-                    setMsgPop('')
                     await axios.post('/guru', {
                         nama, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role
                     })
@@ -135,9 +166,19 @@ export const TambahGuru = (props) => {
                     // axios refresh token
                     refreshToken()
 
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Berhasil di Tambahkan',
+
+                    })
+
                     navigate('/guru')
                 } else {
-                    window.alert('Tolong tekan Upload foto terlebih dahulu!!')
+                    Toast2.fire({
+                        icon: 'warning',
+                        title: 'Tolong tekan Upload foto terlebih dahulu!!',
+
+                    })
                 }
             }
         } catch (error) {
@@ -209,15 +250,12 @@ export const TambahGuru = (props) => {
                                         <div className="form-group">
                                             <form onSubmit={ tambah }>
                                                 <div>
-                                                    <b className='text text-danger'>{ msg }</b>
-                                                </div>
-                                                <div>
                                                     <label>Nama Guru</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } />
+                                                    <input type="text" className="form-control select2" id='name' style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>NUPTK</label>
-                                                    <input type="text" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNuptk(e.target.value) } />
+                                                    <input type="number" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNuptk(e.target.value) } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Tanggal Lahir</label>

@@ -5,8 +5,26 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 const Kelas = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+    const Toast2 = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
@@ -21,6 +39,7 @@ const Kelas = (props) => {
     const [id_guru, setIdGuru] = useState('')
     const [id_guru2, setIdGuru2] = useState('')
     const [role, setRole] = useState('')
+    const [handle, setHandle] = useState(false)
 
     // state Data
     const [kelas, setKelas] = useState([])
@@ -125,29 +144,39 @@ const Kelas = (props) => {
                 await axios.post('/kelas', {
                     nama_kelas, id_guru
                 })
-                await axios.put(`/guru/${id_guru}`, {
+                await axios.put(`/guruRole/${id_guru}`, {
                     role: 'Wali Kelas'
                 })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Berhasil di Tambahkan',
+
+                })
                 getKelas()
+                getGuru()
                 setVisi('invisible')
+                setWali('')
+                setNama('')
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
-            getKelas()
-            getGuru()
-            setVisi('invisible')
-            setWali('')
-            setNama('')
+
         } else {
 
             await axios.put(`/kelas/${idKelas}`, {
                 nama_kelas, id_guru
             })
-            await axios.put(`/guru/${id_guru}`, {
+            await axios.put(`/guruRole/${id_guru}`, {
                 role: 'Wali Kelas'
             })
-            await axios.put(`/guru/${id_guru2}`, {
+            await axios.put(`/guruRole/${id_guru2}`, {
                 role: 'Guru'
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Berhasil di DiEdit',
+
             })
 
             getKelas()
@@ -167,13 +196,42 @@ const Kelas = (props) => {
                 }
             })
 
-            await axios.put(`/guru/${response.data.id_guru}`, {
-                role: 'Guru'
-            })
 
-            await axios.delete(`/kelas/${id_kelas}`)
-            setMsg('Data Berhasil Dihapus')
-            getKelas()
+            Toast2.fire({
+                title: 'Apa Kamu Yakin?',
+                text: "Kamu akan Menghapus Data Kelas!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Hapus!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast2.fire(
+                        'Terhapus!',
+                        'Data Kelas Sudah Terhapus.',
+                        'success'
+                    ).then((res) => {
+                        if (res.isConfirmed)
+                            setHandle(false)
+                    })
+                    axios.put(`/guruRole/${response.data.id_guru}`, {
+                        role: 'Guru'
+                    })
+                    axios.delete(`/kelas/${id_kelas}`)
+                    // navigate('/siswa')
+                    setHandle(true)
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast2.fire(
+                        'Dibatalkan',
+                        'Data Guru tetap aman :)',
+                        'error'
+                    )
+                }
+            })
         } catch (error) {
             console.error(error)
         }
@@ -185,7 +243,10 @@ const Kelas = (props) => {
         getGuru()
         getKelas()
         getSiswa()
-    }, [])
+        return () => {
+            refreshToken()
+        }
+    }, [handle == true])
 
 
     // axios Interceptors 
@@ -290,7 +351,7 @@ const Kelas = (props) => {
                                                             </a>
                                                         </div>
                                                         <div className="col-md-1 d-flex justify-content-end">
-                                                            <button className='btn btn-danger btn-sm ms-3' onClick={ () => confirm('Yakin Ingin menghapus?') ? handleHapus(val.id) : '' } >
+                                                            <button className='btn btn-danger btn-sm ms-3' onClick={ () => handleHapus(val.id) } >
                                                                 <i className="fa-solid fa-trash"></i>
                                                             </button>
                                                         </div>

@@ -47,7 +47,7 @@ const uploads = multer({ storage })
 app.post("/img/uploads", uploads.single('photo'), (req, res) => {
     // membuat URL gambar
     // save ke db
-    const finalImageURL = req.protocol + "://localhost:3000/assets/uploads/" + req.file.filename
+    const finalImageURL = req.protocol + "://localhost:8076/assets/uploads/" + req.file.filename
     res.json({ status: "success", image: finalImageURL, name: req.file.filename })
     // res.json({ status: "success", image: finalImageURL })
 })

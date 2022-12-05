@@ -5,8 +5,18 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 const Mapel = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
@@ -15,7 +25,8 @@ const Mapel = (props) => {
     const [mapel, setMapel] = useState([])
     const [kelas, setKelas] = useState([])
     const [guru, setGuru] = useState([])
-    const [msg, setMsg] = useState('')
+
+    const [handle, setHandle] = useState(false)
 
     // refresh Token
     const refreshToken = async () => {
@@ -84,13 +95,41 @@ const Mapel = (props) => {
             })
             let jtm = parseInt(response.data.jtm) - 2
 
-            await axios.put(`/guru/${val2}`, {
-                jtm
-            })
+            Toast.fire({
+                title: 'Apa Kamu Yakin?',
+                text: "Kamu akan Menghapus Data Mapel!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Hapus!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast.fire(
+                        'Terhapus!',
+                        'Data Mapel Sudah Terhapus.',
+                        'success'
+                    ).then((res) => {
+                        if (res.isConfirmed)
+                            setHandle(false)
+                    })
+                    axios.put(`/guru/${val2}`, {
+                        jtm
+                    })
 
-            await axios.delete(`/mapel/${val}`)
-            setMsg('Data Berhasil Dihapus')
-            getMapel()
+                    axios.delete(`/mapel/${val}`)
+                    setHandle(true)
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast.fire(
+                        'Dibatalkan',
+                        'Data Mapel tetap aman :)',
+                        'error'
+                    )
+                }
+            })
         } catch (error) {
             console.error(error);
         }
@@ -103,7 +142,7 @@ const Mapel = (props) => {
         getMapel()
         getGuru()
         getKelas()
-    }, [])
+    }, [handle == true])
 
 
     // axios Interceptors 
@@ -201,7 +240,7 @@ const Mapel = (props) => {
                                                                     </Link>
                                                                 </div>
                                                                 <div className='ms-5'>
-                                                                    <button type='button' className='btn btn-danger' onClick={ () => { (window.confirm("apakah Yakin ingin menghapus?") ? handleDelete(val.id, val.idGuru) : '') } }>
+                                                                    <button type='button' className='btn btn-danger' onClick={ () => { handleDelete(val.id, val.idGuru) } }>
                                                                         Hapus
                                                                     </button>
                                                                 </div>

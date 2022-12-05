@@ -4,8 +4,19 @@ import jwt_decode from 'jwt-decode'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ActionType from '../../../../redux/reducer/globalActionType'
+import Swal from 'sweetalert2'
 
 export const UtsGanjil = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+
 
     // Deklarasi params, jenis_nilai dan axios
     const params = useParams()
@@ -126,9 +137,17 @@ export const UtsGanjil = (props) => {
                 await axios.put(`/nilai/${idNilai}`, {
                     nilai: inputNilai
                 })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Nilai Berhasil di Update!!'
+                })
             } else {
                 await axios.post('/nilai', {
                     nilai: inputNilai, id_mapel: params.idMapel, id_siswa: idSiswa, jenis_nilai: jenisNilai
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Nilai Berhasil di Tambah!!'
                 })
             }
             setVisi('visible')
@@ -243,13 +262,13 @@ export const UtsGanjil = (props) => {
                                     </div>
                                     <div className='mt-5 d-flex justify-content-end row container'>
                                         <div className='col-sm-1'>
-                                            <button className='btn btn-warning' onClick={ () => handleBack() }>
-                                                Back
+                                            <button className='btn btn-success'>
+                                                Save
                                             </button>
                                         </div>
                                         <div className='col-sm-1'>
-                                            <button className='btn btn-success'>
-                                                Save
+                                            <button className='btn btn-warning' onClick={ () => handleBack() }>
+                                                Back
                                             </button>
                                         </div>
                                     </div>

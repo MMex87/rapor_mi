@@ -5,8 +5,19 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export const Siswa = (props) => {
+    // alert
+
+    const Toast = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
@@ -14,7 +25,7 @@ export const Siswa = (props) => {
     // deklarasi state
     const [siswa, setSiswa] = useState([])
     const [kelas, setKelas] = useState([])
-    const [msg, setMsg] = useState('')
+    const [handle, setHandle] = useState(false)
 
     // refresh Token
     const refreshToken = async () => {
@@ -64,9 +75,37 @@ export const Siswa = (props) => {
 
     const handleHapus = async (val) => {
         try {
-            await axios.delete(`/siswa/${val}`)
-            setMsg("Data Berhasil Terhapus")
-            getSiswa()
+            Toast.fire({
+                title: 'Apa Kamu Yakin?',
+                text: "Kamu akan Menghapus Data Siswa!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Hapus!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast.fire(
+                        'Terhapus!',
+                        'Data Siswa Sudah Terhapus.',
+                        'success'
+                    ).then((res) => {
+                        if (res.isConfirmed)
+                            setHandle(false)
+                    })
+                    axios.delete(`/siswa/${val}`)
+                    setHandle(true)
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast.fire(
+                        'Dibatalkan',
+                        'Data Siswa tetap aman :)',
+                        'error'
+                    )
+                }
+            })
         } catch (error) {
             console.error(error);
         }
@@ -78,7 +117,7 @@ export const Siswa = (props) => {
         refreshToken()
         getSiswa()
         getKelas()
-    }, [])
+    }, [handle == true])
 
 
     // axios Interceptors 
@@ -178,7 +217,7 @@ export const Siswa = (props) => {
                                                             </Link>
                                                         </div>
                                                         <div className='ms-5'>
-                                                            <button type='button' className='btn btn-danger' onClick={ () => { confirm('Apakah anda yakin ingin menghapus?') ? handleHapus(val.id) : '' } }>
+                                                            <button type='button' className='btn btn-danger' onClick={ () => handleHapus(val.id) }>
                                                                 Hapus
                                                             </button>
                                                         </div>

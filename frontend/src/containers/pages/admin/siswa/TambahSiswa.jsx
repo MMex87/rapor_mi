@@ -5,10 +5,21 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-
+import Swal from 'sweetalert2'
 
 
 export const TambahSiswa = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+
+
     // deklarasi hooks dan axios
     const navigate = useNavigate()
     const axiosJWT = axios.create()
@@ -61,12 +72,20 @@ export const TambahSiswa = (props) => {
         e.preventDefault()
         try {
             if (nama == "" || nisn == '' || tanggal_lahir == '' || jenis_kelamin == '' || id_kelas == '') {
-                setMsg("Tolong isi dengan Lengkap")
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Tolong Isi dengan Lengkap',
+
+                })
             } else {
-                setMsg('')
                 const status = 'aktiv'
                 await axios.post('/siswa', {
                     nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Data Berhasil di Tambahkan!',
+
                 })
                 navigate('/siswa')
             }

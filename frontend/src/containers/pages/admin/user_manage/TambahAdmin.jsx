@@ -5,8 +5,25 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export const TambahAdmin = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+    const Toast2 = Swal.mixin({
+        toast: true,
+        position: 'center',
+        showConfirmButton: true,
+        background: '#343a40'
+    })
+
     const fileInput = React.createRef()
 
     // deklarasi hooks dan axios
@@ -22,7 +39,6 @@ export const TambahAdmin = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('adminmidu')
     const [confPassword, setConfPassword] = useState('adminmidu')
-    const [msg, setMsg] = useState('')
 
     // state picture
     const [picture, setPicture] = useState('default.png')
@@ -78,9 +94,15 @@ export const TambahAdmin = (props) => {
         formData.append('photo', saveImage)
 
         if (statusUp == 0) {
-            window.alert('Tolong Pilih gambar Terlebih dalulu!!')
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Tolong Pilih gambar Terlebih dalulu!!'
+            })
         } else if (statusUp == 2) {
-            window.alert('Foto Sudah Tersimpan!!')
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Foto Sudah Tersimpan!!'
+            })
         } else {
             await axios({
                 method: "POST",
@@ -90,7 +112,10 @@ export const TambahAdmin = (props) => {
                 setFoto(res.data.image)
                 setPicture(res.data.name)
                 setStatusUp(2)
-                window.alert('Foto Berhasil di Upload!!')
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Foto Berhasil di Upload!!',
+                })
             }).catch((err) => {
                 console.error(err)
             })
@@ -106,10 +131,17 @@ export const TambahAdmin = (props) => {
             await axios.post('/users', {
                 name, email, password, confPassword, role, picture
             })
+            Toast.fire({
+                icon: 'success',
+                title: "Data Berhasil di Tambahkan!!"
+            })
             navigate('/user')
         } catch (err) {
             if (err.response) {
-                setMsg(err.response.data.msg)
+                Toast2.fire({
+                    icon: 'error',
+                    title: err.response.data.msg
+                })
             }
         }
     }

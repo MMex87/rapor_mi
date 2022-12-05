@@ -103,7 +103,7 @@ export const Profile = (props) => {
                                 </div>
                                 <div className='row p-5 container'>
                                     <div className="card d-flex justify-content-center" style={ { width: '24rem' } }>
-                                        <img src={ "http://localhost:3000/assets/uploads/" + picture } className="card-img-top" />
+                                        <img src={ "http://localhost:8076/assets/uploads/" + picture } className="card-img-top" />
                                         <div className="card-body">
                                             <ul className="list-group list-group-flush">
                                                 <div class="card-header rounded-4">

@@ -74,8 +74,32 @@ export const editGuru = async (req, res) => {
             if (picture === gurus.picture) {
             } else {
                 fs.unlink(filepath, err => console.log(err))
+                console.log('lapo ndek kene');
             }
             res.json({ msg: "Data Berhasil Di Ubah" })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const editGuruRole = async (req, res) => {
+    const { role } = req.body
+
+    try {
+        const guru = await Guru.update({
+            role
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+
+        if (guru == 0) {
+            res.status(404).json({ msg: "Data Tidak di temukan" })
+        } else {
+            res.json({ msg: "Data Berhasil Di Ubah" })
+            console.log('berhasil')
         }
     } catch (error) {
         console.log(error)
@@ -112,6 +136,8 @@ export const updateGuru = async (req, res) => {
                     console.log("default");
                 } else {
                     fs.unlink(filepath, err => console.log(err))
+
+                    console.log('lapo ndek kene pisan');
                 }
             }
             res.json({ msg: "Data Berhasil Di Ubah" })

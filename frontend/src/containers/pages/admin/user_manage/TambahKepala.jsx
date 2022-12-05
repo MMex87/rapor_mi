@@ -5,8 +5,24 @@ import axios from '../../../../api/axios'
 import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export const TambahKepala = (props) => {
+    // alert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#343a40'
+    })
+    const Toast2 = Swal.mixin({
+        toast: true,
+        position: 'center',
+        showConfirmButton: true,
+        background: '#343a40'
+    })
 
     const fileInput = React.createRef()
 
@@ -79,9 +95,15 @@ export const TambahKepala = (props) => {
         formData.append('photo', saveImage)
 
         if (statusUp == 0) {
-            window.alert('Tolong Pilih gambar Terlebih dalulu!!')
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Tolong Pilih gambar Terlebih dalulu!!'
+            })
         } else if (statusUp == 2) {
-            window.alert('Foto Sudah Tersimpan!!')
+            Toast2.fire({
+                icon: 'warning',
+                title: 'Foto Sudah Tersimpan!!'
+            })
         } else {
             await axios({
                 method: "POST",
@@ -91,7 +113,10 @@ export const TambahKepala = (props) => {
                 setFoto(res.data.image)
                 setPicture(res.data.name)
                 setStatusUp(2)
-                window.alert('Foto Berhasil di Upload!!')
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Foto Berhasil di Upload!!'
+                })
             }).catch((err) => {
                 console.error(err)
             })
@@ -104,12 +129,29 @@ export const TambahKepala = (props) => {
         e.preventDefault()
         const role = 'Kepala Sekolah'
         try {
-            await axios.post('/users', {
-                name, email, password, confPassword, role, picture
-            })
-            navigate('/user')
+            if (name == '' || email == '' || password == '' || confPassword == '') {
+                Toast2.fire({
+                    icon: 'warning',
+                    title: 'Tolong Isi Semua Field!!'
+                })
+            } else {
+                console.log('atas');
+                await axios.post('/users', {
+                    name, email, password, confPassword, role, picture
+                })
+                console.log('bawah')
+                Toast.fire({
+                    icon: 'success',
+                    title: "Data Berhasil Di Tambahkan"
+                })
+                navigate('/user')
+            }
         } catch (err) {
             if (err.response) {
+                Toast2.fire({
+                    icon: 'error',
+                    title: err.response.data.msg
+                })
                 setMsg(err.response.data.msg)
             }
         }
