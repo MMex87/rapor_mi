@@ -28,6 +28,7 @@ export const EditMapel = (props) => {
     // state data
     const [nama, setNama] = useState('')
     const [induk, setInduk] = useState('')
+    const [kkm, setKkm] = useState('')
     const [idGuru, setIdGuru] = useState('')
     const [guru, setGuru] = useState([])
     const [mapel, setMapel] = useState([])
@@ -81,6 +82,7 @@ export const EditMapel = (props) => {
             setMapel(response.data)
             setNama(response.data.nama)
             setInduk(response.data.induk)
+            setKkm(response.data.kkm)
             setIdGuru(response.data.idGuru)
         } catch (err) {
             console.error(err)
@@ -100,7 +102,7 @@ export const EditMapel = (props) => {
             }
             else {
                 await axios.put(`/mapel/${id_mapel}`, {
-                    nama, induk, idGuru
+                    nama, induk, kkm, idGuru
                 })
                 Toast.fire({
                     icon: 'success',
@@ -202,6 +204,10 @@ export const EditMapel = (props) => {
                                                         <option selected={ mapel.induk == 'National' ? 'selected' : '' } value={ 'National' }>National</option>
                                                         <option selected={ mapel.induk == 'Muatan Lokal' ? 'selected' : '' } value={ 'Muatan Lokal' }>Muatan Lokal</option>
                                                     </select>
+                                                </div>
+                                                <div className='mt-3'>
+                                                    <label>KKM</label>
+                                                    <input type='number' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setKkm(e.target.value) } value={ kkm } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Nama Guru</label>

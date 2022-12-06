@@ -29,6 +29,7 @@ const TambahMapel = (props) => {
     // state data
     const [nama, setMapel] = useState('')
     const [induk, setInduk] = useState('')
+    const [kkm, setKkm] = useState('')
     const [idGuru, setIdGuru] = useState('')
     const [guru, setGuru] = useState([])
     const [jtm, setJtm] = useState(0)
@@ -102,7 +103,7 @@ const TambahMapel = (props) => {
                     jtm
                 })
                 await axios.post('/mapel', {
-                    nama, induk, idGuru, id_kelas
+                    nama, induk, kkm, idGuru, id_kelas
                 })
                 Toast.fire({
                     icon: 'success',
@@ -205,6 +206,10 @@ const TambahMapel = (props) => {
                                                         <option value={ 'National' }>National</option>
                                                         <option value={ 'Muatan Lokal' }>Muatan Lokal</option>
                                                     </select>
+                                                </div>
+                                                <div className='mt-3'>
+                                                    <label>KKM</label>
+                                                    <input type='number' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setKkm(e.target.value) } value={ kkm } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>Nama Guru</label>

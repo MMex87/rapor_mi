@@ -9,13 +9,18 @@ const DetailRapor = (props) => {
     // Deklarasi axios
     const axiosJWT = axios.create()
     const params = useParams()
+    const jenisNilai = 'UAS Ganjil'
 
     // state data
     const [namaKelas, setNamaKelas] = useState('')
     const [namaSiswa, setNamaSiswa] = useState('')
     const [idKelas, setIdKelas] = useState('')
+    const [id_Guru, setIdGuru] = useState('')
     const [siswa, setSiswa] = useState([])
+    const [guru, setGuru] = useState([])
     const [rapor, setRapor] = useState([])
+    const [nilai, setNilai] = useState([])
+    const [mapel, setMapel] = useState([])
 
 
 
@@ -54,6 +59,7 @@ const DetailRapor = (props) => {
             console.log(error)
         }
     }
+
     const getSiswa = async () => {
         try {
             const response = await axiosJWT.get(`/siswa`, {
@@ -66,6 +72,18 @@ const DetailRapor = (props) => {
             console.log(error)
         }
     }
+    const getGuru = async () => {
+        try {
+            const response = await axiosJWT.get(`/guru`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setGuru(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const getRapor = async () => {
         const response = await axiosJWT.get(`/rapor/${params.idKelas}/${params.idSiswa}`, {
             headers: {
@@ -73,14 +91,33 @@ const DetailRapor = (props) => {
             }
         })
         setRapor(response.data)
-        console.log(response.data)
+    }
+    const getMapel = async () => {
+        const response = await axiosJWT.get(`/mapelKelas/${params.idKelas}`, {
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        setMapel(response.data)
+    }
+
+    const getNilai = async () => {
+        const response = await axiosJWT.get(`/nilai`, {
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        setNilai(response.data)
     }
 
     useEffect(() => {
         refreshToken()
         handleData()
         getSiswa()
+        getGuru()
         getRapor()
+        getMapel()
+        getNilai()
     }, [])
 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -99,7 +136,6 @@ const DetailRapor = (props) => {
     }, (error) => {
         return Promise.reject(error)
     })
-
 
     return (
         <div>
@@ -143,6 +179,56 @@ const DetailRapor = (props) => {
                                     </div>
                                 </div>
                                 <div className="card-body table-responsive p-0">
+                                    <table className="table table-hover table-dark text-nowrap" >
+                                        <thead>
+                                            <tr className='container'>
+                                                <th>No</th>
+                                                <th>Mapel</th>
+                                                <th>Guru</th>
+                                                <th>KKM</th>
+                                                <th>Nilai</th>
+                                                <th>Predikat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            { mapel.map((val, index) => (
+                                                <tr key={ index }>
+                                                    <td>{ index + 1 }</td>
+                                                    <td>{ val.nama }</td>
+                                                    <td>
+                                                        {
+                                                            guru.filter(({ id }) => id == val.idGuru).map((value, indeks) => (
+                                                                <div key={ indeks }>
+                                                                    { value.nama }
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </td>
+                                                    <td>{ val.kkm }</td>
+                                                    <td>
+                                                        {
+                                                            nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                                                <div key={ index }>
+                                                                    { value.nilai }
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </td>
+                                                    <td >
+                                                        {
+                                                            nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                                                <div key={ index }>
+                                                                    {
+                                                                        (90 < parseInt(value.nilai)) ? ('A') : (70 < parseInt(value.nilai)) ? ('B') : (50 < parseInt(value.nilai)) ? ('C') : ('D')
+                                                                    }
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            )) }
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

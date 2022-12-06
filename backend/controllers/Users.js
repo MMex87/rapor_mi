@@ -74,9 +74,7 @@ export const UpdateUser = async (req, res) => {
         if (picture == null) {
             console.log("Tidak Menghapus Gambar")
         } else {
-            if (user.picture == "default.png") {
-                console.log("default");
-            } else {
+            if (user.picture != "default.png") {
                 fs.unlink(filepath, err => console.log(err))
             }
         }
@@ -158,12 +156,9 @@ export const DeleteUser = async (req, res) => {
         else {
             const filepath = '../frontend/public/assets/uploads/' + user.picture
 
-            if (user.picture == 'default.png') {
-                console.log("default")
-            } else {
+            if (user.picture != 'default.png') {
                 fs.unlink(filepath, err => console.log(err))
             }
-
             res.json({ msg: "Data Berhasil Terhapus" })
         }
     } catch (error) {

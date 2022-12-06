@@ -71,10 +71,8 @@ export const editGuru = async (req, res) => {
         if (guru == 0) {
             res.status(404).json({ msg: "Data Tidak di temukan" })
         } else {
-            if (picture === gurus.picture) {
-            } else {
+            if (picture != "default.png") {
                 fs.unlink(filepath, err => console.log(err))
-                console.log('lapo ndek kene');
             }
             res.json({ msg: "Data Berhasil Di Ubah" })
         }
@@ -132,12 +130,8 @@ export const updateGuru = async (req, res) => {
             if (picture == null) {
                 console.log("Tidak Menghapus Gambar")
             } else {
-                if (gurus.picture == "default.png") {
-                    console.log("default");
-                } else {
+                if (gurus.picture != "default.png") {
                     fs.unlink(filepath, err => console.log(err))
-
-                    console.log('lapo ndek kene pisan');
                 }
             }
             res.json({ msg: "Data Berhasil Di Ubah" })
@@ -216,8 +210,6 @@ export const hapusGuru = async (req, res) => {
             const filepath = '../frontend/public/assets/uploads/' + guru.picture
 
             if (guru.picture == 'default.png') {
-                console.log('default');
-            } else {
                 fs.unlink(filepath, err => console.log(err))
             }
             res.json({ msg: "Data Berhasil Terhapus" })

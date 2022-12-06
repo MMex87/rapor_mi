@@ -4,17 +4,16 @@ import jwt_decode from 'jwt-decode'
 import { Link, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ActionType from '../../../../redux/reducer/globalActionType'
+import RaporUasGanjil from './RaporUasGanjil'
 
 const WaliKelas = (props) => {
     // Deklarasi axios
     const axiosJWT = axios.create()
     const params = useParams()
 
+
     // state data
     const [namaKelas, setNamaKelas] = useState('')
-    const [idKelas, setIdKelas] = useState('')
-    const [siswa, setSiswa] = useState([])
-    const [rapor, setRapor] = useState([])
 
 
 
@@ -49,32 +48,9 @@ const WaliKelas = (props) => {
         }
     }
 
-    const getSiswa = async () => {
-        try {
-            const response = await axiosJWT.get(`/siswa`, {
-                headers: {
-                    Authorization: `Bearer ${props.token}`
-                }
-            })
-            setSiswa(response.data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const getRapor = async () => {
-        const response = await axiosJWT.get(`/rapor`, {
-            headers: {
-                Authorization: `Bearer ${props.token}`
-            }
-        })
-        setRapor(response.data)
-    }
-
     useEffect(() => {
         refreshToken()
         handleData()
-        getSiswa()
-        getRapor()
     }, [])
 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -134,46 +110,7 @@ const WaliKelas = (props) => {
                                     </div>
                                 </div>
                                 <div className="card-body table-responsive p-0">
-                                    <table className="table table-hover table-dark text-nowrap" >
-                                        <thead>
-                                            <tr className='container'>
-                                                <th>No</th>
-                                                <th>NISN</th>
-                                                <th>Nama Siswa</th>
-                                                <th>Rata - Rata</th>
-                                                <th>Peringkat</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            { siswa.filter(({ id_kelas }) => id_kelas == params.idKelas).map((val, index) => (
-                                                <tr key={ index }>
-                                                    <td>{ index + 1 }</td>
-                                                    <td>{ val.nisn }</td>
-                                                    <td>{ val.nama }</td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td >
-
-                                                    </td>
-                                                    <td className='d-flex justify-content-around'>
-                                                        { rapor.find(({ id_siswa, id_kelas }) => id_siswa == val.id && id_kelas == val.id_kelas) == null
-                                                            ?
-                                                            <div className='me-5'>
-                                                                <button className='btn btn-primary'>Generate Nilai</button>
-                                                            </div>
-                                                            :
-                                                            <div className='me-5'>
-                                                                <Link className='btn btn-success' to={ `/UserGuru/WaliKelas/${params.idKelas}/${val.id}` }>Detail Nilai</Link>
-                                                            </div>
-
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            )) }
-                                        </tbody>
-                                    </table>
+                                    <RaporUasGanjil />
                                 </div>
                             </div>
                         </div>

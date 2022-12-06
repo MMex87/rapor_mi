@@ -213,6 +213,7 @@ const Mapel = (props) => {
                                                 <tr>
                                                     <th>Mata Pelajaraan</th>
                                                     <th>Induk</th>
+                                                    <th>KKM</th>
                                                     <th>Guru</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -221,8 +222,9 @@ const Mapel = (props) => {
                                                 { mapel.map((val, index) => (
                                                     isi.id == val.id_kelas ?
                                                         <tr key={ index }>
-                                                            <td className='col-5'>{ val.nama }</td>
+                                                            <td className='col-4'>{ val.nama }</td>
                                                             <td className='col-2'>{ val.induk }</td>
+                                                            <td className='col-1'>{ val.kkm }</td>
                                                             {
                                                                 guru.map((value) => (
                                                                     val.idGuru == value.id ?
