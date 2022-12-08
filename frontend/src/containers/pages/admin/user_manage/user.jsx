@@ -325,7 +325,7 @@ export const user = (props) => {
                             <div className="card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">User Kepala Sekolah</h3>
-                                    <div className="col-6">
+                                    <div className="col-5">
                                         <p>Password Default : { pwKepala }</p>
                                     </div>
                                     <div className="col-2 d-flex justify-content-end">
@@ -335,6 +335,13 @@ export const user = (props) => {
                                             <Link type='button' className='btn btn-success btn-sm' to={ `tambah` }>
                                                 Tambah <i className="fa-solid fa-plus"></i>
                                             </Link> }
+                                    </div>
+                                    <div className="col-1 d-flex justify-content-end">
+                                        <button type="button" className="btn btn-tool " data-card-widget="collapse">
+                                            <i className="fas fa-minus" />
+                                        </button>
+                                        <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="card-body table-responsive p-0">
@@ -387,13 +394,20 @@ export const user = (props) => {
                             <div className="card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">User Admin</h3>
-                                    <div className="col-6">
+                                    <div className="col-5">
                                         <p>Password Default : { pwadmin }</p>
                                     </div>
                                     <div className="col-2 d-flex justify-content-end">
                                         <Link type='button' className='btn btn-success btn-sm' to={ `tambahAdmin` }>
                                             Tambah <i className="fa-solid fa-plus"></i>
                                         </Link>
+                                    </div>
+                                    <div className="col-1 d-flex justify-content-end">
+                                        <button type="button" className="btn btn-tool " data-card-widget="collapse">
+                                            <i className="fas fa-minus" />
+                                        </button>
+                                        <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="card-body table-responsive p-0">
@@ -446,8 +460,8 @@ export const user = (props) => {
                             <div className="card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">User Guru</h3>
-                                    <div className="col-6"> <p>Password Default : { pwGuru }</p></div>
-                                    <div className="card-tools col-1">
+                                    <div className="col-5"> <p>Password Default : { pwGuru }</p></div>
+                                    <div className="card-tools col-2">
                                         <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
                                             <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
                                             <div className="input-group-append">
@@ -456,6 +470,13 @@ export const user = (props) => {
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div className="col-1 d-flex justify-content-end">
+                                        <button type="button" className="btn btn-tool " data-card-widget="collapse">
+                                            <i className="fas fa-minus" />
+                                        </button>
+                                        <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="card-body table-responsive p-0">

@@ -10,7 +10,7 @@ import path from "path";
 
 dotenv.config()
 const app = express()
-const port = 7000;
+const port = 9076;
 
 
 app.use(bodyParser.urlencoded({ extended: true }))

@@ -160,7 +160,7 @@ const TambahMapel = (props) => {
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to={ "/dashboard" }>Dashboard</Link></li>
                                     <li className="breadcrumb-item"> <Link to={ "/mapel" }>Mapel</Link></li>
-                                    <li className="breadcrumb-item active">EditMapel</li>
+                                    <li className="breadcrumb-item active">Tambah Mapel</li>
                                 </ol>
                             </div>{/* /.col */ }
                         </div>{/* /.row */ }

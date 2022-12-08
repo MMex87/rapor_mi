@@ -248,7 +248,7 @@ export const UasGanjil = (props) => {
             <div className={ visi2 }>
                 <div className='card position-absolute' style={ { width: '99%' } }>
                     <div className="card-header row">
-                        <h3 className="card-title col-4">Tambah Kelas</h3>
+                        <h3 className="card-title col-4">Tambah Nilai</h3>
                     </div>
                     <div className="row p-5">
                         <div className="col-md-10" >
