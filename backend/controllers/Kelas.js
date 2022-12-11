@@ -4,7 +4,7 @@ import Kelas from "../models/kelasModel.js";
 export const getKelas = async (req, res) => {
     try {
         const kelas = await Kelas.findAll({
-            attributes: ['id', 'nama_kelas', 'id_guru']
+            attributes: ['id', 'kelas', 'nama_kelas', 'id_guru']
         })
         res.json(kelas)
     } catch (error) {
@@ -29,9 +29,9 @@ export const getKelasId = async (req, res) => {
 }
 
 export const tambahKelas = async (req, res) => {
-    const { nama_kelas, id_guru } = req.body
+    const { kelas, nama_kelas, id_guru } = req.body
     try {
-        await Kelas.create({ nama_kelas, id_guru })
+        await Kelas.create({ kelas, nama_kelas, id_guru })
 
         res.json({ msg: "Data Berhasil Di Tambahakan" })
     } catch (error) {
@@ -40,19 +40,19 @@ export const tambahKelas = async (req, res) => {
 }
 
 export const editKelas = async (req, res) => {
-    const { nama_kelas, id_guru } = req.body
+    const { kelas, nama_kelas, id_guru } = req.body
     const id = req.params.id
 
     try {
-        const kelas = await Kelas.update({
-            nama_kelas
+        const kel = await Kelas.update({
+            kelas, nama_kelas
             , id_guru
         }, {
             where: {
                 id
             }
         })
-        if (kelas == 1)
+        if (kel == 1)
             res.json({ msg: "Data Berhasil Di Ubah" })
         else
             res.status(404).json({ msg: "Data Tidak di temukan" })

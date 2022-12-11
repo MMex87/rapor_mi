@@ -27,6 +27,7 @@ export const TambahSiswa = (props) => {
     // state 
     const [msg, setMsg] = useState('')
     const [nama, setNama] = useState('')
+    const [nis, setNis] = useState('')
     const [nisn, setNisn] = useState('')
     const [tanggal_lahir, setTanggal] = useState('')
     const [jenis_kelamin, setJenis] = useState('')
@@ -71,7 +72,7 @@ export const TambahSiswa = (props) => {
     const tambah = async (e) => {
         e.preventDefault()
         try {
-            if (nama == "" || nisn == '' || tanggal_lahir == '' || jenis_kelamin == '' || id_kelas == '') {
+            if (nama == "" || nis == '' || nisn == '' || tanggal_lahir == '' || jenis_kelamin == '' || id_kelas == '') {
                 Toast.fire({
                     icon: 'warning',
                     title: 'Tolong Isi dengan Lengkap',
@@ -80,7 +81,7 @@ export const TambahSiswa = (props) => {
             } else {
                 const status = 'aktiv'
                 await axios.post('/siswa', {
-                    nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
+                    nis, nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
                 })
                 Toast.fire({
                     icon: 'success',
@@ -161,6 +162,10 @@ export const TambahSiswa = (props) => {
                                                 <div>
                                                     <label>Nama Siswa</label>
                                                     <input type="text" id='name' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } />
+                                                </div>
+                                                <div className='mt-3'>
+                                                    <label>NIS</label>
+                                                    <input type="number" id='id' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNis(e.target.value) } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>NISN</label>

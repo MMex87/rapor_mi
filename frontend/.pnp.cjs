@@ -36,6 +36,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bootstrap-icons", "npm:1.9.1"],\
             ["bulma", "npm:0.9.4"],\
             ["jspdf", "npm:2.5.1"],\
+            ["jspdf-autotable", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:3.5.28"],\
             ["jwt-decode", "npm:3.1.2"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:18.2.0"],\
@@ -9234,6 +9235,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bootstrap-icons", "npm:1.9.1"],\
             ["bulma", "npm:0.9.4"],\
             ["jspdf", "npm:2.5.1"],\
+            ["jspdf-autotable", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:3.5.28"],\
             ["jwt-decode", "npm:3.1.2"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:18.2.0"],\
@@ -11412,6 +11414,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dompurify", "npm:2.4.1"],\
             ["fflate", "npm:0.4.8"],\
             ["html2canvas", "npm:1.4.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["jspdf-autotable", [\
+        ["npm:3.5.28", {\
+          "packageLocation": "./.yarn/cache/jspdf-autotable-npm-3.5.28-f33ec918e5-db6593cf29.zip/node_modules/jspdf-autotable/",\
+          "packageDependencies": [\
+            ["jspdf-autotable", "npm:3.5.28"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:3.5.28", {\
+          "packageLocation": "./.yarn/__virtual__/jspdf-autotable-virtual-904f344493/0/cache/jspdf-autotable-npm-3.5.28-f33ec918e5-db6593cf29.zip/node_modules/jspdf-autotable/",\
+          "packageDependencies": [\
+            ["jspdf-autotable", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:3.5.28"],\
+            ["@types/jspdf", null],\
+            ["jspdf", "npm:2.5.1"]\
+          ],\
+          "packagePeers": [\
+            "@types/jspdf",\
+            "jspdf"\
           ],\
           "linkType": "HARD"\
         }]\

@@ -183,6 +183,7 @@ export const Siswa = (props) => {
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>NIS</th>
                                                 <th>NISN</th>
                                                 <th>Nama Siswa</th>
                                                 <th>Tanggal Lahir</th>
@@ -195,6 +196,7 @@ export const Siswa = (props) => {
                                             { siswa.map((val, index) => (
                                                 <tr key={ index + 1 }>
                                                     <td className='col-sm-1'>{ index + 1 }</td>
+                                                    <td className='col-sm-2'>{ val.nis }</td>
                                                     <td className='col-sm-2'>{ val.nisn }</td>
                                                     <td className='col-sm-3'>{ val.nama }</td>
                                                     <td className='col-sm-1'>{ val.tanggal_lahir }</td>

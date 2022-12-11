@@ -8,6 +8,9 @@ const Siswa = db.define('siswa', {
     nisn: {
         type: DataTypes.STRING
     },
+    nis: {
+        type: DataTypes.STRING
+    },
     nama: {
         type: DataTypes.STRING
     },

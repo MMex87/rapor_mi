@@ -5,6 +5,9 @@ const { DataTypes } = Sequelize
 
 
 const Kelas = db.define('kelas', {
+    kelas: {
+        type: DataTypes.STRING
+    },
     nama_kelas: {
         type: DataTypes.STRING
     },

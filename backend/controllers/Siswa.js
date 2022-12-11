@@ -3,7 +3,7 @@ import Siswa from "../models/siswaModel.js";
 export const getSiswa = async (req, res) => {
     try {
         const siswa = await Siswa.findAll({
-            attributes: ['id', 'nisn', 'nama', 'tanggal_lahir', 'jenis_kelamin', 'status', 'id_kelas']
+            attributes: ['id', 'nisn', 'nis', 'nama', 'tanggal_lahir', 'jenis_kelamin', 'status', 'id_kelas']
         })
         if (siswa === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -25,10 +25,10 @@ export const getSiswaId = async (req, res) => {
 }
 
 export const tambahSiswa = async (req, res) => {
-    const { nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas } = req.body
+    const { nisn, nis, nama, tanggal_lahir, jenis_kelamin, status, id_kelas } = req.body
     try {
         const siswa = await Siswa.create({
-            nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
+            nisn, nis, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
         })
         if (siswa === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -39,10 +39,10 @@ export const tambahSiswa = async (req, res) => {
 }
 
 export const editSiswa = async (req, res) => {
-    const { nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas } = req.body
+    const { nisn, nis, nama, tanggal_lahir, jenis_kelamin, status, id_kelas } = req.body
     try {
         const siswa = await Siswa.update({
-            nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
+            nisn, nis, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
         }, {
             where: {
                 id: req.params.id

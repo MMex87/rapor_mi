@@ -28,6 +28,7 @@ export const EditSiswa = (props) => {
     // state 
     const [msg, setMsg] = useState('')
     const [nama, setNama] = useState('')
+    const [nis, setNis] = useState('')
     const [nisn, setNisn] = useState('')
     const [tanggal_lahir, setTanggal] = useState('')
     const [jenis_kelamin, setJenis] = useState('')
@@ -80,6 +81,7 @@ export const EditSiswa = (props) => {
             setSiswa(response.data)
             setNama(response.data.nama)
             setNisn(response.data.nisn)
+            setNis(response.data.nis)
             setJenis(response.data.jenis_kelamin)
             setIdKelas(response.data.id_kelas)
             setTanggal(response.data.tanggal_lahir)
@@ -95,7 +97,7 @@ export const EditSiswa = (props) => {
         try {
             const status = 'aktiv'
             await axios.put(`/siswa/${id_siswa}`, {
-                nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
+                nis, nisn, nama, tanggal_lahir, jenis_kelamin, status, id_kelas
             })
             Toast.fire({
                 icon: 'success',
@@ -177,6 +179,10 @@ export const EditSiswa = (props) => {
                                                 <div>
                                                     <label>Nama Siswa</label>
                                                     <input type="text" id='name' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) } value={ nama } />
+                                                </div>
+                                                <div className='mt-3'>
+                                                    <label>NIS</label>
+                                                    <input type="number" id='id' className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNis(e.target.value) } value={ nis } />
                                                 </div>
                                                 <div className='mt-3'>
                                                     <label>NISN</label>
