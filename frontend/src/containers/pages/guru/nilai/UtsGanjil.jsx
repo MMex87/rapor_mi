@@ -31,14 +31,13 @@ export const UtsGanjil = (props) => {
     const [idSiswa, setIdSiswa] = useState('')
     const [idNilai, setIdNilai] = useState('')
     const [nilai, setNilai] = useState([])
-    const [inputNilai, setInputNilai] = useState([])
+    const [inputNilai, setInputNilai] = useState('')
+    const [inputNilaiKet, setInputNilaiKet] = useState('')
 
 
     // state handle
-    const [visi, setVisi] = useState('visible')
-    const [visi2, setVisi2] = useState('invisible')
-    // const [position, setPositon] = useState('visible')
-    // const [position2, setPositon2] = useState('invisible')
+    const [visi, setVisi] = useState('')
+    const [visi2, setVisi2] = useState('d-none')
 
 
     // Refresh Token
@@ -95,23 +94,25 @@ export const UtsGanjil = (props) => {
     // Handle
     // Handle tambah nilai
     const handleTambah = (val) => {
-        setVisi('invisible')
-        setVisi2('visible')
+        setVisi('d-none')
+        setVisi2('')
         setIdSiswa(val)
     }
     const handleEdit = async (val) => {
-        setVisi('invisible')
-        setVisi2('visible')
+        setVisi('d-none')
+        setVisi2('')
         setIdSiswa(val)
         const n = nilai.find(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val && id_mapel == params.idMapel && jenis_nilai == jenisNilai)
         setInputNilai(n.nilai)
+        setInputNilaiKet(n.nilai_keterampilan)
         setIdNilai(n.id)
     }
     const handleBack = () => {
-        setVisi('visible')
-        setVisi2('invisible')
+        setVisi('')
+        setVisi2('d-none')
         setIdSiswa('')
         setInputNilai('')
+        setInputNilaiKet('')
         setIdNilai('')
     }
 
@@ -135,7 +136,8 @@ export const UtsGanjil = (props) => {
         try {
             if (idNilai) {
                 await axios.put(`/nilai/${idNilai}`, {
-                    nilai: inputNilai
+                    nilai: inputNilai,
+                    nilai_keterampilan: inputNilaiKet
                 })
                 Toast.fire({
                     icon: 'success',
@@ -143,18 +145,23 @@ export const UtsGanjil = (props) => {
                 })
             } else {
                 await axios.post('/nilai', {
-                    nilai: inputNilai, id_mapel: params.idMapel, id_siswa: idSiswa, jenis_nilai: jenisNilai
+                    nilai: inputNilai,
+                    nilai_keterampilan: inputNilaiKet,
+                    id_mapel: params.idMapel,
+                    id_siswa: idSiswa,
+                    jenis_nilai: jenisNilai
                 })
                 Toast.fire({
                     icon: 'success',
                     title: 'Nilai Berhasil di Tambah!!'
                 })
             }
-            setVisi('visible')
-            setVisi2('invisible')
+            setVisi('')
+            setVisi2('d-none')
             getSiswa()
             getNilai()
             setInputNilai('')
+            setInputNilaiKet('')
             setIdNilai('')
         } catch (error) {
             console.log(error);
@@ -191,24 +198,28 @@ export const UtsGanjil = (props) => {
     return (
         <div className='position-relative p-2' style={ { height: 500 } }>
             <div className={ visi }>
-                <table className="table table-hover table-dark text-nowrap position-absolute" >
+                <table className="table table-hover table-dark text-nowrap position-absolute table-bordered" >
                     <thead>
                         <tr className='container'>
-                            <th>No</th>
-                            <th>NISN</th>
-                            <th>Nama Siswa</th>
-                            <th>Nilai</th>
-                            <th>Predikat</th>
-                            <th>Aksi</th>
+                            <th rowspan="2" style={ { width: '5%', textAlign: 'center', verticalAlign: 'middle' } }>No</th>
+                            <th rowspan="2" style={ { width: '40%', textAlign: 'center', verticalAlign: 'middle' } }>Nama Siswa</th>
+                            <th colspan="2" style={ { width: '20%', textAlign: 'center' } }>Pengetahuan</th>
+                            <th colspan="2" style={ { width: '20%', textAlign: 'center' } }>Keterampilan</th>
+                            <th rowspan="2" style={ { width: '15%', textAlign: 'center', verticalAlign: 'middle' } }>Aksi</th>
+                        </tr>
+                        <tr className='container'>
+                            <th style={ { width: '7%', textAlign: 'center' } }>Nilai</th>
+                            <th style={ { width: '13%', textAlign: 'center' } }>Predikat</th>
+                            <th style={ { width: '7%', textAlign: 'center' } }>Nilai</th>
+                            <th style={ { width: '13%', textAlign: 'center' } }>Predikat</th>
                         </tr>
                     </thead>
                     <tbody>
                         { siswa.filter(({ id_kelas }) => id_kelas == idKelas).map((val, index) => (
                             <tr key={ index }>
                                 <td>{ index + 1 }</td>
-                                <td>{ val.nisn }</td>
                                 <td>{ val.nama }</td>
-                                <td>
+                                <td style={ { textAlign: 'center' } }>
                                     {
                                         nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
                                             <div key={ index }>
@@ -217,12 +228,32 @@ export const UtsGanjil = (props) => {
                                         ))
                                     }
                                 </td>
-                                <td >
+                                <td style={ { textAlign: 'center' } }>
                                     {
                                         nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
                                             <div key={ index }>
                                                 {
-                                                    (90 < parseInt(value.nilai)) ? ('A') : (70 < parseInt(value.nilai)) ? ('B') : (50 < parseInt(value.nilai)) ? ('C') : ('D')
+                                                    (89 < parseInt(value.nilai)) ? ('A') : (79 < parseInt(value.nilai)) ? ('B') : (69 < parseInt(value.nilai)) ? ('C') : ('D')
+                                                }
+                                            </div>
+                                        ))
+                                    }
+                                </td>
+                                <td style={ { textAlign: 'center' } }>
+                                    {
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
+                                            <div key={ index }>
+                                                { value.nilai_keterampilan }
+                                            </div>
+                                        ))
+                                    }
+                                </td>
+                                <td style={ { textAlign: 'center' } }>
+                                    {
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
+                                            <div key={ index }>
+                                                {
+                                                    (89 < parseInt(value.nilai_keterampilan)) ? ('A') : (79 < parseInt(value.nilai_keterampilan)) ? ('B') : (69 < parseInt(value.nilai_keterampilan)) ? ('C') : ('D')
                                                 }
                                             </div>
                                         ))
@@ -240,7 +271,6 @@ export const UtsGanjil = (props) => {
                                                 </button>
                                         }
                                     </div>
-
                                 </td>
                             </tr>
                         )) }
@@ -257,8 +287,12 @@ export const UtsGanjil = (props) => {
                             <div className="form-group">
                                 <form onSubmit={ Tambah }>
                                     <div className='mt-3'>
-                                        <label>Nilai</label>
+                                        <label>Nilai Pengetahuan</label>
                                         <input type="number" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setInputNilai(e.target.value) } value={ inputNilai } min='0' max='100' maxlength="4" />
+                                    </div>
+                                    <div className='mt-3'>
+                                        <label>Nilai Keterampilan</label>
+                                        <input type="number" className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setInputNilaiKet(e.target.value) } value={ inputNilaiKet } min='0' max='100' maxlength="4" />
                                     </div>
                                     <div className='mt-5 d-flex justify-content-end row container'>
                                         <div className='col-sm-1'>

@@ -205,7 +205,7 @@ export const EditSiswa = (props) => {
                                                     <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdKelas(e.target.value) }>
                                                         <option selected value={ "" }>-- Pilih Kelas --</option>
                                                         { kelas.map((val, index) => (
-                                                            <option key={ index } selected={ siswa.id_kelas == val.id ? 'selected' : '' } value={ val.id }>{ val.nama_kelas }</option>
+                                                            <option key={ index } selected={ siswa.id_kelas == val.id ? 'selected' : '' } value={ val.id }>{ val.kelas + val.nama_kelas }</option>
                                                         )) }
                                                     </select>
                                                 </div>

@@ -14,6 +14,7 @@ const WaliKelas = (props) => {
 
     // state data
     const [namaKelas, setNamaKelas] = useState('')
+    const [nKelas, setNKelas] = useState('')
 
 
 
@@ -42,6 +43,7 @@ const WaliKelas = (props) => {
                 }
             })
             setNamaKelas(responseKelas.data.nama_kelas)
+            setNKelas(responseKelas.data.kelas)
 
         } catch (error) {
             console.log(error)
@@ -78,12 +80,12 @@ const WaliKelas = (props) => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1 className="m-0">Kelas { namaKelas }</h1>
+                                <h1 className="m-0">Kelas { nKelas + namaKelas }</h1>
                             </div>{/* /.col */ }
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to={ "/dashboardGuru" }>Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Kelas { namaKelas }</li>
+                                    <li className="breadcrumb-item active">Kelas { nKelas + namaKelas }</li>
                                 </ol>
                             </div>{/* /.col */ }
                         </div>{/* /.row */ }

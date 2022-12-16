@@ -1,4 +1,5 @@
 import Mapel from "../models/mapelModel.js";
+import db from '../config/Database.js'
 
 
 export const getMapel = async (req, res) => {
@@ -32,12 +33,39 @@ export const getMapelKelas = async (req, res) => {
                 id_kelas: req.params.idKelas
             }
         })
-        if (mapel === null)
+        const nama = await Mapel.findAll({
+            attributes: ['nama'],
+            where: {
+                id_kelas: req.params.idKelas
+            }
+        })
+        const kkm = await Mapel.findAll({
+            attributes: ['kkm'],
+            where: {
+                id_kelas: req.params.idKelas
+            }
+        })
+        if (mapel === null || nama === null || kkm === null)
             res.status(404).json({ msg: "Data Tidak di temukan" })
         else
-            res.json(mapel)
+            res.json({ mapel, nama, kkm })
     } catch (error) {
         res.status(404).json({ msg: "Data Tidak di temukan" })
+    }
+}
+
+export const getMapelRapor = async (req, res) => {
+    try {
+        const [results, metadata] = await db.query("SELECT m.nama, m.kkm, n.nilai_keterampilan,n.nilai,n.jenis_nilai " +
+            "from mapel as m LEFT join nilai as n on m.id = n.id_mapel " +
+            `WHERE m.id_kelas = ${req.params.idKelas} AND n.id_siswa = ${req.params.idSiswa}`
+        )
+        if (results === null)
+            res.status(404).json({ msg: "Data Kosong" })
+        else
+            res.json(results)
+    } catch (error) {
+        res.status(404).json({ msg: `Data Tidak di temukan && ${error}` })
     }
 }
 

@@ -6,7 +6,7 @@ import * as guru from "../controllers/Gurus.js";
 import * as kelas from "../controllers/Kelas.js";
 import * as nilai from "../controllers/Nilai.js";
 import * as siswa from "../controllers/Siswa.js";
-import { getMapel, getMapelId, editMapel, hapusMapel, tambahMapel, getMapelKelas } from "../controllers/Mapel.js";
+import { getMapel, getMapelId, editMapel, hapusMapel, tambahMapel, getMapelKelas, getMapelRapor } from "../controllers/Mapel.js";
 import * as rapor from "../controllers/Rapor.js";
 
 const router = express.Router()
@@ -60,6 +60,7 @@ router.delete('/siswa/:id', siswa.hapusSiswa)
 router.get('/mapel', verifyToken, getMapel)
 router.get('/mapel/:id', verifyToken, getMapelId)
 router.get('/mapelKelas/:idKelas', verifyToken, getMapelKelas)
+router.get('/mapelRapor/:idKelas/:idSiswa', verifyToken, getMapelRapor)
 router.post('/mapel', tambahMapel)
 router.put('/mapel/:id', editMapel)
 router.delete('/mapel/:id', hapusMapel)

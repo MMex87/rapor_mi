@@ -181,34 +181,30 @@ const Mapel = (props) => {
                         </div>{/* /.row */ }
                     </div>{/* /.container-fluid */ }
                 </div>
-                { kelas.map((isi) => (
-                    <div className="container-fluid">
+                { kelas.map((isi, v) => (
+                    <div className="container-fluid" key={ v }>
                         {/* /.row */ }
                         <div className="row">
                             <div className="col-12">
-                                <div className="card">
+                                <div className="card collapsed-card">
                                     <div className="card-header row">
-                                        <h3 className="card-title col-4">Kelas { isi.nama_kelas }</h3>
+                                        <h3 className="card-title col-4">Kelas { isi.kelas + isi.nama_kelas }</h3>
                                         <div className="col-5"></div>
-                                        <div className="card-tools col-1">
-                                            <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
-                                                <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
-                                                <div className="input-group-append">
-                                                    <button type="submit" className="btn btn-default">
-                                                        <i className="fas fa-search" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div className="col-2 d-flex justify-content-end">
                                             <Link type='button' className='btn btn-success btn-sm' to={ `tambah/${isi.id}` }>
                                                 Tambah <i class="fa-solid fa-plus"></i>
                                             </Link>
                                         </div>
+                                        <div className="col-1 d-flex justify-content-end card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                                            </button>
+                                            <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
+                                            </button>
+                                        </div>
                                     </div>
                                     {/* /.card-header */ }
-                                    <div className="card-body table-responsive p-0">
-                                        <table className="table table-hover table-dark text-nowrap">
+                                    <div className="card-body table-responsive p-0" style={ { height: 500 } }>
+                                        <table className="table table-hover table-dark text-nowrap position-absolute">
                                             <thead>
                                                 <tr>
                                                     <th>Mata Pelajaraan</th>

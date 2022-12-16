@@ -119,11 +119,11 @@ const SideNav = (props) => {
                             <li className="nav-item">
                                 { (props.role == 'Wali Kelas') ? (
                                     <>
-                                        { kelas.filter(({ id_guru }) => id_guru.toString() == id_Guru.toString()).map((val, index) => (
+                                        { kelas.filter(({ id_guru }) => id_guru == id_Guru).map((val, index) => (
                                             <Link className="nav-link" to={ `/UserGuru/WaliKelas/${val.id}` }>
                                                 <i className="fa-sharp fa-solid fa-chalkboard-user nav-icon"></i>
                                                 <p key={ index }>
-                                                    Kelas { val.nama_kelas }
+                                                    Kelas { val.kelas + val.nama_kelas }
                                                 </p>
                                             </Link>
                                         )) }
@@ -135,9 +135,9 @@ const SideNav = (props) => {
                                 <li className="nav-item" key={ index }>
                                     <Link to={ `/UserGuru/nilai/${val.id}` } className="nav-link">
                                         <i className="fa-solid fa-book-open nav-icon"></i>
-                                        { val.nama } - { kelas.filter(({ id }) => id.toString() == val.id_kelas.toString()).map((value, index) => (
+                                        { kelas.filter(({ id }) => id.toString() == val.id_kelas.toString()).map((value, index) => (
                                             <p key={ index }>
-                                                { value.nama_kelas }
+                                                { val.nama } - { value.kelas + value.nama_kelas }
                                             </p>
                                         )) }
                                     </Link>
