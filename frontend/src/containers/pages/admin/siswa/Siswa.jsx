@@ -204,7 +204,7 @@ export const Siswa = (props) => {
                                                         kelas.map((value) => (
                                                             val.id_kelas == value.id ?
                                                                 <td className='col-sm-1'>
-                                                                    { value.nama_kelas }
+                                                                    { value.kelas + value.nama_kelas }
                                                                 </td> : ''
 
                                                         ))

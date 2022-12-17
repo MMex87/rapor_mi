@@ -42,6 +42,8 @@ import DashboardGuru from './containers/pages/guru/dashboard/Dashboard'
 import Nilai from "./containers/pages/guru/nilai/Nilai";
 import WaliKelas from "./containers/pages/guru/wali_kelas/WaliKelas";
 import DetailRapor from "./containers/pages/guru/wali_kelas/DetailRapor";
+import { element } from "prop-types";
+import DataMapel from "./containers/pages/admin/mapel/DataMapel";
 
 // dashboard login
 
@@ -72,6 +74,7 @@ const router = createBrowserRouter(
           element={ <TambahMapel /> } />
         <Route path="/mapel/edit/:idMapel"
           element={ <EditMapel /> } />
+        <Route path={ "/mapel/dataMapel" } element={ <DataMapel /> } />
       </Route>
       <Route path="/siswa" element={ <Template /> } >
         <Route index element={ <Siswa /> } />

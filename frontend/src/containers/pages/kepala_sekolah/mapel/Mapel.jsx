@@ -119,14 +119,14 @@ const Mapel = (props) => {
                         </div>{/* /.row */ }
                     </div>{/* /.container-fluid */ }
                 </div>
-                { kelas.map((isi) => (
-                    <div className="container-fluid">
+                { kelas.map((isi, index) => (
+                    <div className="container-fluid" key={ index }>
                         {/* /.row */ }
                         <div className="row">
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-header row">
-                                        <h3 className="card-title col-4">Kelas { isi.nama_kelas }</h3>
+                                        <h3 className="card-title col-4">Kelas { isi.kelas + isi.nama_kelas }</h3>
                                         <div className="col-6"></div>
                                         <div className="card-tools col-1">
                                             <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>

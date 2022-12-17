@@ -27,15 +27,13 @@ const TambahMapel = (props) => {
 
 
     // state data
-    const [nama, setMapel] = useState('')
-    const [induk, setInduk] = useState('')
+    const [id_NMapel, setIdMapel] = useState('')
     const [kkm, setKkm] = useState('')
     const [idGuru, setIdGuru] = useState('')
     const [guru, setGuru] = useState([])
     const [jtm, setJtm] = useState(0)
+    const [dataMapel, setDataMapel] = useState([])
 
-    // state message
-    const [msg, setMsg] = useState('')
 
     // menampung Data Id Kelas
     const id_kelas = params.idKelas
@@ -74,6 +72,19 @@ const TambahMapel = (props) => {
         }
     }
 
+    const getNamaMapel = async () => {
+        try {
+            const response = await axiosJWT.get(`/namaMapel`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setDataMapel(response.data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     const getGuruId = async (val) => {
         try {
             const response = await axiosJWT.get(`/guru/${val}`, {
@@ -91,7 +102,7 @@ const TambahMapel = (props) => {
     const Tambah = async (e) => {
         e.preventDefault()
         try {
-            if (nama === '' || induk === '' || idGuru === '') {
+            if (id_NMapel == '' || idGuru == '') {
                 Toast.fire({
                     icon: 'warning',
                     title: 'Tolong Isi dengan Lengkap',
@@ -103,7 +114,7 @@ const TambahMapel = (props) => {
                     jtm
                 })
                 await axios.post('/mapel', {
-                    nama, induk, kkm, idGuru, id_kelas
+                    kkm, idGuru, id_kelas, id_NMapel
                 })
                 Toast.fire({
                     icon: 'success',
@@ -113,7 +124,13 @@ const TambahMapel = (props) => {
                 navigate('/mapel')
             }
         } catch (err) {
-            setMsg(err.response.data.msg)
+            if (err.response)
+                Toast.fire({
+                    icon: 'warning',
+                    title: err.response.data.msg,
+                })
+            else
+                console.log(err)
         }
     }
 
@@ -127,6 +144,7 @@ const TambahMapel = (props) => {
     useEffect(() => {
         refreshToken()
         getGuru()
+        getNamaMapel()
     }, [])
 
 
@@ -187,24 +205,14 @@ const TambahMapel = (props) => {
                                         <div className="form-group">
                                             <form onSubmit={ Tambah }>
                                                 <div>
-                                                    <b className='text text-danger'>{ msg }</b>
-                                                </div>
-                                                <div>
                                                     <label>Nama Mapel</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setMapel(e.target.value) }>
+                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdMapel(e.target.value) }>
                                                         <option selected="selected" value={ '' }>-- Pilih Mapel --</option>
-                                                        <option value={ 'Bahasa Indonesia' }>Bahasa Indonesia</option>
-                                                        <option value={ 'Matematika' }>Matematika</option>
-                                                        <option value={ 'IPA' }>IPA</option>
-                                                        <option value={ 'Bahasa Arab' }>Bahasa Arab</option>
-                                                    </select>
-                                                </div>
-                                                <div className='mt-3'>
-                                                    <label>Induk</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setInduk(e.target.value) }>
-                                                        <option selected="selected" value={ '' }>-- Pilih Induk --</option>
-                                                        <option value={ 'National' }>National</option>
-                                                        <option value={ 'Muatan Lokal' }>Muatan Lokal</option>
+                                                        {
+                                                            dataMapel.map((val, index) => (
+                                                                <option value={ val.id } key={ index }>{ val.nama }</option>
+                                                            ))
+                                                        }
                                                     </select>
                                                 </div>
                                                 <div className='mt-3'>

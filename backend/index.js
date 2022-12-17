@@ -19,7 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 try {
     await db.authenticate()
     console.log("Database Connected");
-    // await Users.sync()
 } catch (error) {
     console.log(error)
 }

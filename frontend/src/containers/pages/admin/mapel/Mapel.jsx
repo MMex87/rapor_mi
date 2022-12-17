@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import TambahNamaMapel from './TambahNamaMapel'
 
 const Mapel = (props) => {
     // alert
@@ -181,6 +182,7 @@ const Mapel = (props) => {
                         </div>{/* /.row */ }
                     </div>{/* /.container-fluid */ }
                 </div>
+                <TambahNamaMapel />
                 { kelas.map((isi, v) => (
                     <div className="container-fluid" key={ v }>
                         {/* /.row */ }
@@ -256,9 +258,7 @@ const Mapel = (props) => {
                             </div>
                         </div>
                     </div>
-
                 )) }
-                {/* /.content-header */ }
             </div>
 
         </div>

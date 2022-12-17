@@ -367,7 +367,7 @@ const DetailRapor = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="table-hiden">
+            <div id="table-hiden">
                 <table className="d-none" id="my-table">
                     <thead>
                         <tr>
@@ -388,10 +388,10 @@ const DetailRapor = (props) => {
                             <td colSpan={ 6 } style={ { fontWeight: 'bold', textAlign: 'start', padding: 5 } }>Kelompok A(Umum)</td>
                         </tr>
                         <tr>
-                            <td rowSpan={ mapel.filter(({ induk }) => induk == 'National').length + 1 }>1</td>
+                            <td rowSpan={ mapel.filter(({ induk }) => induk == 'Pendidikan Agama').length + 1 }>1</td>
                             <td style={ { textAlign: 'start', padding: 5 } } colSpan={ 5 }>Pendidikan Agama Islam: </td>
                         </tr>
-                        { mapel.filter(({ induk }) => induk == 'National').map((val, index) => (
+                        { mapel.filter(({ induk }) => induk == 'Pendidikan Agama').map((val, index) => (
                             <tr key={ index }>
                                 <td style={ { textAlign: 'start', padding: 5 } }>
                                     { index + 1 + '. ' + val.nama }

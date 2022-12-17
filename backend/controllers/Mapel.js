@@ -4,9 +4,9 @@ import db from '../config/Database.js'
 
 export const getMapel = async (req, res) => {
     try {
-        const mapel = await Mapel.findAll({
-            attributes: ['id', 'nama', 'induk', 'kkm', 'idGuru', 'id_kelas']
-        })
+        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
+            "INNER JOIN nama_mapel as n " +
+            "on m.id_NMapel = n.id")
         res.json(mapel)
     } catch (error) {
         console.log(error)
@@ -15,36 +15,32 @@ export const getMapel = async (req, res) => {
 
 export const getMapelId = async (req, res) => {
     try {
-        const mapel = await Mapel.findOne({
-            where: { id: req.params.id }
-        })
+        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
+            "INNER JOIN nama_mapel as n " +
+            `on m.id_NMapel = n.id WHERE m.id = ${req.params.id}`)
         if (mapel === null)
-            res.status(404).json({ msg: "Data Tidak di temukan" })
+            res.status(404).json({ msg: "Data Kosong" })
         else
-            res.json(mapel)
+            res.json(mapel[0])
     } catch (error) {
         res.status(404).json({ msg: "Data Tidak di temukan" })
     }
 }
 export const getMapelKelas = async (req, res) => {
     try {
-        const mapel = await Mapel.findAll({
-            where: {
-                id_kelas: req.params.idKelas
-            }
-        })
-        const nama = await Mapel.findAll({
-            attributes: ['nama'],
-            where: {
-                id_kelas: req.params.idKelas
-            }
-        })
-        const kkm = await Mapel.findAll({
-            attributes: ['kkm'],
-            where: {
-                id_kelas: req.params.idKelas
-            }
-        })
+        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
+            "INNER JOIN nama_mapel as n " +
+            `on m.id_NMapel = n.id WHERE m.id_kelas = ${req.params.idKelas}`)
+
+        const [nama] = await db.query("SELECT n.nama FROM mapel as m " +
+            "INNER JOIN nama_mapel as n " +
+            `on m.id_NMapel = n.id WHERE m.id_kelas = ${req.params.idKelas}`)
+
+        const kkm = await db.query("SELECT m.kkm FROM mapel as m " +
+            "INNER JOIN nama_mapel as n " +
+            `on m.id_NMapel = n.id WHERE m.id_kelas = ${req.params.idKelas}`)
+
+
         if (mapel === null || nama === null || kkm === null)
             res.status(404).json({ msg: "Data Tidak di temukan" })
         else
@@ -70,9 +66,9 @@ export const getMapelRapor = async (req, res) => {
 }
 
 export const tambahMapel = async (req, res) => {
-    const { nama, induk, kkm, idGuru, id_kelas } = req.body
+    const { kkm, idGuru, id_kelas, id_NMapel } = req.body
     try {
-        const mapel = await Mapel.create({ nama, induk, kkm, idGuru, id_kelas })
+        const mapel = await Mapel.create({ kkm, idGuru, id_kelas, id_NMapel })
 
         if (mapel === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -84,11 +80,11 @@ export const tambahMapel = async (req, res) => {
 }
 
 export const editMapel = async (req, res) => {
-    const { nama, induk, kkm, idGuru, id_kelas } = req.body
+    const { kkm, idGuru, id_kelas, id_NMapel } = req.body
     const id = req.params.id
 
     try {
-        const mapel = await Mapel.update({ nama, induk, kkm, idGuru, id_kelas }, {
+        const mapel = await Mapel.update({ kkm, idGuru, id_kelas, id_NMapel }, {
             where: {
                 id
             }

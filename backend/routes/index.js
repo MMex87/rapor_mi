@@ -8,6 +8,7 @@ import * as nilai from "../controllers/Nilai.js";
 import * as siswa from "../controllers/Siswa.js";
 import { getMapel, getMapelId, editMapel, hapusMapel, tambahMapel, getMapelKelas, getMapelRapor } from "../controllers/Mapel.js";
 import * as rapor from "../controllers/Rapor.js";
+import * as mapel from "../controllers/NamaMapel.js"
 
 const router = express.Router()
 
@@ -64,6 +65,15 @@ router.get('/mapelRapor/:idKelas/:idSiswa', verifyToken, getMapelRapor)
 router.post('/mapel', tambahMapel)
 router.put('/mapel/:id', editMapel)
 router.delete('/mapel/:id', hapusMapel)
+
+
+// Nama Mapel
+router.get('/namaMapel', verifyToken, mapel.getNamaMapel)
+router.get('/namaMapel/:nama', verifyToken, mapel.getNamaMapelNama)
+router.get('/namaMapelId/:id', verifyToken, mapel.getNamaMapelId)
+router.post('/namaMapel', mapel.tambahNamaMapel)
+router.put('/namaMapel/:id', mapel.editNamaMapel)
+router.delete('/namaMapel/:id', mapel.hapusNamaMapel)
 
 // Rapor
 router.get('/rapor', verifyToken, rapor.getRapor)

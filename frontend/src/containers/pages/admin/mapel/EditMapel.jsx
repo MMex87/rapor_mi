@@ -26,12 +26,12 @@ export const EditMapel = (props) => {
 
 
     // state data
-    const [nama, setNama] = useState('')
-    const [induk, setInduk] = useState('')
+    const [id_NMapel, setIdMapel] = useState('')
     const [kkm, setKkm] = useState('')
     const [idGuru, setIdGuru] = useState('')
     const [guru, setGuru] = useState([])
     const [mapel, setMapel] = useState([])
+    const [dataMapel, setDataMapel] = useState([])
 
     // state message
     const [msg, setMsg] = useState('')
@@ -80,10 +80,21 @@ export const EditMapel = (props) => {
                 }
             })
             setMapel(response.data)
-            setNama(response.data.nama)
-            setInduk(response.data.induk)
+            setIdMapel(response.data.id_NMapel)
             setKkm(response.data.kkm)
             setIdGuru(response.data.idGuru)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+    const getNamaMapel = async () => {
+        try {
+            const response = await axiosJWT.get(`/namaMapel`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setDataMapel(response.data)
         } catch (err) {
             console.error(err)
         }
@@ -92,17 +103,23 @@ export const EditMapel = (props) => {
     // handle Tambah Data
     const Edit = async (e) => {
         e.preventDefault()
+        console.log(mapel.id_NMapel);
+        console.log(id_NMapel);
         try {
-            if (nama === '' || induk === '' || idGuru === '') {
+            if (id_NMapel == mapel.id_NMapel) {
+                await axios.put(`/mapel/${id_mapel}`, {
+                    kkm, idGuru
+                })
                 Toast.fire({
-                    icon: 'warning',
-                    title: 'Tolong Isi dengan Lengkap',
+                    icon: 'success',
+                    title: 'Berhasil Mengubah Data!',
 
                 })
+                navigate('/mapel')
             }
             else {
                 await axios.put(`/mapel/${id_mapel}`, {
-                    nama, induk, kkm, idGuru
+                    kkm, idGuru, id_NMapel
                 })
                 Toast.fire({
                     icon: 'success',
@@ -112,7 +129,13 @@ export const EditMapel = (props) => {
                 navigate('/mapel')
             }
         } catch (err) {
-            setMsg(err.response.data.msg)
+            if (err.response)
+                Toast.fire({
+                    icon: 'warning',
+                    title: err.response.data.msg,
+                })
+            else
+                console.log(err)
         }
     }
 
@@ -121,6 +144,7 @@ export const EditMapel = (props) => {
     useEffect(() => {
         refreshToken()
         getGuru()
+        getNamaMapel()
         return () => {
             getMapel(id_mapel)
         }
@@ -188,21 +212,13 @@ export const EditMapel = (props) => {
                                                 </div>
                                                 <div>
                                                     <label>Nama Mapel</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setNama(e.target.value) }>
+                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setIdMapel(e.target.value) }>
                                                         <option selected value={ '' }>-- Pilih Mapel --</option>
-                                                        <option selected={ mapel.nama == 'Bahasa Indonesia' ? 'selected' : '' } value={ 'Bahasa Indonesia' }>Bahasa Indonesia</option>
-                                                        <option selected={ mapel.nama == 'Matematika' ? 'selected' : '' } value={ 'Matematika' }>Matematika</option>
-                                                        <option selected={ mapel.nama == 'IPA' ? 'selected' : '' } value={ 'IPA' }>IPA</option>
-                                                        <option selected={ mapel.nama == 'Bahasa Arab' ? 'selected' : '' } value={ 'Bahasa Arab' }>Bahasa Arab</option>
-                                                        <option selected={ mapel.nama == 'Bahasa Jawa' ? 'selected' : '' } value={ 'Bahasa Jawa' }>Bahasa Jawa</option>
-                                                    </select>
-                                                </div>
-                                                <div className='mt-3'>
-                                                    <label>Induk</label>
-                                                    <select className="form-control select2" style={ { width: '100%' } } onChange={ (e) => setInduk(e.target.value) }>
-                                                        <option selected value={ '' }>-- Pilih Induk --</option>
-                                                        <option selected={ mapel.induk == 'National' ? 'selected' : '' } value={ 'National' }>National</option>
-                                                        <option selected={ mapel.induk == 'Muatan Lokal' ? 'selected' : '' } value={ 'Muatan Lokal' }>Muatan Lokal</option>
+                                                        {
+                                                            dataMapel.map((val, index) => (
+                                                                <option selected={ mapel.nama == val.nama ? 'selected' : '' } value={ val.id } key={ index }>{ val.nama }</option>
+                                                            ))
+                                                        }
                                                     </select>
                                                 </div>
                                                 <div className='mt-3'>

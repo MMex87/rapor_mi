@@ -16,18 +16,24 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:7000/login
+POST http://localhost:9076/login
 Content-Type: application/json
 
 {
-    "email":"okkysetya87@gmail.com",
-    "password":"12345678"
+    "email":"okkysetya@gmail.com",
+    "password":"adminmidu"
 } 
 
 
 
 ###
-GET http://localhost:7000/token
+GET http://localhost:9076/token
+
+
+###
+GET http://localhost:9076/mapel/42
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJva2t5IiwiZW1haWwiOiJva2t5c2V0eWFAZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcxMjI3NDMyLCJleHAiOjE2NzEyMjc0NDd9.P_BAQ5ylC-wK9u8W-SFJyVvoOmH5sZD6dEXNOzs48zI
+
 
 
 ###
