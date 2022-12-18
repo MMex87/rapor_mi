@@ -28,7 +28,8 @@ import SiswaKep from "./containers/pages/kepala_sekolah/siswa/Siswa";
 import GuruKep from "./containers/pages/kepala_sekolah/guru/Guru";
 import KelasKep from "./containers/pages/kepala_sekolah/kelas/Kelas";
 // import profile
-import Profile from "./containers/pages/Profile";
+import Profile from "./containers/pages/admin/Profile";
+import ProfileGuru from "./containers/pages/guru/Profile"
 // import SuperUser
 import User from "./containers/pages/admin/user_manage/user";
 import TambahKepala from "./containers/pages/admin/user_manage/TambahKepala";
@@ -42,7 +43,6 @@ import DashboardGuru from './containers/pages/guru/dashboard/Dashboard'
 import Nilai from "./containers/pages/guru/nilai/Nilai";
 import WaliKelas from "./containers/pages/guru/wali_kelas/WaliKelas";
 import DetailRapor from "./containers/pages/guru/wali_kelas/DetailRapor";
-import { element } from "prop-types";
 import DataMapel from "./containers/pages/admin/mapel/DataMapel";
 
 // dashboard login
@@ -126,6 +126,9 @@ const router = createBrowserRouter(
       <Route path="/UserGuru/WaliKelas/:idKelas" element={ <TemplateGuru /> } >
         <Route index element={ <WaliKelas /> } />
         <Route path='/UserGuru/WaliKelas/:idKelas/:idSiswa' element={ <DetailRapor /> } />
+      </Route>
+      <Route path={ "/profileGuru" } element={ <TemplateGuru /> }>
+        <Route index element={ <ProfileGuru /> } />
       </Route>
     </Route>
   )

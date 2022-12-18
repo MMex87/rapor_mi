@@ -103,6 +103,87 @@ export const editGuruRole = async (req, res) => {
         console.log(error)
     }
 }
+
+
+export const UpdatePass = async (req, res) => {
+    const { password, confPassword, passwordLama } = req.body
+    const salt = await bcrypt.genSalt();
+
+    const user = await Guru.findAll({
+        where: {
+            id: req.params.id
+        }
+    })
+
+    const match = await bcrypt.compare(passwordLama, user[0].password)
+
+    if (!match) return res.status(400).json({ msg: "Password Lama Tidak Cocok!!" })
+
+    if (password !== confPassword) return res.status(400)
+        .json({ msg: "Password dan Confirm Password tidak cocok" })
+
+    const hashPassword = await bcrypt.hash(password, salt)
+
+    try {
+        await Guru.update({
+            password: hashPassword
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ msg: "Update Berhasil" })
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const UpdateUsername = async (req, res) => {
+    const { username } = req.body
+    try {
+        await Guru.update({
+            username
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ msg: "Update Berhasil" })
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const UpdateProfil = async (req, res) => {
+    const { picture } = req.body
+
+    const user = await Guru.findOne({
+        where: {
+            id: req.params.id
+        }
+    })
+    const filepath = '../frontend/public/assets/uploads/' + user.picture
+    try {
+        await Guru.update({
+            picture
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ msg: "Update Berhasil" })
+        if (picture != null) {
+            if (user.picture != "default.png") {
+                fs.unlink(filepath, err => console.log(err))
+            }
+        } else {
+            console.log("Tidak Menghapus Gambar")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
 export const updateGuru = async (req, res) => {
     const { nama, username, password, confPassword, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 
@@ -155,10 +236,11 @@ export const Login = async (req, res) => {
         const username = user[0].username;
         const picture = user[0].picture;
         const role = user[0].role;
-        const accesstoken = jwt.sign({ userId, name, username, picture, role }, process.env.ACCESS_TOKEN_SECRET, {
+        const jtm = user[0].jtm
+        const accesstoken = jwt.sign({ userId, name, username, picture, role, jtm }, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: '20s'
         })
-        const refreshtoken = jwt.sign({ userId, name, username, picture, role }, process.env.REFRESH_TOKEN_SECRET, {
+        const refreshtoken = jwt.sign({ userId, name, username, picture, role, jtm }, process.env.REFRESH_TOKEN_SECRET, {
             expiresIn: '1D'
         })
         await Guru.update({ refresh_token: refreshtoken }, {

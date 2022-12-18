@@ -86,7 +86,7 @@ const SideNav = (props) => {
                             <img src={ 'http://localhost:8076/assets/uploads/' + props.picture } className="img-circle justify-content-center" style={ { width: 200 } } alt="User Image" />
                         </div>
                         <div className="info container">
-                            <Link to={ "/profile" } className="d-flex justify-content-center">{ props.name }</Link>
+                            <Link to={ "/profileGuru" } className="d-flex justify-content-center">{ props.name }</Link>
                         </div>
                         <div className="info container">
                             <span className='d-flex justify-content-center'>{ props.role }</span>

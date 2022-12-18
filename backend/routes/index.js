@@ -1,5 +1,5 @@
 import express from "express";
-import { DeleteUser, getSuper, getUsers, getUsersId, Login, Logout, Register, UpdateUser } from "../controllers/Users.js";
+import { DeleteUser, getSuper, getUsers, getUsersId, Login, Logout, Register, UpdateEmail, UpdatePass, UpdateProfil, UpdateUser } from "../controllers/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken, refreshTokenGuru } from "../controllers/RefreshToken.js";
 import * as guru from "../controllers/Gurus.js";
@@ -17,6 +17,9 @@ router.get('/users', verifyToken, getUsers)
 router.get('/users/:id', verifyToken, getUsersId)
 router.get('/users/super/:super', getSuper)
 router.put('/users/:id', UpdateUser)
+router.put('/usersEmail/:id', UpdateEmail)
+router.put('/usersPass/:id', UpdatePass)
+router.put('/usersProfile/:id', UpdateProfil)
 router.post('/users', Register)
 router.delete('/users/:id', DeleteUser)
 router.post('/login', Login)
@@ -31,6 +34,9 @@ router.post('/guru', guru.TambahGuru)
 router.put('/guru/:id', guru.editGuru)
 router.put('/guruUpdate/:id', guru.updateGuru)
 router.put('/guruRole/:id', guru.editGuruRole)
+router.put('/guruUsername/:id', guru.UpdateUsername)
+router.put('/guruPass/:id', guru.UpdatePass)
+router.put('/guruProfile/:id', guru.UpdateProfil)
 router.delete('/guru/:id', guru.hapusGuru)
 router.get('/tokenGuru', refreshTokenGuru)
 router.post('/loginGuru', guru.Login)

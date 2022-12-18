@@ -71,12 +71,89 @@ export const UpdateUser = async (req, res) => {
             }
         })
         res.json({ msg: "Register Berhasil" })
-        if (picture == null) {
-            console.log("Tidak Menghapus Gambar")
-        } else {
+        if (picture != null) {
             if (user.picture != "default.png") {
                 fs.unlink(filepath, err => console.log(err))
             }
+        } else {
+            console.log("Tidak Menghapus Gambar")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const UpdatePass = async (req, res) => {
+    const { password, confPassword, passwordLama } = req.body
+    const salt = await bcrypt.genSalt();
+
+    const user = await Users.findAll({
+        where: {
+            id: req.params.id
+        }
+    })
+
+    const match = await bcrypt.compare(passwordLama, user[0].password)
+
+    if (!match) return res.status(400).json({ msg: "Password Lama Tidak Cocok!!" })
+
+    if (password !== confPassword) return res.status(400)
+        .json({ msg: "Password dan Confirm Password tidak cocok" })
+
+    const hashPassword = await bcrypt.hash(password, salt)
+
+    try {
+        await Users.update({
+            password: hashPassword
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ msg: "Register Berhasil" })
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const UpdateEmail = async (req, res) => {
+    const { email } = req.body
+    try {
+        await Users.update({
+            email
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ msg: "Register Berhasil" })
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const UpdateProfil = async (req, res) => {
+    const { picture } = req.body
+
+    const user = await Users.findOne({
+        where: {
+            id: req.params.id
+        }
+    })
+    const filepath = '../frontend/public/assets/uploads/' + user.picture
+    try {
+        await Users.update({
+            picture
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ msg: "Update Berhasil" })
+        if (picture != null) {
+            if (user.picture != "default.png") {
+                fs.unlink(filepath, err => console.log(err))
+            }
+        } else {
+            console.log("Tidak Menghapus Gambar")
         }
     } catch (error) {
         console.log(error)

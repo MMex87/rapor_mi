@@ -45,7 +45,8 @@ export const refreshTokenGuru = async (req, res) => {
             const nama = user[0].nama
             const picture = user[0].picture
             const role = user[0].role
-            const accessToken = jwt.sign({ userId, nama, picture, role }, process.env.ACCESS_TOKEN_SECRET, {
+            const jtm = user[0].jtm
+            const accessToken = jwt.sign({ userId, nama, picture, role, jtm }, process.env.ACCESS_TOKEN_SECRET, {
                 expiresIn: '15s'
             })
             res.json({ accessToken })
