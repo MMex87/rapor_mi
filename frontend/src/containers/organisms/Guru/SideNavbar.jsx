@@ -75,7 +75,7 @@ const SideNav = (props) => {
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* Brand Logo */ }
                 <Link to="/dashboard" className="brand-link">
-                    <img src="http://localhost:8076/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={ { opacity: '.8' } } />
+                    <img src="../../../../assets/logo/logo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={ { opacity: '.8' } } />
                     <span className="brand-text font-weight-light">{ props.role } MIDU</span>
                 </Link>
                 {/* Sidebar */ }
