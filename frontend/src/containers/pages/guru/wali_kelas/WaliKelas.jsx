@@ -5,6 +5,9 @@ import { Link, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ActionType from '../../../../redux/reducer/globalActionType'
 import RaporUasGanjil from './RaporUasGanjil'
+import RaporUasGenap from './RaporUasGenap'
+import RaporUtsGenap from './RaporUtsGenap'
+import RaporUtsGanjil from './RaporUtsGanjil'
 
 const WaliKelas = (props) => {
     // Deklarasi axios
@@ -95,25 +98,38 @@ const WaliKelas = (props) => {
                     {/* /.row */ }
                     <div className="row">
                         <div className="col-12">
-                            <div className="card">
-                                <div className="card-header row">
-                                    <h3 className="card-title col-4">Daftar Siswa</h3>
-                                    <div className="col-5"></div>
-                                    <div className="col-3 d-flex justify-content-end">
-                                        <div className="card-tools">
-                                            <button type="button" className="btn btn-tool " data-card-widget="collapse">
-                                                <i className="fas fa-minus" />
-                                            </button>
-                                        </div>
-                                        <div className="card-tools me-5">
-                                            <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body table-responsive p-0">
-                                    <RaporUasGanjil />
-                                </div>
+                            <div className="card collapsed-card">
+                                <RaporUasGanjil />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-fluid">
+                    {/* /.row */ }
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card collapsed-card">
+                                <RaporUasGenap />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-fluid">
+                    {/* /.row */ }
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card collapsed-card">
+                                <RaporUtsGanjil />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-fluid">
+                    {/* /.row */ }
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card collapsed-card">
+                                <RaporUtsGenap />
                             </div>
                         </div>
                     </div>

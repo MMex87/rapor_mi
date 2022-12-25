@@ -51,7 +51,6 @@ const Nilai = (props) => {
             })
             setNamaKelas(responseKelas.data.nama_kelas)
             setNKelas(responseKelas.data.kelas)
-
         } catch (error) {
             console.log(error)
         }
@@ -79,7 +78,6 @@ const Nilai = (props) => {
         return Promise.reject(error)
     })
 
-
     return (
         <div>
             <div className="content-wrapper">
@@ -103,7 +101,7 @@ const Nilai = (props) => {
                     {/* /.row */ }
                     <div className="row">
                         <div className="col-12">
-                            <div className="card">
+                            <div className="card collapsed-card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">Nilai UAS Ganjil</h3>
                                     <div className="col-5"></div>
@@ -130,7 +128,7 @@ const Nilai = (props) => {
                     {/* /.row */ }
                     <div className="row">
                         <div className="col-12">
-                            <div className="card">
+                            <div className="card collapsed-card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">Nilai UAS Genap</h3>
                                     <div className="col-5"></div>
@@ -157,7 +155,7 @@ const Nilai = (props) => {
                     {/* /.row */ }
                     <div className="row">
                         <div className="col-12">
-                            <div className="card">
+                            <div className="card collapsed-card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">Nilai UTS Ganjil</h3>
                                     <div className="col-5"></div>
@@ -184,7 +182,7 @@ const Nilai = (props) => {
                     {/* /.row */ }
                     <div className="row">
                         <div className="col-12">
-                            <div className="card">
+                            <div className="card collapsed-card">
                                 <div className="card-header row">
                                     <h3 className="card-title col-4">Nilai UTS Genap</h3>
                                     <div className="col-5"></div>

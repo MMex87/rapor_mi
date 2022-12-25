@@ -12,7 +12,9 @@ const DetailRapor = (props) => {
     // Deklarasi axios
     const axiosJWT = axios.create()
     const params = useParams()
-    const jenisNilai = 'UAS Ganjil'
+    const Jenis_rapor = params.jenisR
+    const Semester = params.semester
+
 
     // state data
     const [namaKelas, setNamaKelas] = useState('')
@@ -20,7 +22,6 @@ const DetailRapor = (props) => {
     const [namaSiswa, setNamaSiswa] = useState('')
     const [siswa, setSiswa] = useState([])
     const [guru, setGuru] = useState([])
-    const [rapor, setRapor] = useState([])
     const [nilai, setNilai] = useState([])
     const [mapel, setMapel] = useState([])
 
@@ -31,8 +32,6 @@ const DetailRapor = (props) => {
     const [ajar, setAjar] = useState('')
     const [semester, setSemester] = useState('')
 
-    const [c, setC] = useState('')
-    const [c2, setC2] = useState('')
     let count = 0
     let count2 = 0
 
@@ -74,7 +73,7 @@ const DetailRapor = (props) => {
             setNamaSiswa(responseSiswa.data.nama)
             setNis(responseSiswa.data.nis)
             setNisn(responseSiswa.data.nisn)
-            const responseRapor = await axiosJWT.get(`/rapor/${params.idKelas}/${params.idSiswa}`, {
+            const responseRapor = await axiosJWT.get(`/rapor/${params.idKelas}/${params.idSiswa}/${Semester}/${Jenis_rapor}`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
@@ -110,14 +109,6 @@ const DetailRapor = (props) => {
             console.log(error)
         }
     }
-    const getRapor = async () => {
-        const response = await axiosJWT.get(`/rapor/${params.idKelas}/${params.idSiswa}`, {
-            headers: {
-                Authorization: `Bearer ${props.token}`
-            }
-        })
-        setRapor(response.data)
-    }
     const getMapel = async () => {
         const response = await axiosJWT.get(`/mapelKelas/${params.idKelas}`, {
             headers: {
@@ -140,7 +131,7 @@ const DetailRapor = (props) => {
         const idMapel = mapel[i].id
         for (let j = 0; j < nilai.length; j++) {
             try {
-                count = count + nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == idMapel && jenis_nilai == jenisNilai)[j].nilai
+                count = count + nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == idMapel && jenis_rapor == Jenis_rapor && semester == Semester)[j].nilai
             } catch (error) {
 
             }
@@ -150,7 +141,7 @@ const DetailRapor = (props) => {
         const idMapel = mapel[i].id
         for (let j = 0; j < nilai.length; j++) {
             try {
-                count2 = count2 + nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == idMapel && jenis_nilai == jenisNilai)[j].nilai_keterampilan
+                count2 = count2 + nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == idMapel && jenis_rapor == Jenis_rapor && semester == Semester)[j].nilai_keterampilan
             } catch (error) {
 
             }
@@ -218,7 +209,6 @@ const DetailRapor = (props) => {
         handleData()
         getSiswa()
         getGuru()
-        getRapor()
         getMapel()
         getNilai()
     }, [])
@@ -266,8 +256,9 @@ const DetailRapor = (props) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header row">
-                                    <h3 className="card-title col-4">Rapor </h3>
-                                    <div className="col-7 d-flex justify-content-end">
+                                    <h3 className="card-title col-4">Rapor</h3>
+                                    <div className="col-5"></div>
+                                    <div className="col-2 d-flex justify-content-end">
                                         <button type='button' className='btn btn-success' onClick={ () => handlePdf() }>
                                             <i className="fa-solid fa-file-arrow-down"></i> Save
                                         </button>
@@ -319,7 +310,7 @@ const DetailRapor = (props) => {
                                                     <td>{ val.kkm }</td>
                                                     <td style={ { textAlign: 'center' } }>
                                                         {
-                                                            nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                                            nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                                                 <div key={ index }>
                                                                     { value.nilai }
                                                                 </div>
@@ -328,7 +319,7 @@ const DetailRapor = (props) => {
                                                     </td>
                                                     <td style={ { textAlign: 'center' } }>
                                                         {
-                                                            nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                                            nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                                                 <div key={ index }>
                                                                     {
                                                                         (89 < parseInt(value.nilai)) ? ('A') : (79 < parseInt(value.nilai)) ? ('B') : (69 < parseInt(value.nilai)) ? ('C') : ('D')
@@ -339,7 +330,7 @@ const DetailRapor = (props) => {
                                                     </td>
                                                     <td style={ { textAlign: 'center' } }>
                                                         {
-                                                            nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                                            nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                                                 <div key={ index }>
                                                                     { value.nilai_keterampilan }
                                                                 </div>
@@ -348,7 +339,7 @@ const DetailRapor = (props) => {
                                                     </td>
                                                     <td style={ { textAlign: 'center' } }>
                                                         {
-                                                            nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                                            nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                                                 <div key={ index }>
                                                                     {
                                                                         (89 < parseInt(value.nilai_keterampilan)) ? ('A') : (79 < parseInt(value.nilai_keterampilan)) ? ('B') : (69 < parseInt(value.nilai_keterampilan)) ? ('C') : ('D')
@@ -398,7 +389,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai }
                                             </div>
@@ -407,7 +398,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai)) ? ('A') : (79 < parseInt(value.nilai)) ? ('B') : (69 < parseInt(value.nilai)) ? ('C') : ('D')
@@ -418,7 +409,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai_keterampilan }
                                             </div>
@@ -427,7 +418,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai_keterampilan)) ? ('A') : (79 < parseInt(value.nilai_keterampilan)) ? ('B') : (69 < parseInt(value.nilai_keterampilan)) ? ('C') : ('D')
@@ -444,7 +435,7 @@ const DetailRapor = (props) => {
                                 <td style={ { textAlign: 'start', padding: 5 } }>{ val.nama }</td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai }
                                             </div>
@@ -453,7 +444,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai)) ? ('A') : (79 < parseInt(value.nilai)) ? ('B') : (69 < parseInt(value.nilai)) ? ('C') : ('D')
@@ -464,7 +455,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai_keterampilan }
                                             </div>
@@ -473,7 +464,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai_keterampilan)) ? ('A') : (79 < parseInt(value.nilai_keterampilan)) ? ('B') : (69 < parseInt(value.nilai_keterampilan)) ? ('C') : ('D')
@@ -496,7 +487,7 @@ const DetailRapor = (props) => {
                                 <td style={ { textAlign: 'start', padding: 5 } }> { index + 1 + '. ' + val.nama }</td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai }
                                             </div>
@@ -505,7 +496,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai)) ? ('A') : (79 < parseInt(value.nilai)) ? ('B') : (69 < parseInt(value.nilai)) ? ('C') : ('D')
@@ -516,7 +507,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai_keterampilan }
                                             </div>
@@ -525,7 +516,7 @@ const DetailRapor = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == params.idSiswa && id_mapel == val.id && jenis_rapor == Jenis_rapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai_keterampilan)) ? ('A') : (79 < parseInt(value.nilai_keterampilan)) ? ('B') : (69 < parseInt(value.nilai_keterampilan)) ? ('C') : ('D')

@@ -7,7 +7,7 @@ import ActionType from '../../../../redux/reducer/globalActionType'
 
 import Swal from 'sweetalert2'
 
-export const RaporUasGanjil = (props) => {
+export const RaporUtsGenap = (props) => {
     // alert
     const Toast = Swal.mixin({
         customClass: {
@@ -21,7 +21,7 @@ export const RaporUasGanjil = (props) => {
     const axiosJWT = axios.create()
     const params = useParams()
     const date = new Date()
-    const Angkatan = `${date.getFullYear()}/${date.getFullYear() + 1}`
+    const Angkatan = `${date.getFullYear() - 1}/${date.getFullYear()}`
 
 
     // state data
@@ -30,8 +30,8 @@ export const RaporUasGanjil = (props) => {
 
     // state
     const [handle, setHandle] = useState(false)
-    const Semester = 'Ganjil'
-    const Jenis_rapor = 'UAS'
+    const Semester = 'Genap'
+    const Jenis_rapor = 'UTS'
 
 
     // Refresh Token
@@ -213,7 +213,7 @@ export const RaporUasGanjil = (props) => {
     return (
         <>
             <div className="card-header row">
-                <h3 className="card-title col-4">Daftar Siswa UAS Ganjil</h3>
+                <h3 className="card-title col-4">Daftar Siswa UTS Genap</h3>
                 <div className="col-5"></div>
                 <div className='col-2 d-flex justify-content-end'>
                     {
@@ -225,7 +225,6 @@ export const RaporUasGanjil = (props) => {
                             ''
                             :
                             <button className='btn btn-sm btn-primary' onClick={ () => hanldeAllRapor() }>Generate All</button>
-
                     }
                 </div>
                 <div className="col-1 d-flex justify-content-end">
@@ -306,4 +305,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RaporUasGanjil)
+export default connect(mapStateToProps, mapDispatchToProps)(RaporUtsGenap)

@@ -125,7 +125,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/UserGuru/WaliKelas/:idKelas" element={ <TemplateGuru /> } >
         <Route index element={ <WaliKelas /> } />
-        <Route path='/UserGuru/WaliKelas/:idKelas/:idSiswa' element={ <DetailRapor /> } />
+        <Route path='/UserGuru/WaliKelas/:idKelas/:idSiswa/:semester/:jenisR' element={ <DetailRapor /> } />
       </Route>
       <Route path={ "/profileGuru" } element={ <TemplateGuru /> }>
         <Route index element={ <ProfileGuru /> } />

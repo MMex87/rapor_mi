@@ -3,7 +3,7 @@ import Rapor from "../models/raporModel.js";
 export const getRapor = async (req, res) => {
     try {
         const rapor = await Rapor.findAll({
-            attributes: ["id", "angkatan", "semester", "id_siswa", "id_kelas"]
+            attributes: ["id", "angkatan", "semester", "jenis_rapor", "id_siswa", "id_kelas"]
         })
         if (rapor === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -29,7 +29,9 @@ export const getRaporIdSiswa = async (req, res) => {
         const rapor = await Rapor.findOne({
             where: {
                 id_kelas: req.params.idKelas,
-                id_siswa: req.params.idSiswa
+                id_siswa: req.params.idSiswa,
+                jenis_rapor: req.params.jenisR,
+                semester: req.params.semester
             }
         })
         if (rapor === null)
@@ -41,10 +43,10 @@ export const getRaporIdSiswa = async (req, res) => {
 }
 
 export const tambahRapor = async (req, res) => {
-    const { angkatan, semester, id_siswa, id_kelas } = req.body
+    const { angkatan, semester, jenis_rapor, id_siswa, id_kelas } = req.body
     try {
         const rapor = await Rapor.create({
-            angkatan, semester, id_siswa, id_kelas
+            angkatan, semester, jenis_rapor, id_siswa, id_kelas
         })
         if (rapor === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -55,10 +57,10 @@ export const tambahRapor = async (req, res) => {
 }
 
 export const editRapor = async (req, res) => {
-    const { angkatan, semester, id_siswa, id_kelas } = req.body
+    const { angkatan, semester, jenis_rapor, id_siswa, id_kelas } = req.body
     try {
         const rapor = await Rapor.update({
-            angkatan, semester, id_siswa, id_kelas
+            angkatan, semester, jenis_rapor, id_siswa, id_kelas
         }, {
             where: {
                 id: req.params.id

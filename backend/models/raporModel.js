@@ -6,6 +6,7 @@ const { DataTypes } = Sequelize
 const Rapor = db.define('rapor', {
     angkatan: { type: DataTypes.STRING },
     semester: { type: DataTypes.STRING },
+    jenis_rapor: { type: DataTypes.STRING },
     id_siswa: { type: DataTypes.INTEGER },
     id_kelas: { type: DataTypes.INTEGER },
 }, {

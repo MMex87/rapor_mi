@@ -22,7 +22,8 @@ export const UtsGanjil = (props) => {
     const params = useParams()
     const axiosJWT = axios.create()
     const navigate = useNavigate()
-    const jenisNilai = 'UTS Ganjil'
+    const jenisRapor = 'UTS'
+    const Semester = 'Ganjil'
 
     // state data
     const [siswa, setSiswa] = useState([])
@@ -30,9 +31,12 @@ export const UtsGanjil = (props) => {
     const [idKelas, setIdKelas] = useState('')
     const [idSiswa, setIdSiswa] = useState('')
     const [idNilai, setIdNilai] = useState('')
+    const [idRapor, setIdRapor] = useState('')
     const [nilai, setNilai] = useState([])
     const [inputNilai, setInputNilai] = useState('')
     const [inputNilaiKet, setInputNilaiKet] = useState('')
+    const [rapor, setRapor] = useState([])
+
 
 
     // state handle
@@ -70,6 +74,7 @@ export const UtsGanjil = (props) => {
             console.log(error)
         }
     }
+
     const getKelas = async () => {
         try {
             const response = await axiosJWT.get(`/kelas`, {
@@ -91,21 +96,42 @@ export const UtsGanjil = (props) => {
         setNilai(response.data)
     }
 
+    const getRapor = async () => {
+        try {
+            const response = await axiosJWT.get('/rapor', {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setRapor(response.data)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     // Handle
     // Handle tambah nilai
-    const handleTambah = (val) => {
+    const handleTambah = async (val) => {
         setVisi('d-none')
         setVisi2('')
         setIdSiswa(val)
+        const response = await axiosJWT.get(`/rapor/${idKelas}/${val}/${Semester}/${jenisRapor}`, {
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        console.log(response.data.id)
+        setIdRapor(response.data.id)
     }
     const handleEdit = async (val) => {
         setVisi('d-none')
         setVisi2('')
         setIdSiswa(val)
-        const n = nilai.find(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val && id_mapel == params.idMapel && jenis_nilai == jenisNilai)
+        const n = nilai.find(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == val && id_mapel == params.idMapel && jenis_rapor == jenisRapor && semester == Semester)
         setInputNilai(n.nilai)
         setInputNilaiKet(n.nilai_keterampilan)
         setIdNilai(n.id)
+        setIdRapor(n.id_rapor)
     }
     const handleBack = () => {
         setVisi('')
@@ -114,6 +140,7 @@ export const UtsGanjil = (props) => {
         setInputNilai('')
         setInputNilaiKet('')
         setIdNilai('')
+        setIdRapor('')
     }
 
     // Handle data
@@ -149,7 +176,7 @@ export const UtsGanjil = (props) => {
                     nilai_keterampilan: inputNilaiKet,
                     id_mapel: params.idMapel,
                     id_siswa: idSiswa,
-                    jenis_nilai: jenisNilai
+                    id_rapor: idRapor
                 })
                 Toast.fire({
                     icon: 'success',
@@ -163,6 +190,7 @@ export const UtsGanjil = (props) => {
             setInputNilai('')
             setInputNilaiKet('')
             setIdNilai('')
+            setIdRapor('')
         } catch (error) {
             console.log(error);
         }
@@ -175,6 +203,7 @@ export const UtsGanjil = (props) => {
         getSiswa()
         getKelas()
         getNilai()
+        getRapor()
     }, [params.idMapel])
 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -193,7 +222,6 @@ export const UtsGanjil = (props) => {
     }, (error) => {
         return Promise.reject(error)
     })
-
 
     return (
         <div className='position-relative p-2' style={ { height: 500 } }>
@@ -221,7 +249,7 @@ export const UtsGanjil = (props) => {
                                 <td>{ val.nama }</td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_rapor == jenisRapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai }
                                             </div>
@@ -230,7 +258,7 @@ export const UtsGanjil = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_rapor == jenisRapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai)) ? ('A') : (79 < parseInt(value.nilai)) ? ('B') : (69 < parseInt(value.nilai)) ? ('C') : ('D')
@@ -241,7 +269,7 @@ export const UtsGanjil = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_rapor == jenisRapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 { value.nilai_keterampilan }
                                             </div>
@@ -250,7 +278,7 @@ export const UtsGanjil = (props) => {
                                 </td>
                                 <td style={ { textAlign: 'center' } }>
                                     {
-                                        nilai.filter(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai).map((value, index) => (
+                                        nilai.filter(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_rapor == jenisRapor && semester == Semester).map((value, index) => (
                                             <div key={ index }>
                                                 {
                                                     (89 < parseInt(value.nilai_keterampilan)) ? ('A') : (79 < parseInt(value.nilai_keterampilan)) ? ('B') : (69 < parseInt(value.nilai_keterampilan)) ? ('C') : ('D')
@@ -262,13 +290,16 @@ export const UtsGanjil = (props) => {
                                 <td className='d-flex justify-content-around'>
                                     <div key={ index } className='me-5'>
                                         {
-                                            nilai.find(({ id_siswa, id_mapel, jenis_nilai }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_nilai == jenisNilai) == null
-                                                ? <button type='button' className='btn btn-success' onClick={ () => handleTambah(val.id) }>
-                                                    Tambah Nilai
-                                                </button>
-                                                : <button type='button' className='btn btn-warning' onClick={ () => handleEdit(val.id) }>
-                                                    Edit
-                                                </button>
+                                            rapor.find(({ id_kelas, id_siswa, semester, jenis_rapor }) => id_siswa == val.id && id_kelas == idKelas && jenis_rapor == jenisRapor && semester == Semester) != null
+                                                ?
+                                                nilai.find(({ id_siswa, id_mapel, jenis_rapor, semester }) => id_siswa == val.id && id_mapel == params.idMapel && jenis_rapor == jenisRapor && semester == Semester) == null
+                                                    ? <button type='button' className='btn btn-success' onClick={ () => handleTambah(val.id) }>
+                                                        Tambah Nilai
+                                                    </button>
+                                                    : <button type='button' className='btn btn-warning' onClick={ () => handleEdit(val.id) }>
+                                                        Edit
+                                                    </button>
+                                                : 'Permention WaliKelas'
                                         }
                                     </div>
                                 </td>
