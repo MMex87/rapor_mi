@@ -40,7 +40,6 @@ export const RaporUasGenap = (props) => {
     const [idSiswa, setIdSiswa] = useState('')
 
     // state data
-    const [namaKelas, setNamaKelas] = useState('')
     const [nKelas, setNKelas] = useState('')
 
 
