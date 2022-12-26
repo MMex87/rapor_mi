@@ -256,14 +256,13 @@ const DetailRapor = (props) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header row">
-                                    <h3 className="card-title col-4">Rapor</h3>
-                                    <div className="col-5"></div>
-                                    <div className="col-2 d-flex justify-content-end">
+                                    <h3 className="card-title col-sm-4">Rapor</h3>
+                                    <div className="col-sm-7 d-flex justify-content-end">
                                         <button type='button' className='btn btn-success' onClick={ () => handlePdf() }>
                                             <i className="fa-solid fa-file-arrow-down"></i> Save
                                         </button>
                                     </div>
-                                    <div className="col-1 d-flex justify-content-end">
+                                    <div className="col-sm-1 d-flex justify-content-end">
                                         <div className="card-tools">
                                             <button type="button" className="btn btn-tool " data-card-widget="collapse">
                                                 <i className="fas fa-minus" />

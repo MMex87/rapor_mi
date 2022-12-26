@@ -74,7 +74,7 @@ const SideNav = (props) => {
             {/* Main Sidebar Container */ }
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* Brand Logo */ }
-                <Link to="/dashboard" className="brand-link">
+                <Link to="/dashboardGuru" className="brand-link">
                     <img src="../../../../assets/logo/logo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={ { opacity: '.8' } } />
                     <span className="brand-text font-weight-light">{ props.role } MIDU</span>
                 </Link>
@@ -90,17 +90,6 @@ const SideNav = (props) => {
                         </div>
                         <div className="info container">
                             <span className='d-flex justify-content-center'>{ props.role }</span>
-                        </div>
-                    </div>
-                    {/* SidebarSearch Form */ }
-                    <div className="form-inline">
-                        <div className="input-group" data-widget="sidebar-search">
-                            <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
-                            <div className="input-group-append">
-                                <button className="btn btn-sidebar">
-                                    <i className="fas fa-search fa-fw" />
-                                </button>
-                            </div>
                         </div>
                     </div>
                     {/* Sidebar Menu */ }

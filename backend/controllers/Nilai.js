@@ -4,7 +4,7 @@ import db from "../config/Database.js"
 export const getNilai = async (req, res) => {
     try {
         const [nilai] = await db.query("SELECT n.id, n.nilai, n.nilai_keterampilan, n.id_mapel, " +
-            "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester " +
+            "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester, r.id_kelas, r.id_siswa " +
             "FROM nilai as n " +
             "INNER JOIN rapor as r " +
             "on n.id_rapor = r.id")
@@ -17,7 +17,7 @@ export const getNilai = async (req, res) => {
 export const getNilaiId = async (req, res) => {
     try {
         const [nilai] = await db.query("SELECT n.id, n.nilai, n.nilai_keterampilan, n.id_mapel, " +
-            "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester " +
+            "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester, r.id_kelas, r.id_siswa " +
             "FROM nilai as n " +
             "INNER JOIN rapor as r " +
             "on n.id_rapor = r.id " +
@@ -32,7 +32,7 @@ export const getNilaiId = async (req, res) => {
 export const getNilaiIdSiswa = async (req, res) => {
     try {
         const [nilai] = await db.query("SELECT n.id, n.nilai, n.nilai_keterampilan, n.id_mapel, " +
-            "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester " +
+            "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester, r.id_kelas, r.id_siswa " +
             "FROM nilai as n " +
             "INNER JOIN rapor as r " +
             "on n.id_rapor = r.id " +

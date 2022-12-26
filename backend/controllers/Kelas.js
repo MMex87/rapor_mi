@@ -27,6 +27,21 @@ export const getKelasId = async (req, res) => {
         res.status(404).json({ msg: "Data Tidak di temukan" })
     }
 }
+export const getKelasGuru = async (req, res) => {
+    try {
+        const kelas = await Kelas.findOne({
+            where: { id_guru: req.params.idGuru }
+        })
+        if (kelas === null)
+            res.status(404).json({ msg: "Data Tidak di temukan" })
+        else
+            res.json(kelas)
+
+
+    } catch (error) {
+        res.status(404).json({ msg: "Data Tidak di temukan" })
+    }
+}
 
 export const tambahKelas = async (req, res) => {
     const { kelas, nama_kelas, id_guru } = req.body

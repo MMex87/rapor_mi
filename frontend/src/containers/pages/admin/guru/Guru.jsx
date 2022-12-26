@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import ReactPaginate from 'react-paginate'
 
 export const Guru = (props) => {
     // alert
@@ -25,6 +26,14 @@ export const Guru = (props) => {
     // deklarasi State
     const [guru, setGuru] = useState([])
     const [handle, setHandle] = useState(false)
+
+    // state Pagination dan search
+    const [search, setSearch] = useState('')
+    const [page, setPage] = useState(0)
+    const [limit, setLimit] = useState(10)
+    const [pages, setPages] = useState(0)
+    const [rows, setRows] = useState(0)
+
 
     // refresh Token
     const refreshToken = async () => {
@@ -47,12 +56,15 @@ export const Guru = (props) => {
     // get Datas
     const getGuru = async () => {
         try {
-            const response = await axiosJWT.get('/guru', {
+            const response = await axiosJWT.get(`/guruSearch?search=${search}&limit=${limit}&page=${page}`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            setGuru(response.data)
+            setGuru(response.data.result)
+            setPage(response.data.page)
+            setPages(response.data.totalPage)
+            setRows(response.data.totalRows)
         } catch (error) {
             console.error(error);
         }
@@ -98,12 +110,17 @@ export const Guru = (props) => {
         }
     }
 
+    // handel Pagenation
+    const changePage = ({ selected }) => {
+        setPage(selected)
+    }
+
 
     // Hooks Use Effect
     useEffect(() => {
         refreshToken()
         getGuru()
-    }, [handle == true])
+    }, [handle == true || page || search])
 
     // axios Interceptors 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -150,7 +167,7 @@ export const Guru = (props) => {
                                     <div className="col-5"></div>
                                     <div className="card-tools col-1">
                                         <div className="input-group input-group-sm" style={ { width: 150, marginTop: 1 } }>
-                                            <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
+                                            <input type="text" name="table_search" className="form-control float-right" placeholder="Search" onChange={ (e) => setSearch(e.target.value) } />
                                             <div className="input-group-append">
                                                 <button type="submit" className="btn btn-default">
                                                     <i className="fas fa-search" />
@@ -206,6 +223,27 @@ export const Guru = (props) => {
                                             )) }
                                         </tbody>
                                     </table>
+                                    <div className="p-3">
+                                        <div className='d-flex justify-content-between'>
+                                            <p className='text-center'>Total Guru : { rows } Page: { rows ? page + 1 : 0 } of { pages }</p>
+                                            <nav aria-label="Page navigation example justify-content-end">
+                                                <ReactPaginate
+                                                    previousLabel={ "< Prev" }
+                                                    nextLabel={ "Next >" }
+                                                    pageCount={ pages }
+                                                    onPageChange={ changePage }
+                                                    containerClassName={ 'pagination' }
+                                                    pageLinkClassName={ 'page-link' }
+                                                    pageClassName={ 'page-item' }
+                                                    previousLinkClassName={ 'page-link' }
+                                                    previousClassName={ 'page-item' }
+                                                    nextClassName={ 'page-item' }
+                                                    nextLinkClassName={ 'page-link' }
+                                                    activeClassName={ 'active' }
+                                                />
+                                            </nav>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

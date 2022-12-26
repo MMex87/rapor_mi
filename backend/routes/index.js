@@ -28,6 +28,7 @@ router.delete('/logout', Logout)
 
 // Guru
 router.get('/guru', verifyToken, guru.getGurus)
+router.get('/guruSearch', verifyToken, guru.getSearchGurus)
 router.get('/guru/:id', verifyToken, guru.getGurusId)
 router.get('/guru/nama/:nama', verifyToken, guru.getGurusName)
 router.post('/guru', guru.TambahGuru)
@@ -44,6 +45,7 @@ router.delete('/logoutGuru', guru.Logout)
 
 // Kelas
 router.get('/kelas', verifyToken, kelas.getKelas)
+router.get('/kelasGuru/:idGuru', verifyToken, kelas.getKelasGuru)
 router.get('/kelas/:id', verifyToken, kelas.getKelasId)
 router.post('/kelas', kelas.tambahKelas)
 router.put('/kelas/:id', kelas.editKelas)
@@ -59,7 +61,10 @@ router.delete('/nilai/:id', nilai.hapusNilai)
 
 // Siswa
 router.get('/siswa', verifyToken, siswa.getSiswa)
+router.get('/siswaRecent', verifyToken, siswa.getSiswaRecent)
 router.get('/siswa/:id', verifyToken, siswa.getSiswaId)
+router.get('/siswaSearch', verifyToken, siswa.getSearchSiswa)
+router.get('/siswaPage', verifyToken, siswa.getPageSiswa)
 router.post('/siswa', siswa.tambahSiswa)
 router.put('/siswa/:id', siswa.editSiswa)
 router.delete('/siswa/:id', siswa.hapusSiswa)

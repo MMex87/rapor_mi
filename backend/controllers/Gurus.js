@@ -2,6 +2,7 @@ import Guru from "../models/guruModel.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 import fs from 'fs'
+import { Op } from "sequelize"
 
 export const getGurus = async (req, res) => {
     try {
@@ -11,6 +12,58 @@ export const getGurus = async (req, res) => {
         if (gurus === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
         res.json(gurus)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getSearchGurus = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 0
+        const limit = parseInt(req.query.limit) || 10
+        const search = req.query.search || ''
+        const offset = limit * page
+        const totalRows = await Guru.count({
+            where: {
+                [Op.or]: [{
+                    nama: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }, {
+                    nuptk: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }
+                ]
+            }
+        })
+        const totalPage = Math.ceil(totalRows / limit)
+        const result = await Guru.findAll({
+            where: {
+                [Op.or]: [{
+                    nama: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }, {
+                    nuptk: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }
+                ]
+            },
+            offset,
+            limit,
+            order: [
+                ['id', 'DESC']
+            ]
+        })
+        res.json({
+            page,
+            result,
+            totalPage,
+            totalRows,
+            limit
+        })
     } catch (error) {
         console.log(error)
     }

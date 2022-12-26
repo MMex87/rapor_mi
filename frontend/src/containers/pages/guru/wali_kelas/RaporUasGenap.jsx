@@ -297,9 +297,8 @@ export const RaporUasGenap = (props) => {
     return (
         <>
             <div className="card-header row">
-                <h3 className="card-title col-4">Daftar Siswa UAS Genap</h3>
-                <div className="col-5"></div>
-                <div className='col-2 d-flex justify-content-end'>
+                <h3 className="card-title col-sm-4">Daftar Siswa UAS Genap</h3>
+                <div className='col-sm-7 d-flex justify-content-end'>
                     {
                         (
                             siswa.filter(({ id_kelas }) => id_kelas == params.idKelas).length ==
@@ -311,7 +310,7 @@ export const RaporUasGenap = (props) => {
                             <button className='btn btn-sm btn-primary' onClick={ () => hanldeAllRapor() }>Generate All</button>
                     }
                 </div>
-                <div className="col-1 d-flex justify-content-end">
+                <div className="col-sm-1 d-flex justify-content-end">
                     <div className="card-tools">
                         <button type="button" className="btn btn-tool " data-card-widget="collapse">
                             <i className="fas fa-minus" />
@@ -329,10 +328,9 @@ export const RaporUasGenap = (props) => {
                         <thead>
                             <tr className='container'>
                                 <th>No</th>
+                                <th>NIS</th>
                                 <th>NISN</th>
                                 <th>Nama Siswa</th>
-                                <th>Rata - Rata</th>
-                                <th>Peringkat</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -340,14 +338,9 @@ export const RaporUasGenap = (props) => {
                             { siswa.filter(({ id_kelas }) => id_kelas == params.idKelas).map((val, index) => (
                                 <tr key={ index }>
                                     <td>{ index + 1 }</td>
+                                    <td>{ val.nis }</td>
                                     <td>{ val.nisn }</td>
                                     <td>{ val.nama }</td>
-                                    <td>
-
-                                    </td>
-                                    <td >
-
-                                    </td>
                                     {
                                         visi == index + 1
                                             ?
@@ -378,7 +371,11 @@ export const RaporUasGenap = (props) => {
                                                         </div>
                                                     }
                                                     {
-                                                        (rapor) &&
+                                                        (
+                                                            rapor.find(({ id_kelas, semester, jenis_rapor, angkatan, id_siswa }) =>
+                                                                id_kelas == params.idKelas && semester == Semester && jenis_rapor == Jenis_rapor && angkatan == Angkatan && id_siswa == val.id)
+                                                        )
+                                                            &&
                                                             (
                                                                 nilai.filter(({ id_siswa, id_rapor }) =>
                                                                     id_siswa == val.id &&

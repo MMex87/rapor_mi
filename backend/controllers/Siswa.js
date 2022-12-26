@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Siswa from "../models/siswaModel.js";
 
 export const getSiswa = async (req, res) => {
@@ -8,6 +9,126 @@ export const getSiswa = async (req, res) => {
         if (siswa === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
         res.json(siswa)
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getSearchSiswa = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 0
+        const limit = parseInt(req.query.limit) || 10
+        const search = req.query.search || ''
+        const offset = limit * page
+        const totalRows = await Siswa.count({
+            where: {
+                [Op.or]: [{
+                    nama: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }, {
+                    nis: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }, {
+                    nisn: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }
+                ]
+            }
+        })
+        const totalPage = Math.ceil(totalRows / limit)
+        const result = await Siswa.findAll({
+            where: {
+                [Op.or]: [{
+                    nama: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }, {
+                    nis: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }, {
+                    nisn: {
+                        [Op.like]: '%' + search + '%'
+                    }
+                }
+                ]
+            },
+            offset,
+            limit,
+            order: [
+                ['id', 'DESC']
+            ]
+        })
+        res.json({
+            page,
+            result,
+            totalPage,
+            totalRows,
+            limit
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getPageSiswa = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 0
+        const limit = parseInt(req.query.limit) || 10
+        const idKelas = req.query.idKelas || ''
+        const offset = limit * page
+        const totalRows = await Siswa.count({
+            where: {
+                [Op.or]: [{
+                    id_kelas: idKelas
+                }
+                ]
+            }
+        })
+        const totalPage = Math.ceil(totalRows / limit)
+        const result = await Siswa.findAll({
+            where: {
+                [Op.or]: [{
+                    id_kelas: idKelas
+                }
+                ]
+            },
+            offset,
+            limit,
+            order: [
+                ['id', 'DESC']
+            ]
+        })
+        res.json({
+            page,
+            result,
+            totalPage,
+            totalRows,
+            limit
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getSiswaRecent = async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 5
+        const totalRows = await Siswa.count()
+        const totalPage = Math.ceil(totalRows / limit)
+        const result = await Siswa.findAll({
+            limit,
+            order: [
+                ['id', 'DESC']
+            ]
+        })
+        res.json({
+            result,
+            totalPage,
+            totalRows,
+            limit
+        })
     } catch (error) {
         console.log(error)
     }

@@ -302,11 +302,11 @@ export const Profile = (props) => {
                                     </div>
                                 </div>
                                 <div className='row p-5 container'>
-                                    <div className="card d-flex justify-content-center" style={ { width: '24rem' } }>
+                                    <div className="card d-flex justify-content-center">
                                         <div className="card card-primary card-outline">
                                             <div className="card-body box-profile">
                                                 <div className="text-center">
-                                                    <img src={ 'http://localhost:8076/assets/uploads/' + props.picture } className="card-img-top img-fluid" />
+                                                    <img src={ 'http://localhost:8076/assets/uploads/' + props.picture } className="card-img-top img-fluid" style={ { width: '24rem' } } />
                                                 </div>
                                                 <h3 className="profile-username text-center mb-2">{ nama }</h3>
                                                 <p className="text-muted text-center mb-3">{ role }</p>

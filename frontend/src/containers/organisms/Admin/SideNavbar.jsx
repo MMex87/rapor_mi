@@ -26,17 +26,6 @@ const SideNav = (props) => {
                             <span className='d-flex justify-content-center'>{ props.role }</span>
                         </div>
                     </div>
-                    {/* SidebarSearch Form */ }
-                    <div className="form-inline">
-                        <div className="input-group" data-widget="sidebar-search">
-                            <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
-                            <div className="input-group-append">
-                                <button className="btn btn-sidebar">
-                                    <i className="fas fa-search fa-fw" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                     {/* Sidebar Menu */ }
                     <nav className="mt-2">
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">

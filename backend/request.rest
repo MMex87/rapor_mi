@@ -34,10 +34,17 @@ GET http://localhost:9076/token
 GET http://localhost:9076/mapel/42
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJva2t5IiwiZW1haWwiOiJva2t5c2V0eWFAZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcxMjI3NDMyLCJleHAiOjE2NzEyMjc0NDd9.P_BAQ5ylC-wK9u8W-SFJyVvoOmH5sZD6dEXNOzs48zI
 
+###
+GET http://localhost:9076/siswaSearch?page=0&limit=10
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJva2t5IiwiZW1haWwiOiJva2t5c2V0eWFAZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcyMDAyOTE1LCJleHAiOjE2NzIwMDI5MzB9.4iV8DHLkb_Yn5xmsJWh4gT4nJqqgDcmlrZ3o67q54SY
+
+
+
+
 
 
 ###
-DELETE http://localhost:7000/logout
+DELETE http://localhost:9076/logout
 
 
 # Guru
