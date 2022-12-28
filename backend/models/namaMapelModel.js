@@ -1,6 +1,5 @@
-import { Sequelize } from "sequelize";
-import db from "../config/Database.js";
-import Mapel from "./mapelModel.js";
+const { Sequelize } = require("sequelize")
+const db = require("../config/Database.js")
 
 const { DataTypes } = Sequelize
 
@@ -12,4 +11,4 @@ const NamaMapel = db.define('nama_mapel', {
 })
 
 
-export default NamaMapel
+module.exports = NamaMapel

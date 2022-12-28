@@ -1,7 +1,7 @@
-import Nilai from "../models/nilaiModel.js";
-import db from "../config/Database.js"
+const Nilai = require("../models/nilaiModel.js")
+const db = require("../config/Database.js")
 
-export const getNilai = async (req, res) => {
+const getNilai = async (req, res) => {
     try {
         const [nilai] = await db.query("SELECT n.id, n.nilai, n.nilai_keterampilan, n.id_mapel, " +
             "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester, r.id_kelas, r.id_siswa " +
@@ -14,7 +14,7 @@ export const getNilai = async (req, res) => {
     }
 }
 
-export const getNilaiId = async (req, res) => {
+const getNilaiId = async (req, res) => {
     try {
         const [nilai] = await db.query("SELECT n.id, n.nilai, n.nilai_keterampilan, n.id_mapel, " +
             "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester, r.id_kelas, r.id_siswa " +
@@ -29,7 +29,7 @@ export const getNilaiId = async (req, res) => {
         console.log(error)
     }
 }
-export const getNilaiIdSiswa = async (req, res) => {
+const getNilaiIdSiswa = async (req, res) => {
     try {
         const [nilai] = await db.query("SELECT n.id, n.nilai, n.nilai_keterampilan, n.id_mapel, " +
             "n.id_siswa, n.id_rapor, r.jenis_rapor, r.semester, r.id_kelas, r.id_siswa " +
@@ -46,7 +46,7 @@ export const getNilaiIdSiswa = async (req, res) => {
     }
 }
 
-export const tambahNilai = async (req, res) => {
+const tambahNilai = async (req, res) => {
     const { nilai, nilai_keterampilan, id_mapel, id_siswa, id_rapor } = req.body
 
     try {
@@ -62,7 +62,7 @@ export const tambahNilai = async (req, res) => {
     }
 }
 
-export const editNilai = async (req, res) => {
+const editNilai = async (req, res) => {
     const { nilai, nilai_keterampilan, id_mapel, id_siswa, id_rapor } = req.body
     try {
         const n = await Nilai.update({
@@ -81,7 +81,7 @@ export const editNilai = async (req, res) => {
     }
 }
 
-export const hapusNilai = async (req, res) => {
+const hapusNilai = async (req, res) => {
     try {
         const n = await Nilai.destroy({
             where: {
@@ -94,4 +94,13 @@ export const hapusNilai = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+module.exports = {
+    hapusNilai,
+    getNilai,
+    getNilaiId,
+    getNilaiIdSiswa,
+    editNilai,
+    tambahNilai
 }

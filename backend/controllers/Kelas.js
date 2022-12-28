@@ -1,7 +1,7 @@
-import Kelas from "../models/kelasModel.js";
+const Kelas = require("../models/kelasModel.js")
 
 
-export const getKelas = async (req, res) => {
+const getKelas = async (req, res) => {
     try {
         const kelas = await Kelas.findAll({
             attributes: ['id', 'kelas', 'nama_kelas', 'id_guru']
@@ -12,7 +12,7 @@ export const getKelas = async (req, res) => {
     }
 }
 
-export const getKelasId = async (req, res) => {
+const getKelasId = async (req, res) => {
     try {
         const kelas = await Kelas.findOne({
             where: { id: req.params.id }
@@ -27,7 +27,7 @@ export const getKelasId = async (req, res) => {
         res.status(404).json({ msg: "Data Tidak di temukan" })
     }
 }
-export const getKelasGuru = async (req, res) => {
+const getKelasGuru = async (req, res) => {
     try {
         const kelas = await Kelas.findOne({
             where: { id_guru: req.params.idGuru }
@@ -43,7 +43,7 @@ export const getKelasGuru = async (req, res) => {
     }
 }
 
-export const tambahKelas = async (req, res) => {
+const tambahKelas = async (req, res) => {
     const { kelas, nama_kelas, id_guru } = req.body
     try {
         await Kelas.create({ kelas, nama_kelas, id_guru })
@@ -54,7 +54,7 @@ export const tambahKelas = async (req, res) => {
     }
 }
 
-export const editKelas = async (req, res) => {
+const editKelas = async (req, res) => {
     const { kelas, nama_kelas, id_guru } = req.body
     const id = req.params.id
 
@@ -78,7 +78,7 @@ export const editKelas = async (req, res) => {
     }
 }
 
-export const hapusKelas = async (req, res) => {
+const hapusKelas = async (req, res) => {
     try {
         const kelas = await Kelas.destroy({ where: { id: req.params.id } })
 
@@ -90,4 +90,13 @@ export const hapusKelas = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+module.exports = {
+    hapusKelas,
+    editKelas,
+    tambahKelas,
+    getKelasId,
+    getKelasGuru,
+    getKelas
 }

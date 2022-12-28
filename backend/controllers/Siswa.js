@@ -1,7 +1,7 @@
-import { Op } from "sequelize";
-import Siswa from "../models/siswaModel.js";
+const { Op } = require("sequelize")
+const Siswa = require("../models/siswaModel.js")
 
-export const getSiswa = async (req, res) => {
+const getSiswa = async (req, res) => {
     try {
         const siswa = await Siswa.findAll({
             attributes: ['id', 'nisn', 'nis', 'nama', 'tanggal_lahir', 'jenis_kelamin', 'status', 'id_kelas']
@@ -13,7 +13,7 @@ export const getSiswa = async (req, res) => {
         console.log(error)
     }
 }
-export const getSearchSiswa = async (req, res) => {
+const getSearchSiswa = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 0
         const limit = parseInt(req.query.limit) || 10
@@ -72,7 +72,7 @@ export const getSearchSiswa = async (req, res) => {
         console.log(error)
     }
 }
-export const getPageSiswa = async (req, res) => {
+const getPageSiswa = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 0
         const limit = parseInt(req.query.limit) || 10
@@ -112,7 +112,7 @@ export const getPageSiswa = async (req, res) => {
     }
 }
 
-export const getSiswaRecent = async (req, res) => {
+const getSiswaRecent = async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 5
         const totalRows = await Siswa.count()
@@ -134,7 +134,7 @@ export const getSiswaRecent = async (req, res) => {
     }
 }
 
-export const getSiswaId = async (req, res) => {
+const getSiswaId = async (req, res) => {
     try {
         const siswa = await Siswa.findOne({ where: { id: req.params.id } })
         if (siswa === null)
@@ -145,7 +145,7 @@ export const getSiswaId = async (req, res) => {
     }
 }
 
-export const tambahSiswa = async (req, res) => {
+const tambahSiswa = async (req, res) => {
     const { nisn, nis, nama, tanggal_lahir, jenis_kelamin, status, id_kelas } = req.body
     try {
         const siswa = await Siswa.create({
@@ -159,7 +159,7 @@ export const tambahSiswa = async (req, res) => {
     }
 }
 
-export const editSiswa = async (req, res) => {
+const editSiswa = async (req, res) => {
     const { nisn, nis, nama, tanggal_lahir, jenis_kelamin, status, id_kelas } = req.body
     try {
         const siswa = await Siswa.update({
@@ -179,7 +179,7 @@ export const editSiswa = async (req, res) => {
     }
 }
 
-export const hapusSiswa = async (req, res) => {
+const hapusSiswa = async (req, res) => {
     try {
         const siswa = await Siswa.destroy({
             where: {
@@ -194,3 +194,13 @@ export const hapusSiswa = async (req, res) => {
     }
 }
 
+module.exports = {
+    getPageSiswa,
+    getSearchSiswa,
+    getSiswa,
+    getSiswaId,
+    getSiswaRecent,
+    tambahSiswa,
+    editSiswa,
+    hapusSiswa
+}

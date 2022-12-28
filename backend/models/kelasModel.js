@@ -1,5 +1,5 @@
-import { Sequelize } from "sequelize";
-import db from "../config/Database.js";
+const { Sequelize } = require("sequelize")
+const db = require("../config/Database.js")
 
 const { DataTypes } = Sequelize
 
@@ -24,4 +24,4 @@ const Kelas = db.define('kelas', {
     freezeTableName: true
 })
 
-export default Kelas
+module.exports = Kelas

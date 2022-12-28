@@ -1,5 +1,5 @@
-import { Sequelize } from "sequelize";
-import db from "../config/Database.js";
+const { Sequelize } = require("sequelize")
+const db = require("../config/Database.js")
 
 const { DataTypes } = Sequelize
 
@@ -41,4 +41,4 @@ const Guru = db.define('guru', {
     freezeTableName: true
 })
 
-export default Guru
+module.exports = Guru

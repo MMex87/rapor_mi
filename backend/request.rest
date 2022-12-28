@@ -4,24 +4,24 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm5hb
 
 
 ###
-POST http://localhost:7000/users
+POST https://raportmidu.layhomedev.site/api/users
 Content-Type: application/json
 
 {
     "name" : "Okky Setya Kurniawan",
-    "email" : "okkysetya@gmail.com",
-    "password" : "1234568",
+    "email" : "okky@gmail.com",
+    "password" : "1234",
     "confPassword" : "12345678"
 }
 
 
 ###
-POST http://localhost:9076/login
+POST https://raportmidu.layhomedev.site/api/login
 Content-Type: application/json
 
 {
-    "email":"okkysetya@gmail.com",
-    "password":"adminmidu"
+    "email":"okky@gmail.com",
+    "password":"1234"
 } 
 
 

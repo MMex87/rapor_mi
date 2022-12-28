@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+const { Sequelize } = require("sequelize")
 
 const db = new Sequelize('db_rapor', 'root', '', {
     host: "localhost",
@@ -6,4 +6,4 @@ const db = new Sequelize('db_rapor', 'root', '', {
     define: { freezeTableName: true }
 })
 
-export default db
+module.exports = db

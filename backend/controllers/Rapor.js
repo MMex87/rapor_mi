@@ -1,6 +1,6 @@
-import Rapor from "../models/raporModel.js";
+const Rapor = require("../models/raporModel.js")
 
-export const getRapor = async (req, res) => {
+const getRapor = async (req, res) => {
     try {
         const rapor = await Rapor.findAll({
             attributes: ["id", "angkatan", "semester", "jenis_rapor", "id_siswa", "id_kelas"]
@@ -13,7 +13,7 @@ export const getRapor = async (req, res) => {
     }
 }
 
-export const getRaporId = async (req, res) => {
+const getRaporId = async (req, res) => {
     try {
         const rapor = await Rapor.findOne({ where: { id: req.params.id } })
         if (rapor === null)
@@ -24,7 +24,7 @@ export const getRaporId = async (req, res) => {
     }
 }
 
-export const getRaporIdSiswa = async (req, res) => {
+const getRaporIdSiswa = async (req, res) => {
     try {
         const rapor = await Rapor.findOne({
             where: {
@@ -42,7 +42,7 @@ export const getRaporIdSiswa = async (req, res) => {
     }
 }
 
-export const tambahRapor = async (req, res) => {
+const tambahRapor = async (req, res) => {
     const { angkatan, semester, jenis_rapor, id_siswa, id_kelas } = req.body
     try {
         const rapor = await Rapor.create({
@@ -56,7 +56,7 @@ export const tambahRapor = async (req, res) => {
     }
 }
 
-export const editRapor = async (req, res) => {
+const editRapor = async (req, res) => {
     const { angkatan, semester, jenis_rapor, id_siswa, id_kelas } = req.body
     try {
         const rapor = await Rapor.update({
@@ -76,7 +76,7 @@ export const editRapor = async (req, res) => {
     }
 }
 
-export const hapusRapor = async (req, res) => {
+const hapusRapor = async (req, res) => {
     try {
         const rapor = await Rapor.destroy({
             where: {
@@ -91,3 +91,11 @@ export const hapusRapor = async (req, res) => {
     }
 }
 
+module.exports = {
+    getRapor,
+    getRaporId,
+    getRaporIdSiswa,
+    tambahRapor,
+    hapusRapor,
+    editRapor
+}

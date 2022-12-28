@@ -1,12 +1,11 @@
-import express from "express"
-import dotenv from "dotenv"
-import cors from "cors"
-import db from "./config/Database.js";
-import router from "./routes/index.js";
-import cookieParser from "cookie-parser";
-import multer from 'multer'
-import bodyParser from "body-parser";
-import path from "path";
+const express = require("express")
+const dotenv = require("dotenv")
+const cors = require("cors")
+const router = require("./routes/index.js")
+const cookieParser = require("cookie-parser")
+const multer = require('multer')
+const bodyParser = require("body-parser")
+const path = require("path")
 
 dotenv.config()
 const app = express()
@@ -17,7 +16,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 
 try {
-    await db.authenticate()
     console.log("Database Connected");
 } catch (error) {
     console.log(error)

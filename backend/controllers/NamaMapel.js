@@ -1,8 +1,8 @@
-import NamaMapel from "../models/namaMapelModel.js";
-import db from "../config/Database.js"
+const NamaMapel = require("../models/namaMapelModel.js")
+const db = require("../config/Database.js")
 
 
-export const getNamaMapel = async (req, res) => {
+const getNamaMapel = async (req, res) => {
     try {
         const mapel = await NamaMapel.findAll({
             attributes: ['id', 'nama', 'induk']
@@ -13,7 +13,7 @@ export const getNamaMapel = async (req, res) => {
     }
 }
 
-export const getNamaMapelId = async (req, res) => {
+const getNamaMapelId = async (req, res) => {
     try {
         const mapel = await NamaMapel.findOne({
             where: { id: req.params.id }
@@ -26,7 +26,7 @@ export const getNamaMapelId = async (req, res) => {
         res.status(404).json({ msg: "Data Tidak di temukan" })
     }
 }
-export const getNamaMapelNama = async (req, res) => {
+const getNamaMapelNama = async (req, res) => {
     try {
         const mapel = await NamaMapel.findOne({
             where: { nama: req.params.nama }
@@ -40,7 +40,7 @@ export const getNamaMapelNama = async (req, res) => {
     }
 }
 
-export const tambahNamaMapel = async (req, res) => {
+const tambahNamaMapel = async (req, res) => {
     const { nama, induk } = req.body
     try {
         const mapel = await NamaMapel.create({ nama, induk })
@@ -54,7 +54,7 @@ export const tambahNamaMapel = async (req, res) => {
     }
 }
 
-export const editNamaMapel = async (req, res) => {
+const editNamaMapel = async (req, res) => {
     const { nama, induk } = req.body
     const id = req.params.id
 
@@ -75,7 +75,7 @@ export const editNamaMapel = async (req, res) => {
     }
 }
 
-export const hapusNamaMapel = async (req, res) => {
+const hapusNamaMapel = async (req, res) => {
     try {
         const mapel = await NamaMapel.destroy({ where: { id: req.params.id } });
 
@@ -87,4 +87,13 @@ export const hapusNamaMapel = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+module.exports = {
+    hapusNamaMapel,
+    editNamaMapel,
+    tambahNamaMapel,
+    getNamaMapelNama,
+    getNamaMapelId,
+    getNamaMapel
 }

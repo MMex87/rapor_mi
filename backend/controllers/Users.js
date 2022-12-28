@@ -1,9 +1,9 @@
-import Users from "../models/userModel.js";
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken";
-import fs from 'fs'
+const Users = require("../models/userModel.js")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const fs = require('fs')
 
-export const getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
     try {
         const users = await Users.findAll({
             attributes: ['id', 'name', 'email', 'role', 'picture']
@@ -13,7 +13,7 @@ export const getUsers = async (req, res) => {
         console.log(error);
     }
 }
-export const getUsersId = async (req, res) => {
+const getUsersId = async (req, res) => {
     try {
         const users = await Users.findOne({ where: { id: req.params.id } })
         res.json(users)
@@ -21,7 +21,7 @@ export const getUsersId = async (req, res) => {
         console.log(error);
     }
 }
-export const getSuper = async (req, res) => {
+const getSuper = async (req, res) => {
     try {
         const users = await Users.findOne({ where: { role: req.params.super } })
         res.json(users)
@@ -30,7 +30,7 @@ export const getSuper = async (req, res) => {
     }
 }
 
-export const Register = async (req, res) => {
+const Register = async (req, res) => {
     const { name, email, password, confPassword, role, picture } = req.body
 
     if (password !== confPassword) return res.status(400)
@@ -47,7 +47,7 @@ export const Register = async (req, res) => {
         console.log(error)
     }
 }
-export const UpdateUser = async (req, res) => {
+const UpdateUser = async (req, res) => {
     const { name, email, password, confPassword, role, picture } = req.body
 
     const user = await Users.findOne({
@@ -83,7 +83,7 @@ export const UpdateUser = async (req, res) => {
     }
 }
 
-export const UpdatePass = async (req, res) => {
+const UpdatePass = async (req, res) => {
     const { password, confPassword, passwordLama } = req.body
     const salt = await bcrypt.genSalt();
 
@@ -115,7 +115,7 @@ export const UpdatePass = async (req, res) => {
         console.log(error);
     }
 }
-export const UpdateEmail = async (req, res) => {
+const UpdateEmail = async (req, res) => {
     const { email } = req.body
     try {
         await Users.update({
@@ -130,7 +130,7 @@ export const UpdateEmail = async (req, res) => {
         console.log(error);
     }
 }
-export const UpdateProfil = async (req, res) => {
+const UpdateProfil = async (req, res) => {
     const { picture } = req.body
 
     const user = await Users.findOne({
@@ -160,7 +160,7 @@ export const UpdateProfil = async (req, res) => {
     }
 }
 
-export const Login = async (req, res) => {
+const Login = async (req, res) => {
     try {
         const user = await Users.findAll({
             where: {
@@ -195,7 +195,7 @@ export const Login = async (req, res) => {
     }
 }
 
-export const Logout = async (req, res) => {
+const Logout = async (req, res) => {
     const refreshToken = req.cookies.refreshToken
     if (!refreshToken) return res.sendStatus(204)
     const user = await Users.findAll({
@@ -214,7 +214,7 @@ export const Logout = async (req, res) => {
     return res.sendStatus(200)
 }
 
-export const DeleteUser = async (req, res) => {
+const DeleteUser = async (req, res) => {
     try {
         const user = await Users.findOne({
             where: {
@@ -241,4 +241,19 @@ export const DeleteUser = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+
+module.exports = {
+    getSuper,
+    getUsers,
+    getUsersId,
+    DeleteUser,
+    Login,
+    Logout,
+    Register,
+    UpdateEmail,
+    UpdatePass,
+    UpdateProfil,
+    UpdateUser
 }

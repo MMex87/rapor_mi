@@ -1,10 +1,10 @@
-import Guru from "../models/guruModel.js";
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken";
-import fs from 'fs'
-import { Op } from "sequelize"
+const Guru = require("../models/guruModel.js")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const fs = require('fs')
+const { Op } = require("sequelize")
 
-export const getGurus = async (req, res) => {
+const getGurus = async (req, res) => {
     try {
         const gurus = await Guru.findAll({
             attributes: ['id', 'nama', 'password', 'jtm', 'nuptk', 'pendidikan', 'tanggal_lahir', 'jenis_kelamin', 'picture', 'role']
@@ -17,7 +17,7 @@ export const getGurus = async (req, res) => {
     }
 }
 
-export const getSearchGurus = async (req, res) => {
+const getSearchGurus = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 0
         const limit = parseInt(req.query.limit) || 10
@@ -69,7 +69,7 @@ export const getSearchGurus = async (req, res) => {
     }
 }
 
-export const getGurusId = async (req, res) => {
+const getGurusId = async (req, res) => {
     try {
         const gurus = await Guru.findOne({ where: { id: req.params.id } })
         if (gurus === 0)
@@ -80,7 +80,7 @@ export const getGurusId = async (req, res) => {
     }
 }
 
-export const getGurusName = async (req, res) => {
+const getGurusName = async (req, res) => {
     try {
         const gurus = await Guru.findOne({ where: { nama: req.params.nama } })
         if (gurus === 0)
@@ -91,7 +91,7 @@ export const getGurusName = async (req, res) => {
     }
 }
 
-export const TambahGuru = async (req, res) => {
+const TambahGuru = async (req, res) => {
     const { nama, username, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 
     try {
@@ -106,7 +106,7 @@ export const TambahGuru = async (req, res) => {
     }
 }
 
-export const editGuru = async (req, res) => {
+const editGuru = async (req, res) => {
     const { nama, username, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 
     const gurus = await Guru.findOne({ where: { id: req.params.id } })
@@ -134,7 +134,7 @@ export const editGuru = async (req, res) => {
     }
 }
 
-export const editGuruRole = async (req, res) => {
+const editGuruRole = async (req, res) => {
     const { role } = req.body
 
     try {
@@ -158,7 +158,7 @@ export const editGuruRole = async (req, res) => {
 }
 
 
-export const UpdatePass = async (req, res) => {
+const UpdatePass = async (req, res) => {
     const { password, confPassword, passwordLama } = req.body
     const salt = await bcrypt.genSalt();
 
@@ -190,7 +190,7 @@ export const UpdatePass = async (req, res) => {
         console.log(error);
     }
 }
-export const UpdateUsername = async (req, res) => {
+const UpdateUsername = async (req, res) => {
     const { username } = req.body
     try {
         await Guru.update({
@@ -205,7 +205,7 @@ export const UpdateUsername = async (req, res) => {
         console.log(error);
     }
 }
-export const UpdateProfil = async (req, res) => {
+const UpdateProfil = async (req, res) => {
     const { picture } = req.body
 
     const user = await Guru.findOne({
@@ -237,7 +237,7 @@ export const UpdateProfil = async (req, res) => {
 
 
 
-export const updateGuru = async (req, res) => {
+const updateGuru = async (req, res) => {
     const { nama, username, password, confPassword, jtm, nuptk, pendidikan, tanggal_lahir, jenis_kelamin, picture, role } = req.body
 
     const gurus = await Guru.findOne({ where: { id: req.params.id } })
@@ -275,7 +275,7 @@ export const updateGuru = async (req, res) => {
     }
 }
 
-export const Login = async (req, res) => {
+const Login = async (req, res) => {
     try {
         const user = await Guru.findAll({
             where: {
@@ -311,7 +311,7 @@ export const Login = async (req, res) => {
     }
 }
 
-export const Logout = async (req, res) => {
+const Logout = async (req, res) => {
     const refreshToken = req.cookies.refreshToken
     if (!refreshToken) return res.sendStatus(204)
     const user = await Guru.findAll({
@@ -330,7 +330,7 @@ export const Logout = async (req, res) => {
     return res.sendStatus(200)
 }
 
-export const hapusGuru = async (req, res) => {
+const hapusGuru = async (req, res) => {
     try {
         const guru = await Guru.findOne({ where: { id: req.params.id } })
 
@@ -354,3 +354,19 @@ export const hapusGuru = async (req, res) => {
     }
 }
 
+module.exports = {
+    hapusGuru,
+    Logout,
+    Login,
+    updateGuru,
+    UpdateProfil,
+    UpdateUsername,
+    UpdatePass,
+    editGuruRole,
+    editGuru,
+    TambahGuru,
+    getGurusName,
+    getGurus,
+    getSearchGurus,
+    getGurusId,
+}

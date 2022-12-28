@@ -1,14 +1,14 @@
-import express from "express";
-import { DeleteUser, getSuper, getUsers, getUsersId, Login, Logout, Register, UpdateEmail, UpdatePass, UpdateProfil, UpdateUser } from "../controllers/Users.js";
-import { verifyToken } from "../middleware/VerifyToken.js";
-import { refreshToken, refreshTokenGuru } from "../controllers/RefreshToken.js";
-import * as guru from "../controllers/Gurus.js";
-import * as kelas from "../controllers/Kelas.js";
-import * as nilai from "../controllers/Nilai.js";
-import * as siswa from "../controllers/Siswa.js";
-import { getMapel, getMapelId, editMapel, hapusMapel, tambahMapel, getMapelKelas, getMapelRapor } from "../controllers/Mapel.js";
-import * as rapor from "../controllers/Rapor.js";
-import * as mapel from "../controllers/NamaMapel.js"
+const express = require("express")
+const { DeleteUser, getSuper, getUsers, getUsersId, Login, Logout, Register, UpdateEmail, UpdatePass, UpdateProfil, UpdateUser } = require("../controllers/Users.js")
+const { verifyToken } = require("../middleware/VerifyToken.js")
+const { refreshToken, refreshTokenGuru } = require("../controllers/RefreshToken.js")
+const guru = require("../controllers/Gurus.js")
+const kelas = require("../controllers/Kelas.js")
+const nilai = require("../controllers/Nilai.js")
+const siswa = require("../controllers/Siswa.js")
+const { getMapel, getMapelId, editMapel, hapusMapel, tambahMapel, getMapelKelas, getMapelRapor } = require("../controllers/Mapel.js")
+const rapor = require("../controllers/Rapor.js")
+const mapel = require("../controllers/NamaMapel.js")
 
 const router = express.Router()
 
@@ -95,4 +95,4 @@ router.post('/rapor', rapor.tambahRapor)
 router.put('/rapor/:id', rapor.editRapor)
 router.delete('/rapor/:id', rapor.hapusRapor)
 
-export default router
+module.exports = router

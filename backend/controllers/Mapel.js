@@ -1,8 +1,8 @@
-import Mapel from "../models/mapelModel.js";
-import db from '../config/Database.js'
+const Mapel = require("../models/mapelModel.js")
+const db = require('../config/Database.js')
 
 
-export const getMapel = async (req, res) => {
+const getMapel = async (req, res) => {
     try {
         const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
@@ -13,7 +13,7 @@ export const getMapel = async (req, res) => {
     }
 }
 
-export const getMapelId = async (req, res) => {
+const getMapelId = async (req, res) => {
     try {
         const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
@@ -26,7 +26,7 @@ export const getMapelId = async (req, res) => {
         res.status(404).json({ msg: "Data Tidak di temukan" })
     }
 }
-export const getMapelKelas = async (req, res) => {
+const getMapelKelas = async (req, res) => {
     try {
         const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
@@ -50,7 +50,7 @@ export const getMapelKelas = async (req, res) => {
     }
 }
 
-export const getMapelRapor = async (req, res) => {
+const getMapelRapor = async (req, res) => {
     try {
         const [results, metadata] = await db.query("SELECT m.nama, m.kkm, n.nilai_keterampilan,n.nilai,n.jenis_nilai " +
             "from mapel as m LEFT join nilai as n on m.id = n.id_mapel " +
@@ -65,7 +65,7 @@ export const getMapelRapor = async (req, res) => {
     }
 }
 
-export const tambahMapel = async (req, res) => {
+const tambahMapel = async (req, res) => {
     const { kkm, idGuru, id_kelas, id_NMapel } = req.body
     try {
         const mapel = await Mapel.create({ kkm, idGuru, id_kelas, id_NMapel })
@@ -79,7 +79,7 @@ export const tambahMapel = async (req, res) => {
     }
 }
 
-export const editMapel = async (req, res) => {
+const editMapel = async (req, res) => {
     const { kkm, idGuru, id_kelas, id_NMapel } = req.body
     const id = req.params.id
 
@@ -100,7 +100,7 @@ export const editMapel = async (req, res) => {
     }
 }
 
-export const hapusMapel = async (req, res) => {
+const hapusMapel = async (req, res) => {
     try {
         const mapel = await Mapel.destroy({ where: { id: req.params.id } })
 
@@ -112,4 +112,14 @@ export const hapusMapel = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+module.exports = {
+    hapusMapel,
+    editMapel,
+    tambahMapel,
+    getMapelRapor,
+    getMapelKelas,
+    getMapelId
+    , getMapel
 }

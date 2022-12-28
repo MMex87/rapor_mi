@@ -1,8 +1,8 @@
-import Users from "../models/userModel.js";
-import jwt from "jsonwebtoken"
-import Guru from "../models/guruModel.js";
+const Users = require("../models/userModel.js")
+const jwt = require("jsonwebtoken")
+const Guru = require("../models/guruModel.js")
 
-export const refreshToken = async (req, res) => {
+const refreshToken = async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken
         if (!refreshToken) return res.sendStatus(401)
@@ -29,7 +29,7 @@ export const refreshToken = async (req, res) => {
     }
 }
 
-export const refreshTokenGuru = async (req, res) => {
+const refreshTokenGuru = async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken
         if (!refreshToken) return res.sendStatus(401)
@@ -54,4 +54,9 @@ export const refreshTokenGuru = async (req, res) => {
     } catch (err) {
         console.log(err)
     }
+}
+
+module.exports = {
+    refreshToken,
+    refreshTokenGuru
 }

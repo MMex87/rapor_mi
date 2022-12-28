@@ -1,6 +1,6 @@
-import { Sequelize } from "sequelize";
-import db from "../config/Database.js";
-import NamaMapel from "./namaMapelModel.js";
+const { Sequelize } = require("sequelize")
+const db = require("../config/Database.js")
+const NamaMapel = require("./namaMapelModel.js")
 
 const { DataTypes } = Sequelize
 
@@ -23,4 +23,4 @@ const Mapel = db.define('mapel', {
 Mapel.hasOne(NamaMapel, { foreignKey: 'id' })
 Mapel.belongsTo(NamaMapel, { foreignKey: 'id' })
 
-export default Mapel
+module.exports = Mapel

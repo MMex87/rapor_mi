@@ -1,5 +1,5 @@
-import { Sequelize } from "sequelize";
-import db from "../config/Database.js";
+const { Sequelize } = require("sequelize")
+const db = require("../config/Database.js")
 
 const { DataTypes } = Sequelize
 
@@ -20,4 +20,4 @@ const Nilai = db.define('nilai', {
     ]
 })
 
-export default Nilai
+module.exports = Nilai
