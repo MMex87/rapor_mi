@@ -21,17 +21,27 @@ export const RaporUasGanjil = (props) => {
     const axiosJWT = axios.create()
     const params = useParams()
     const date = new Date()
-    const Angkatan = `${date.getFullYear()}/${date.getFullYear() + 1}`
+    const Angkatan = `${date.getFullYear() - 1}/${date.getFullYear()}`
 
 
     // state data
     const [siswa, setSiswa] = useState([])
     const [rapor, setRapor] = useState([])
+    const [nilai, setNilai] = useState([])
+    const [mapel, setMapel] = useState([])
+    const [kelas, setKelas] = useState([])
 
     // state
     const [handle, setHandle] = useState(false)
     const Semester = 'Ganjil'
     const Jenis_rapor = 'UAS'
+    const [visi, setVisi] = useState(0)
+    const [idTahun, setIdTahun] = useState('')
+    const [idKelas, setIdKelas] = useState('')
+    const [idSiswa, setIdSiswa] = useState('')
+
+    // state data
+    const [nKelas, setNKelas] = useState('')
 
 
     // Refresh Token
@@ -45,26 +55,32 @@ export const RaporUasGanjil = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         } catch (error) {
             return navigate('/')
         }
     }
 
     // get Datas
-    // const handleData = async () => {
-    //     try {
-    //         const responseKelas = await axiosJWT.get(`/kelas/${params.idKelas}`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${props.token}`
-    //             }
-    //         })
-    //         setNamaKelas(responseKelas.data.nama_kelas)
+    const handleData = async () => {
+        try {
+            const responseMapel = await axiosJWT.get(`/mapelKelas/${params.idKelas}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setMapel(responseMapel.data.mapel)
 
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
+            const responseKelas = await axiosJWT.get(`/kelas/${params.idKelas}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setNKelas(parseInt(responseKelas.data.kelas) + 1)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const getSiswa = async () => {
         try {
             const response = await axiosJWT.get(`/siswa`, {
@@ -84,6 +100,38 @@ export const RaporUasGanjil = (props) => {
             }
         })
         setRapor(response.data)
+    }
+    const getNilai = async () => {
+        const response = await axiosJWT.get(`/nilai`, {
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        setNilai(response.data)
+    }
+    const getKelas = async () => {
+        try {
+            const response = await axiosJWT.get('/kelas', {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setKelas(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const getTahunId = async () => {
+        try {
+            const response = await axiosJWT.get(`/tahunAjar/${props.tahun_ajar}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setIdTahun(response.data)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // handle all Generate Raport
@@ -117,7 +165,8 @@ export const RaporUasGanjil = (props) => {
                                 semester: Semester,
                                 jenis_rapor: Jenis_rapor,
                                 id_kelas: params.idKelas,
-                                id_siswa: dataSiswa[i]['id']
+                                id_siswa: dataSiswa[i]['id'],
+                                id_tahunAjar: idTahun.id
                             })
                         }
                         // console.log(dataRapor[0])
@@ -165,7 +214,8 @@ export const RaporUasGanjil = (props) => {
                         semester: Semester,
                         jenis_rapor: Jenis_rapor,
                         id_kelas,
-                        id_siswa
+                        id_siswa,
+                        id_tahunAjar: idTahun.id
                     })
                     setHandle(true)
                 } else if (
@@ -184,13 +234,65 @@ export const RaporUasGanjil = (props) => {
         }
     }
 
-    // const nSiswa = siswa.filter(({ id_kelas }) => id_kelas == params.idKelas)
-    // console.log(nSiswa[0]['id']);
+    const handleNaik = (val, id) => {
+        setVisi(val + 1)
+        setIdSiswa(id)
+    }
+
+    const handleBatal = () => {
+        setVisi(0)
+        setIdSiswa('')
+    }
+
+    const naikKelas = (e) => {
+        e.preventDefault()
+        try {
+            Toast.fire({
+                title: 'Apa Kamu Yakin?',
+                text: `Kamu akan Menaikan Siswa Tersebut!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok, Naik!',
+                cancelButtonText: 'Tidak, Batal!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Toast.fire(
+                        'Naik Kelas!',
+                        `Data berhasil Berganti Kelas.`,
+                        'success'
+                    ).then((res) => {
+                        if (res.isConfirmed)
+                            setHandle(false)
+                    })
+                    axios.put(`/siswa/${idSiswa}`, {
+                        id_kelas: idKelas
+                    })
+                    setHandle(true)
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Toast.fire(
+                        'Dibatalkan',
+                        `Data Belum Ganti kelas :)`,
+                        'error'
+                    )
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         refreshToken()
-        // handleData()
+        handleData()
         getSiswa()
         getRapor()
+        getNilai()
+        getKelas()
+        getTahunId()
     }, [handle == true])
 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -204,16 +306,16 @@ export const RaporUasGanjil = (props) => {
             props.handleName(decoded.nama)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     }, (error) => {
         return Promise.reject(error)
     })
-
     return (
         <>
-            <div className="card-header row ">
-                <h3 className="card-title col-sm-4">Daftar Siswa UAS Ganjil</h3>
+            <div className="card-header row">
+                <h3 className="card-title col-sm-4">Daftar Siswa UAS Genap</h3>
                 <div className='col-sm-7 d-flex justify-content-end'>
                     {
                         (
@@ -224,7 +326,6 @@ export const RaporUasGanjil = (props) => {
                             ''
                             :
                             <button className='btn btn-sm btn-primary' onClick={ () => hanldeAllRapor() }>Generate All</button>
-
                     }
                 </div>
                 <div className="col-sm-1 d-flex justify-content-end">
@@ -240,40 +341,82 @@ export const RaporUasGanjil = (props) => {
                 </div>
             </div>
             <div className="card-body table-responsive p-0">
-                <table className="table table-hover table-dark text-nowrap" >
-                    <thead>
-                        <tr className='container'>
-                            <th>No</th>
-                            <th>NIS</th>
-                            <th>NISN</th>
-                            <th>Nama Siswa</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { siswa.filter(({ id_kelas }) => id_kelas == params.idKelas).map((val, index) => (
-                            <tr key={ index }>
-                                <td>{ index + 1 }</td>
-                                <td>{ val.nis }</td>
-                                <td>{ val.nisn }</td>
-                                <td>{ val.nama }</td>
-                                <td className='d-flex justify-content-around'>
-                                    { rapor.find(({ id_siswa, id_kelas, semester, jenis_rapor, angkatan }) => id_siswa == val.id && id_kelas == val.id_kelas && semester == Semester && jenis_rapor == Jenis_rapor && angkatan == Angkatan) == null
-                                        ?
-                                        <div className='me-5'>
-                                            <button className='btn btn-primary' onClick={ () => handleRapor(val.id, val.id_kelas) }>Generate Nilai</button>
-                                        </div>
-                                        :
-                                        <div className='me-5'>
-                                            <Link className='btn btn-success' to={ `/UserGuru/WaliKelas/${params.idKelas}/${val.id}/${Semester}/${Jenis_rapor}` }>Detail Nilai</Link>
-                                        </div>
-
-                                    }
-                                </td>
+                <form onSubmit={ naikKelas }>
+                    <table className="table table-hover table-dark text-nowrap" >
+                        <thead>
+                            <tr className='container'>
+                                <th>No</th>
+                                <th>NIS</th>
+                                <th>NISN</th>
+                                <th>Nama Siswa</th>
+                                <th>Aksi</th>
                             </tr>
-                        )) }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            { siswa.filter(({ id_kelas }) => id_kelas == params.idKelas).map((val, index) => (
+                                <tr key={ index }>
+                                    <td>{ index + 1 }</td>
+                                    <td>{ val.nis }</td>
+                                    <td>{ val.nisn }</td>
+                                    <td>{ val.nama }</td>
+                                    {
+                                        visi == index + 1
+                                            ?
+                                            <>
+                                                <td className='d-flex justify-content-around'>
+
+                                                    <select className="form-control select2" style={ { width: '50%' } } onChange={ (e) => setIdKelas(e.target.value) }>
+                                                        <option selected value="">-- Pilih Kelas --</option>
+                                                        { kelas.filter(({ kelas }) => kelas == nKelas).map((val) => (
+                                                            <option value={ val.id }>{ val.kelas + val.nama_kelas }</option>
+                                                        )) }
+                                                    </select>
+                                                    <button type='submit' className='btn btn-success btn-sm'>Naik</button>
+                                                    <button type='button' className='btn btn-warning btn-sm' onClick={ () => handleBatal() }>Batal</button>
+                                                </td>
+                                            </>
+                                            :
+                                            <>
+                                                <td className='d-flex justify-content-around'>
+                                                    { rapor.find(({ id_siswa, id_kelas, semester, jenis_rapor, angkatan }) => id_siswa == val.id && id_kelas == val.id_kelas && semester == Semester && jenis_rapor == Jenis_rapor && angkatan == Angkatan) == null
+                                                        ?
+                                                        <div className='me-5'>
+                                                            <button type='button' className='btn btn-primary' onClick={ () => handleRapor(val.id, val.id_kelas) }>Generate Nilai</button>
+                                                        </div>
+                                                        :
+                                                        <div className='me-5'>
+                                                            <Link className='btn btn-success' to={ `/UserGuru/WaliKelas/${params.idKelas}/${val.id}/${Semester}/${Jenis_rapor}` }>Detail Nilai</Link>
+                                                        </div>
+                                                    }
+                                                    {
+                                                        (
+                                                            rapor.find(({ id_kelas, semester, jenis_rapor, angkatan, id_siswa }) =>
+                                                                id_kelas == params.idKelas && semester == Semester && jenis_rapor == Jenis_rapor && angkatan == Angkatan && id_siswa == val.id)
+                                                        )
+                                                            &&
+                                                            (
+                                                                nilai.filter(({ id_siswa, id_rapor }) =>
+                                                                    id_siswa == val.id &&
+                                                                    id_rapor ==
+                                                                    rapor.find(({ id_kelas, semester, jenis_rapor, angkatan, id_siswa }) =>
+                                                                        id_kelas == params.idKelas && semester == Semester && jenis_rapor == Jenis_rapor && angkatan == Angkatan && id_siswa == val.id).id).length
+                                                                ==
+                                                                mapel.length
+                                                            )
+                                                            ?
+                                                            <div className='btn btn-sm btn-warning align-middle' onClick={ () => handleNaik(index, val.id) }>Naik Kelas</div>
+                                                            :
+                                                            ''
+                                                    }
+                                                </td>
+                                            </>
+                                    }
+                                </tr>
+                            )) }
+                        </tbody>
+                    </table>
+                </form>
+
             </div>
         </>
     )
@@ -285,7 +428,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -294,8 +438,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

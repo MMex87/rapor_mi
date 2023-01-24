@@ -71,6 +71,7 @@ export const Profile = (props) => {
             props.handleRole(decoded.role)
             setUserId(decoded.userId)
             getUser(decoded.userId)
+            props.handleTahunAjar(decoded.tahun)
             setJtm(decoded.jtm)
         } catch (error) {
             return navigate('/')
@@ -268,6 +269,7 @@ export const Profile = (props) => {
             props.handleName(decoded.nama)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     })
@@ -284,7 +286,7 @@ export const Profile = (props) => {
                             </div>{/* /.col */ }
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><Link to={ "/dashboard" }>Dashboard</Link></li>
+                                    <li className="breadcrumb-item"><Link to={ "/dashboardGuru" }>Dashboard</Link></li>
                                     <li className="breadcrumb-item active">Profile</li>
                                 </ol>
                             </div>{/* /.col */ }
@@ -455,7 +457,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -464,8 +467,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

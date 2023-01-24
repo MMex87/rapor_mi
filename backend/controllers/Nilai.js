@@ -45,6 +45,20 @@ const getNilaiIdSiswa = async (req, res) => {
         console.log(error)
     }
 }
+const getCountNilaiIdSiswa = async (req, res) => {
+    try {
+        const [nilai] = await db.query("SELECT COUNT(n.nilai) as jumlahNilai, COUNT(n.nilai_keterampilan) as jumlahNilaiKet " +
+            "FROM nilai as n " +
+            "INNER JOIN rapor as r " +
+            "on n.id_rapor = r.id " +
+            `WHERE n.id_siswa = ${req.params.idSiswa} AND r.id_kelas = ${req.params.idKelas} AND r.semester = 'Genap' AND r.jenis_rapor = 'UAS'`)
+        if (nilai === null)
+            res.status(404).json({ msg: "Data Tidak di temukan" })
+        res.json(nilai)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const tambahNilai = async (req, res) => {
     const { nilai, nilai_keterampilan, id_mapel, id_siswa, id_rapor } = req.body
@@ -102,5 +116,6 @@ module.exports = {
     getNilaiId,
     getNilaiIdSiswa,
     editNilai,
-    tambahNilai
+    tambahNilai,
+    getCountNilaiIdSiswa
 }

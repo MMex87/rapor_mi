@@ -4,11 +4,11 @@ const db = require("../config/Database.js")
 const { DataTypes } = Sequelize
 
 const Rapor = db.define('rapor', {
-    angkatan: { type: DataTypes.STRING },
     semester: { type: DataTypes.STRING },
     jenis_rapor: { type: DataTypes.STRING },
     id_siswa: { type: DataTypes.INTEGER },
     id_kelas: { type: DataTypes.INTEGER },
+    id_tahunAjar: { type: DataTypes.INTEGER },
 }, {
     indexes: [
         {
@@ -16,6 +16,9 @@ const Rapor = db.define('rapor', {
         },
         {
             fields: ['id_kelas']
+        },
+        {
+            fields: ['id_tahunAjar']
         }
     ]
 })

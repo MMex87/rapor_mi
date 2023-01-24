@@ -12,13 +12,19 @@ const Kelas = db.define('kelas', {
         type: DataTypes.STRING
     },
     id_guru: {
-        type: DataTypes.STRING
+        type: DataTypes.INTEGER
+    },
+    id_tahunAjar: {
+        type: DataTypes.INTEGER
     },
 
 }, {
     indexes: [
         {
             fields: ['id_guru']
+        },
+        {
+            fields: ['id_tahunAjar']
         }
     ],
     freezeTableName: true

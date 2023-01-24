@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode'
 import { useNavigate, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ActionType from '../../../../redux/reducer/globalActionType'
+import ProgresRapor from './ProgresRapor'
 
 const Dashboard = (props) => {
     const navigate = useNavigate()
@@ -26,6 +27,7 @@ const Dashboard = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
             if (decoded.role == "Kepala Sekolah") {
                 return navigate('/kepala/dashboard')
             }
@@ -33,6 +35,7 @@ const Dashboard = (props) => {
             return navigate('/')
         }
     }
+
     const getSiswaRecent = async () => {
         try {
             const response = await axiosJWT.get(`/siswaRecent?limit=${5}`, {
@@ -110,6 +113,7 @@ const Dashboard = (props) => {
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     }, (error) => {
@@ -195,57 +199,7 @@ const Dashboard = (props) => {
                             </div>
                             {/* /.col */ }
                         </div>
-                        <div className="card">
-                            <div className="card-header">
-                                <h3 className="card-title" style={ { color: '#fff' } }>Data Siswa Terbaru</h3>
-                                <div className="card-tools">
-                                    <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                                        <i className="fas fa-minus" />
-                                    </button>
-                                    <button type="button" className="btn btn-tool" data-card-widget="remove">
-                                        <i className="fas fa-times" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="card-body p-0">
-                                <table className="table table-hover table-dark text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>NIS</th>
-                                            <th>NISN</th>
-                                            <th>Nama Siswa</th>
-                                            <th>Tanggal Lahir</th>
-                                            <th>Kelas</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        { siswa.map((val, index) => (
-                                            <tr key={ index + 1 }>
-                                                <td className='col-sm-1'>{ index + 1 }</td>
-                                                <td className='col-sm-2'>{ val.nis }</td>
-                                                <td className='col-sm-2'>{ val.nisn }</td>
-                                                <td className='col-sm-3'>{ val.nama }</td>
-                                                <td className='col-sm-1'>{ val.tanggal_lahir }</td>
-                                                {
-                                                    kelas.map((value) => (
-                                                        val.id_kelas == value.id ?
-                                                            <td className='col-sm-1'>
-                                                                { value.kelas + value.nama_kelas }
-                                                            </td> : ''
-
-                                                    ))
-                                                }
-                                                <td className='col-sm-1'>
-                                                    { val.status }
-                                                </td>
-                                            </tr>
-                                        )) }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <ProgresRapor />
                     </div>
                 </section>
             </div>
@@ -260,7 +214,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -269,8 +224,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

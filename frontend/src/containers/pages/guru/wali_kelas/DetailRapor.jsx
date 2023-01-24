@@ -48,6 +48,7 @@ const DetailRapor = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         } catch (error) {
             return navigate('/')
         }
@@ -78,8 +79,8 @@ const DetailRapor = (props) => {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            setAjar(responseRapor.data.angkatan)
-            setSemester(responseRapor.data.semester)
+            setAjar(responseRapor.data[0].angkatan)
+            setSemester(responseRapor.data[0].semester)
         } catch (error) {
             console.log(error)
         }
@@ -224,6 +225,7 @@ const DetailRapor = (props) => {
             props.handleName(decoded.nama)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     }, (error) => {
@@ -546,7 +548,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -555,8 +558,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

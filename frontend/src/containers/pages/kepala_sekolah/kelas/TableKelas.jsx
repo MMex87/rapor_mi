@@ -30,6 +30,7 @@ export const TableKelas = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         } catch (error) {
             return navigate('/')
         }
@@ -118,6 +119,7 @@ export const TableKelas = (props) => {
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     })
@@ -219,7 +221,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -228,8 +231,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

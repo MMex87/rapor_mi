@@ -145,6 +145,17 @@ const getSiswaId = async (req, res) => {
     }
 }
 
+const getSiswaIdKelas = async (req, res) => {
+    try {
+        const siswa = await Siswa.findOne({ where: { id_kelas: req.params.idKelas } })
+        if (siswa === null)
+            res.status(404).json({ msg: "Data Tidak di temukan" })
+        res.json(siswa)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const tambahSiswa = async (req, res) => {
     const { nisn, nis, nama, tanggal_lahir, jenis_kelamin, status, id_kelas } = req.body
     try {
@@ -202,5 +213,6 @@ module.exports = {
     getSiswaRecent,
     tambahSiswa,
     editSiswa,
-    hapusSiswa
+    hapusSiswa,
+    getSiswaIdKelas
 }

@@ -157,7 +157,8 @@ const mapStateToProps = (state) => {
     return {
         name: state.user,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 

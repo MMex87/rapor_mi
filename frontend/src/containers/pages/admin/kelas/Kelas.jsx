@@ -18,7 +18,6 @@ const Kelas = (props) => {
     const axiosJWT = axios.create()
 
 
-
     // refresh Token
     const refreshToken = async () => {
         try {
@@ -29,6 +28,7 @@ const Kelas = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
             if (decoded.role == "Kepala Sekolah") {
                 return navigate('/kepala/kelas')
             }
@@ -57,6 +57,7 @@ const Kelas = (props) => {
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     })
@@ -96,7 +97,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -106,7 +108,8 @@ const mapDispatchToProps = (dispatch) => {
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
         handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

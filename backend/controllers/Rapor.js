@@ -1,10 +1,11 @@
+const db = require("../config/Database.js")
 const Rapor = require("../models/raporModel.js")
 
 const getRapor = async (req, res) => {
     try {
-        const rapor = await Rapor.findAll({
-            attributes: ["id", "angkatan", "semester", "jenis_rapor", "id_siswa", "id_kelas"]
-        })
+        const [rapor] = await db.query('SELECT r.id, r.semester, r.jenis_rapor, r.id_siswa, r.id_kelas, a.tahun_ajar as angkatan ' +
+            'FROM rapor as r INNER JOIN ' +
+            'tahun_ajar as a on a.id = r.id_tahunAjar')
         if (rapor === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
         res.json(rapor)
@@ -15,7 +16,10 @@ const getRapor = async (req, res) => {
 
 const getRaporId = async (req, res) => {
     try {
-        const rapor = await Rapor.findOne({ where: { id: req.params.id } })
+        const [rapor] = await db.query('SELECT r.id, r.semester, r.jenis_rapor, r.id_siswa, r.id_kelas, a.tahun_ajar as angkatan ' +
+            'FROM rapor as r INNER JOIN ' +
+            'tahun_ajar as a on a.id = r.id_tahunAjar ' +
+            `WHERE r.id = ${req.params.id}`)
         if (rapor === null)
             res.status(404).json({ msg: "Data Tidak di temukan" })
         res.json(rapor)
@@ -26,14 +30,14 @@ const getRaporId = async (req, res) => {
 
 const getRaporIdSiswa = async (req, res) => {
     try {
-        const rapor = await Rapor.findOne({
-            where: {
-                id_kelas: req.params.idKelas,
-                id_siswa: req.params.idSiswa,
-                jenis_rapor: req.params.jenisR,
-                semester: req.params.semester
-            }
-        })
+        const [rapor] = await db.query('SELECT r.id, r.semester, r.jenis_rapor, r.id_siswa, r.id_kelas, a.tahun_ajar as angkatan ' +
+            'FROM rapor as r INNER JOIN ' +
+            'tahun_ajar as a on a.id = r.id_tahunAjar ' +
+            `WHERE r.id_kelas = ${req.params.idKelas} AND ` +
+            `r.id_siswa = ${req.params.idSiswa} AND ` +
+            `r.jenis_rapor = '${req.params.jenisR}' AND ` +
+            `r.semester = '${req.params.semester}'`
+        )
         if (rapor === null)
             res.status(404).json({ msg: "Data Tidak di Temukan" })
         res.json(rapor)
@@ -43,10 +47,10 @@ const getRaporIdSiswa = async (req, res) => {
 }
 
 const tambahRapor = async (req, res) => {
-    const { angkatan, semester, jenis_rapor, id_siswa, id_kelas } = req.body
+    const { semester, jenis_rapor, id_siswa, id_kelas, id_tahunAjar } = req.body
     try {
         const rapor = await Rapor.create({
-            angkatan, semester, jenis_rapor, id_siswa, id_kelas
+            semester, jenis_rapor, id_siswa, id_kelas, id_tahunAjar
         })
         if (rapor === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -57,10 +61,10 @@ const tambahRapor = async (req, res) => {
 }
 
 const editRapor = async (req, res) => {
-    const { angkatan, semester, jenis_rapor, id_siswa, id_kelas } = req.body
+    const { semester, jenis_rapor, id_siswa, id_kelas, id_tahunAjar } = req.body
     try {
         const rapor = await Rapor.update({
-            angkatan, semester, jenis_rapor, id_siswa, id_kelas
+            semester, jenis_rapor, id_siswa, id_kelas, id_tahunAjar
         }, {
             where: {
                 id: req.params.id

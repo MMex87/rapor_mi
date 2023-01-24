@@ -4,9 +4,12 @@ const db = require('../config/Database.js')
 
 const getMapel = async (req, res) => {
     try {
-        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
+        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama ,n.induk ,m.id_tahunAjar ,t.tahun_ajar " +
+            "FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
-            "on m.id_NMapel = n.id")
+            "on m.id_NMapel = n.id " +
+            "INNER JOIN tahun_ajar as t " +
+            "on m.id_tahunAjar = t.id")
         res.json(mapel)
     } catch (error) {
         console.log(error)
@@ -15,9 +18,12 @@ const getMapel = async (req, res) => {
 
 const getMapelId = async (req, res) => {
     try {
-        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
+        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk,m.id_tahunAjar FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
-            `on m.id_NMapel = n.id WHERE m.id = ${req.params.id}`)
+            `on m.id_NMapel = n.id ` +
+            "INNER JOIN tahun_ajar as t " +
+            "on m.id_tahunAjar = t.id " +
+            `WHERE m.id = ${req.params.id}`)
         if (mapel === null)
             res.status(404).json({ msg: "Data Kosong" })
         else
@@ -28,17 +34,26 @@ const getMapelId = async (req, res) => {
 }
 const getMapelKelas = async (req, res) => {
     try {
-        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk FROM mapel as m " +
+        const [mapel] = await db.query("SELECT m.id, m.kkm, m.idGuru, m.id_kelas, m.id_NMapel, n.nama,n.induk,m.id_tahunAjar FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
-            `on m.id_NMapel = n.id WHERE m.id_kelas = ${req.params.idKelas}`)
+            `on m.id_NMapel = n.id ` +
+            "INNER JOIN tahun_ajar as t " +
+            "on m.id_tahunAjar = t.id " +
+            `WHERE m.id_kelas = ${req.params.idKelas}`)
 
         const [nama] = await db.query("SELECT n.nama FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
-            `on m.id_NMapel = n.id WHERE m.id_kelas = ${req.params.idKelas}`)
+            `on m.id_NMapel = n.id ` +
+            "INNER JOIN tahun_ajar as t " +
+            "on m.id_tahunAjar = t.id " +
+            `WHERE m.id_kelas = ${req.params.idKelas}`)
 
         const kkm = await db.query("SELECT m.kkm FROM mapel as m " +
             "INNER JOIN nama_mapel as n " +
-            `on m.id_NMapel = n.id WHERE m.id_kelas = ${req.params.idKelas}`)
+            `on m.id_NMapel = n.id ` +
+            "INNER JOIN tahun_ajar as t " +
+            "on m.id_tahunAjar = t.id " +
+            `WHERE m.id_kelas = ${req.params.idKelas}`)
 
 
         if (mapel === null || nama === null || kkm === null)
@@ -50,25 +65,10 @@ const getMapelKelas = async (req, res) => {
     }
 }
 
-const getMapelRapor = async (req, res) => {
-    try {
-        const [results, metadata] = await db.query("SELECT m.nama, m.kkm, n.nilai_keterampilan,n.nilai,n.jenis_nilai " +
-            "from mapel as m LEFT join nilai as n on m.id = n.id_mapel " +
-            `WHERE m.id_kelas = ${req.params.idKelas} AND n.id_siswa = ${req.params.idSiswa}`
-        )
-        if (results === null)
-            res.status(404).json({ msg: "Data Kosong" })
-        else
-            res.json(results)
-    } catch (error) {
-        res.status(404).json({ msg: `Data Tidak di temukan && ${error}` })
-    }
-}
-
 const tambahMapel = async (req, res) => {
-    const { kkm, idGuru, id_kelas, id_NMapel } = req.body
+    const { kkm, idGuru, id_kelas, id_NMapel, id_tahunAjar } = req.body
     try {
-        const mapel = await Mapel.create({ kkm, idGuru, id_kelas, id_NMapel })
+        const mapel = await Mapel.create({ kkm, idGuru, id_kelas, id_NMapel, id_tahunAjar })
 
         if (mapel === 0)
             res.status(404).json({ msg: "Data Tidak di temukan" })
@@ -80,11 +80,11 @@ const tambahMapel = async (req, res) => {
 }
 
 const editMapel = async (req, res) => {
-    const { kkm, idGuru, id_kelas, id_NMapel } = req.body
+    const { kkm, idGuru, id_kelas, id_NMapel, id_tahunAjar } = req.body
     const id = req.params.id
 
     try {
-        const mapel = await Mapel.update({ kkm, idGuru, id_kelas, id_NMapel }, {
+        const mapel = await Mapel.update({ kkm, idGuru, id_kelas, id_NMapel, id_tahunAjar }, {
             where: {
                 id
             }
@@ -118,8 +118,7 @@ module.exports = {
     hapusMapel,
     editMapel,
     tambahMapel,
-    getMapelRapor,
     getMapelKelas,
-    getMapelId
-    , getMapel
+    getMapelId,
+    getMapel,
 }

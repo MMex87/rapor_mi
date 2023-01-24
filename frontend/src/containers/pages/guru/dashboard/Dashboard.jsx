@@ -13,15 +13,16 @@ const Dashboard = (props) => {
 
     // state Datas
     const [users, setUsers] = useState([])
-    const [siswa, setSiswa] = useState([])
-    const [siswaCount, setSiswaCount] = useState([])
     const [kelas, setKelas] = useState([])
+    const [siswaCount, setSiswaCount] = useState([])
+    const [kelasCount, setKelasCount] = useState([])
     const [guru, setGuru] = useState([])
     const [nilai, setNilai] = useState([])
     const [rapor, setRapor] = useState([])
 
     // state
     const [idKelas, setIdKelas] = useState('')
+    const [idGuru, setIdGuru] = useState('')
 
     // state Pagination dan search
     const [page, setPage] = useState(0)
@@ -40,6 +41,7 @@ const Dashboard = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         } catch (error) {
             return navigate('/')
         }
@@ -64,7 +66,7 @@ const Dashboard = (props) => {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            setKelas(response.data)
+            setKelasCount(response.data)
         } catch (error) {
             console.error(error);
         }
@@ -91,26 +93,21 @@ const Dashboard = (props) => {
     }
     const getData = async () => {
         try {
-            const response = await axiosJWT.get(`/guru/nama/${props.name}`, {
+
+            const responseIdGuru = await axiosJWT.get(`/guru/nama/${props.name}`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            const responseKelas = await axiosJWT.get(`/kelasGuru/${response.data.id}`, {
+            const responseKelas = await axiosJWT.get(`/kelasSearch?limit=${limit}&page=${page}&idGuru=${responseIdGuru.data.id}`, {
                 headers: {
                     Authorization: `Bearer ${props.token}`
                 }
             })
-            setIdKelas(responseKelas.data.id)
-            const responseSiswa = await axiosJWT.get(`/siswaPage?limit=${limit}&page=${page}&idKelas=${responseKelas.data.id}`, {
-                headers: {
-                    Authorization: `Bearer ${props.token}`
-                }
-            })
-            setSiswa(responseSiswa.data.result)
-            setPage(responseSiswa.data.page)
-            setPages(responseSiswa.data.totalPage)
-            setRows(responseSiswa.data.totalRows)
+            setKelas(responseKelas.data.result)
+            setPage(responseKelas.data.page)
+            setPages(responseKelas.data.totalPage)
+            setRows(responseKelas.data.totalRows)
         } catch (error) {
             console.error(error);
         }
@@ -164,6 +161,7 @@ const Dashboard = (props) => {
             props.handleName(decoded.nama)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     }, (error) => {
@@ -212,7 +210,7 @@ const Dashboard = (props) => {
                                 <span className="info-box-icon bg-danger elevation-1"><i className="fa-solid fa-school-flag" /></span>
                                 <div className="info-box-content">
                                     <span className="info-box-text">Kelas</span>
-                                    <span className="info-box-number">{ kelas.length }</span>
+                                    <span className="info-box-number">{ kelasCount.length }</span>
                                 </div>
                                 {/* /.info-box-content */ }
                             </div>
@@ -251,7 +249,7 @@ const Dashboard = (props) => {
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-header row">
-                                        <h3 className="card-title col-4">Data Nilai Terbaru</h3>
+                                        <h3 className="card-title col-4">Data Rapor Dahulu</h3>
                                         <div className="col-6"></div>
                                         <div className="col-2 d-flex justify-content-end">
                                             <div className="card-tools">
@@ -269,75 +267,23 @@ const Dashboard = (props) => {
                                         <table className="table table-hover table-dark text-nowrap table-bordered" >
                                             <thead>
                                                 <tr className='container'>
-                                                    <th rowspan="2" style={ { width: '5%', textAlign: 'center', verticalAlign: 'middle' } }>No</th>
-                                                    <th rowspan="2" style={ { width: '40%', textAlign: 'center', verticalAlign: 'middle' } }>Nama Siswa</th>
-                                                    <th rowspan="2" style={ { width: '15%', textAlign: 'center', verticalAlign: 'middle' } }>Jenis Nilai</th>
-                                                    <th colspan="2" style={ { width: '20%', textAlign: 'center' } }>Pengetahuan</th>
-                                                    <th colspan="2" style={ { width: '20%', textAlign: 'center' } }>Keterampilan</th>
-                                                </tr>
-                                                <tr className='container'>
-                                                    <th style={ { width: '7%', textAlign: 'center' } }>Nilai</th>
-                                                    <th style={ { width: '13%', textAlign: 'center' } }>Predikat</th>
-                                                    <th style={ { width: '7%', textAlign: 'center' } }>Nilai</th>
-                                                    <th style={ { width: '13%', textAlign: 'center' } }>Predikat</th>
+                                                    <th>No</th>
+                                                    <th>Nama Kelas</th>
+                                                    <th>Tahun Ajar</th>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                { siswa.filter(({ id_kelas }) => id_kelas == idKelas).map((val, index) => (
-                                                    <tr key={ index }>
-                                                        <td>{ index + 1 }</td>
-                                                        <td>{ val.nama }</td>
-                                                        <td>
-                                                            {
-                                                                nilai.filter(({ id_kelas, id_siswa }) => id_kelas == idKelas && id_siswa == val.id).map((value, index) => (
-                                                                    <div key={ index }>
-                                                                        { value.jenis_rapor + ' ' + value.semester }
-                                                                    </div>
-                                                                ))
-                                                            }
-                                                        </td>
-                                                        <td style={ { textAlign: 'center' } }>
-                                                            {
-                                                                nilai.filter(({ id_kelas, id_siswa }) => id_kelas == idKelas && id_siswa == val.id).map((value, index) => (
-                                                                    <div key={ index }>
-                                                                        { value.nilai }
-                                                                    </div>
-                                                                ))
-                                                            }
-                                                        </td>
-                                                        <td style={ { textAlign: 'center' } }>
-                                                            {
-                                                                nilai.filter(({ id_kelas, id_siswa }) => id_kelas == idKelas && id_siswa == val.id).map((value, index) => (
-                                                                    <div key={ index }>
-                                                                        {
-                                                                            (89 < parseInt(value.nilai)) ? ('A') : (79 < parseInt(value.nilai)) ? ('B') : (69 < parseInt(value.nilai)) ? ('C') : ('D')
-                                                                        }
-                                                                    </div>
-                                                                ))
-                                                            }
-                                                        </td>
-                                                        <td style={ { textAlign: 'center' } }>
-                                                            {
-                                                                nilai.filter(({ id_kelas, id_siswa }) => id_kelas == idKelas && id_siswa == val.id).map((value, index) => (
-                                                                    <div key={ index }>
-                                                                        { value.nilai_keterampilan }
-                                                                    </div>
-                                                                ))
-                                                            }
-                                                        </td>
-                                                        <td style={ { textAlign: 'center' } }>
-                                                            {
-                                                                nilai.filter(({ id_kelas, id_siswa }) => id_kelas == idKelas && id_siswa == val.id).map((value, index) => (
-                                                                    <div key={ index }>
-                                                                        {
-                                                                            (89 < parseInt(value.nilai_keterampilan)) ? ('A') : (79 < parseInt(value.nilai_keterampilan)) ? ('B') : (69 < parseInt(value.nilai_keterampilan)) ? ('C') : ('D')
-                                                                        }
-                                                                    </div>
-                                                                ))
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                )) }
+                                                {
+                                                    kelas.map((val, index) => (
+                                                        <tr>
+                                                            <td>{ index + 1 }</td>
+                                                            <td>{ val.kelas + val.nama_kelas }</td>
+                                                            <td>{ val.tahun_ajar }</td>
+                                                            <td><Link className='btn btn-success' to={ `/UserGuru/WaliKelas/${val.id}` }>Detail</Link></td>
+                                                        </tr>
+                                                    ))
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -379,7 +325,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -388,8 +335,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

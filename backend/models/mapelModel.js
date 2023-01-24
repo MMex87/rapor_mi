@@ -8,14 +8,23 @@ const Mapel = db.define('mapel', {
     kkm: { type: DataTypes.STRING },
     idGuru: { type: DataTypes.INTEGER },
     id_kelas: { type: DataTypes.INTEGER },
-    id_NMapel: { type: DataTypes.INTEGER }
+    id_NMapel: { type: DataTypes.INTEGER },
+    id_tahunAjar: { type: DataTypes.INTEGER }
 }, {
     indexes: [
         {
-            fields: ['idGuru'],
+            fields: ['idGuru']
+        },
+        {
             fields: ['id_kelas'],
+        },
+        {
             fields: ['id_NMapel']
+        },
+        {
+            fields: ['id_tahunAjar']
         }
+
     ],
     freezeTableName: true
 })

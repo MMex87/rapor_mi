@@ -55,6 +55,7 @@ export const UasGenap = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         } catch (error) {
             return navigate('/login')
         }
@@ -115,12 +116,16 @@ export const UasGenap = (props) => {
         setVisi('d-none')
         setVisi2('')
         setIdSiswa(val)
-        const response = await axiosJWT.get(`/rapor/${idKelas}/${val}/${Semester}/${jenisRapor}`, {
-            headers: {
-                Authorization: `Bearer ${props.token}`
-            }
-        })
-        setIdRapor(response.data.id)
+        try {
+            const response = await axiosJWT.get(`/rapor/${idKelas}/${val}/${Semester}/${jenisRapor}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setIdRapor(response.data[0].id)
+        } catch (error) {
+            console.error(error);
+        }
     }
     const handleEdit = async (val) => {
         setVisi('d-none')
@@ -216,6 +221,7 @@ export const UasGenap = (props) => {
             props.handleName(decoded.nama)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     }, (error) => {
@@ -352,7 +358,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -361,8 +368,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

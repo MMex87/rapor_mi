@@ -108,7 +108,7 @@ const SideNav = (props) => {
                             <li className="nav-item">
                                 { (props.role == 'Wali Kelas') ? (
                                     <>
-                                        { kelas.filter(({ id_guru }) => id_guru == id_Guru).map((val, index) => (
+                                        { kelas.filter(({ id_guru, tahun_ajar }) => id_guru == id_Guru && tahun_ajar == props.tahun_ajar).map((val, index) => (
                                             <Link className="nav-link" to={ `/UserGuru/WaliKelas/${val.id}` }>
                                                 <i className="fa-sharp fa-solid fa-chalkboard-user nav-icon"></i>
                                                 <p key={ index }>
@@ -120,11 +120,11 @@ const SideNav = (props) => {
 
                                 ) : '' }
                             </li>
-                            { mapel.filter(({ idGuru }) => idGuru.toString() == id_Guru.toString()).map((val, index) => (
+                            { mapel.filter(({ idGuru, tahun_ajar }) => idGuru == id_Guru && tahun_ajar == props.tahun_ajar).map((val, index) => (
                                 <li className="nav-item" key={ index }>
                                     <Link to={ `/UserGuru/nilai/${val.id}` } className="nav-link">
                                         <i className="fa-solid fa-book-open nav-icon"></i>
-                                        { kelas.filter(({ id }) => id.toString() == val.id_kelas.toString()).map((value, index) => (
+                                        { kelas.filter(({ id }) => id == val.id_kelas).map((value, index) => (
                                             <p key={ index }>
                                                 { val.nama } - { value.kelas + value.nama_kelas }
                                             </p>
@@ -149,7 +149,8 @@ const mapStateToProps = (state) => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 

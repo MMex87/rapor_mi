@@ -16,18 +16,50 @@ Content-Type: application/json
 
 
 ###
-POST https://raportmidu.layhomedev.site/api/login
+POST http://localhost:9076/login
 Content-Type: application/json
 
 {
-    "email":"okky@gmail.com",
-    "password":"1234"
+    "email":"Yerico@gmail.com",
+    "password":"adminmidu"
 } 
 
 
 
 ###
 GET http://localhost:9076/token
+
+
+
+###
+GET http://localhost:9076/kelasSearch/?limit=10&page=0&idGuru=1
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm5hbWUiOiJZRVJJQ08gQUdVTkcgS1JJU1RBTlRPIiwiZW1haWwiOiJZZXJpY29AZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwidGFodW4iOiIyMDIyLzIwMjMiLCJpYXQiOjE2NzM1NDY1NjYsImV4cCI6MTY3MzU0NjU4MX0.kTKqgR6O5dSVPxuwZR2meug9hduZTjzIce7gQaWjqiM
+
+
+
+
+
+
+
+###
+GET http://localhost:9076/rapor/2/3/Genap/UAS
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm5hbWUiOiJZRVJJQ08gQUdVTkcgS1JJU1RBTlRPIiwiZW1haWwiOiJZZXJpY29AZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwidGFodW4iOiIyMDIyLzIwMjMiLCJpYXQiOjE2NzMwMjkyODksImV4cCI6MTY3MzAyOTMwNH0.5ushpagBRkTMMZHfsLrbIcnGWThOmbSE9WN85xFt7Ag
+
+
+###
+GET http://localhost:9076/kelasProgres/progres
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm5hbWUiOiJZRVJJQ08gQUdVTkcgS1JJU1RBTlRPIiwiZW1haWwiOiJZZXJpY29AZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwidGFodW4iOiIyMDIyLzIwMjMiLCJpYXQiOjE2NzMwMzgzNTgsImV4cCI6MTY3MzAzODM3M30.V2hEgZSONIqQDK00isyeUngpr4NhizkLbZ2kDXeVw5c
+
+
+
+
+
+###
+GET http://localhost:9076/kelas
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm5hbWUiOiJZRVJJQ08gQUdVTkcgS1JJU1RBTlRPIiwiZW1haWwiOiJZZXJpY29AZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcyOTQ2NzU3LCJleHAiOjE2NzI5NDY3Nzd9.3xv0FfZSRpr8K_BvfzPkwRRtXyVBh54RZdh3Ak2GfRk
+
+
+
 
 
 ###
@@ -37,6 +69,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hb
 ###
 GET http://localhost:9076/siswaSearch?page=0&limit=10
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJva2t5IiwiZW1haWwiOiJva2t5c2V0eWFAZ21haWwuY29tIiwicGljdHVyZSI6ImRlZmF1bHQucG5nIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcyMDAyOTE1LCJleHAiOjE2NzIwMDI5MzB9.4iV8DHLkb_Yn5xmsJWh4gT4nJqqgDcmlrZ3o67q54SY
+
+
 
 
 

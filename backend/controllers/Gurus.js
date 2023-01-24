@@ -54,7 +54,7 @@ const getSearchGurus = async (req, res) => {
             offset,
             limit,
             order: [
-                ['id', 'DESC']
+                ['nama', 'ASC']
             ]
         })
         res.json({

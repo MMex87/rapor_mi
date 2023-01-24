@@ -30,6 +30,7 @@ const TambahMapel = (props) => {
     const [id_NMapel, setIdMapel] = useState('')
     const [kkm, setKkm] = useState('')
     const [idGuru, setIdGuru] = useState('')
+    const [idTahun, setIdTahun] = useState('')
     const [guru, setGuru] = useState([])
     const [jtm, setJtm] = useState(0)
     const [dataMapel, setDataMapel] = useState([])
@@ -49,6 +50,7 @@ const TambahMapel = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
             if (decoded.role == "Kepala Sekolah") {
                 return navigate('/kepala/mapel')
             }
@@ -97,6 +99,18 @@ const TambahMapel = (props) => {
             console.log(error);
         }
     }
+    const getTahunId = async () => {
+        try {
+            const response = await axiosJWT.get(`/tahunAjar/${props.tahun_ajar}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setIdTahun(response.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // handle Tambah Data
     const Tambah = async (e) => {
@@ -114,7 +128,7 @@ const TambahMapel = (props) => {
                     jtm
                 })
                 await axios.post('/mapel', {
-                    kkm, idGuru, id_kelas, id_NMapel
+                    kkm, idGuru, id_kelas, id_NMapel, id_tahunAjar: idTahun.id
                 })
                 Toast.fire({
                     icon: 'success',
@@ -145,6 +159,7 @@ const TambahMapel = (props) => {
         refreshToken()
         getGuru()
         getNamaMapel()
+        getTahunId()
     }, [])
 
 
@@ -160,6 +175,7 @@ const TambahMapel = (props) => {
             props.handleName(decoded.name)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     })
@@ -255,7 +271,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -264,8 +281,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 

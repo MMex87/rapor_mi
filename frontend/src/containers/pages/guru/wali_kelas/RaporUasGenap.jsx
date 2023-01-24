@@ -36,6 +36,7 @@ export const RaporUasGenap = (props) => {
     const Semester = 'Genap'
     const Jenis_rapor = 'UAS'
     const [visi, setVisi] = useState(0)
+    const [idTahun, setIdTahun] = useState('')
     const [idKelas, setIdKelas] = useState('')
     const [idSiswa, setIdSiswa] = useState('')
 
@@ -54,6 +55,7 @@ export const RaporUasGenap = (props) => {
             props.handleExp(decoded.exp)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         } catch (error) {
             return navigate('/')
         }
@@ -119,6 +121,18 @@ export const RaporUasGenap = (props) => {
             console.error(error);
         }
     }
+    const getTahunId = async () => {
+        try {
+            const response = await axiosJWT.get(`/tahunAjar/${props.tahun_ajar}`, {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
+            setIdTahun(response.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // handle all Generate Raport
     const hanldeAllRapor = async () => {
@@ -151,7 +165,8 @@ export const RaporUasGenap = (props) => {
                                 semester: Semester,
                                 jenis_rapor: Jenis_rapor,
                                 id_kelas: params.idKelas,
-                                id_siswa: dataSiswa[i]['id']
+                                id_siswa: dataSiswa[i]['id'],
+                                id_tahunAjar: idTahun.id
                             })
                         }
                         // console.log(dataRapor[0])
@@ -199,7 +214,8 @@ export const RaporUasGenap = (props) => {
                         semester: Semester,
                         jenis_rapor: Jenis_rapor,
                         id_kelas,
-                        id_siswa
+                        id_siswa,
+                        id_tahunAjar: idTahun.id
                     })
                     setHandle(true)
                 } else if (
@@ -276,6 +292,7 @@ export const RaporUasGenap = (props) => {
         getRapor()
         getNilai()
         getKelas()
+        getTahunId()
     }, [handle == true])
 
     axiosJWT.interceptors.request.use(async (config) => {
@@ -289,6 +306,7 @@ export const RaporUasGenap = (props) => {
             props.handleName(decoded.nama)
             props.handlePicture(decoded.picture)
             props.handleRole(decoded.role)
+            props.handleTahunAjar(decoded.tahun)
         }
         return config
     }, (error) => {
@@ -410,7 +428,8 @@ const mapStateToProps = state => {
         token: state.token,
         expired: state.expired,
         picture: state.picture,
-        role: state.role
+        role: state.role,
+        tahun_ajar: state.tahun_ajar
     }
 }
 
@@ -419,8 +438,9 @@ const mapDispatchToProps = (dispatch) => {
         handleName: (nama) => dispatch({ type: ActionType.SET_NAME_USER, index: nama }),
         handleToken: (token) => dispatch({ type: ActionType.SET_TOKEN_USER, index: token }),
         handleExp: (exp) => dispatch({ type: ActionType.SET_EXPIRED_USER, index: exp }),
-        handlePicture: (exp) => dispatch({ type: ActionType.SET_PICTURE_USER, index: exp }),
-        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role })
+        handlePicture: (pic) => dispatch({ type: ActionType.SET_PICTURE_USER, index: pic }),
+        handleRole: (role) => dispatch({ type: ActionType.SET_ROLE_USER, index: role }),
+        handleTahunAjar: (tahun) => dispatch({ type: ActionType.SET_TAHUN_AJAR, index: tahun })
     }
 }
 
